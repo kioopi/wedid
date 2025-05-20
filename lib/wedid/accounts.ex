@@ -5,5 +5,6 @@ defmodule Wedid.Accounts do
   resources do
     resource Wedid.Accounts.Token
     resource Wedid.Accounts.User
+    resource Wedid.Accounts.Couple
   end
 end
