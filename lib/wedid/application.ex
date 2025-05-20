@@ -15,7 +15,8 @@ defmodule Wedid.Application do
       # Start a worker by calling: Wedid.Worker.start_link(arg)
       # {Wedid.Worker, arg},
       # Start to serve requests, typically the last entry
-      WedidWeb.Endpoint
+      WedidWeb.Endpoint,
+      {AshAuthentication.Supervisor, [otp_app: :wedid]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

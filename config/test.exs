@@ -1,4 +1,6 @@
 import Config
+config :wedid, token_signing_secret: "bq730oKMW4EW2TiHF+HvxivD3bms91LU"
+config :bcrypt_elixir, log_rounds: 1
 
 # Configure your database
 #

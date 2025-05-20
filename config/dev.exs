@@ -64,7 +64,7 @@ config :wedid, WedidWeb.Endpoint,
   ]
 
 # Enable dev routes for dashboard and mailbox
-config :wedid, dev_routes: true
+config :wedid, dev_routes: true, token_signing_secret: "MrFrDAd2Hp1uxMSmC38dJany+LdS01Ua"
 
 # Do not include metadata nor timestamps in development logs
 config :logger, :default_formatter, format: "[$level] $message\n"
