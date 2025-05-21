@@ -42,6 +42,14 @@ defmodule Wedid.Accounts.User do
           request_password_reset_action_name :request_password_reset_token
         end
       end
+
+      magic_link do
+        identity_field :email
+        registration_enabled? false
+        require_interaction? true
+
+        sender Wedid.Accounts.User.Senders.SendMagicLinkEmail
+      end
     end
   end
 
@@ -228,11 +236,67 @@ defmodule Wedid.Accounts.User do
       # Generates an authentication token for the user
       change AshAuthentication.GenerateTokenChange
     end
+
+    create :sign_in_with_magic_link do
+      description "Sign in or register a user with magic link."
+
+      argument :token, :string do
+        description "The token from the magic link that was sent to the user"
+        allow_nil? false
+      end
+
+      upsert? false
+      upsert_identity :unique_email
+      upsert_fields [:email]
+
+      # Uses the information from the token to create or sign in the user
+      change AshAuthentication.Strategy.MagicLink.SignInChange
+
+      metadata :token, :string do
+        allow_nil? false
+      end
+    end
+
+    action :request_magic_link do
+      argument :email, :ci_string do
+        allow_nil? false
+      end
+
+      run AshAuthentication.Strategy.MagicLink.Request
+    end
+
+    create :invite do
+      description "Invite a user to join a couple."
+      accept [:email]
+
+      argument :couple_id, :uuid do
+        allow_nil? false
+      end
+
+      change set_attribute(:couple_id, arg(:couple_id))
+
+      change fn changeset, _context ->
+        Ash.Changeset.after_action(changeset, fn changeset, user ->
+          # this should probably become a code_interface action
+          Ash.ActionInput.for_action(__MODULE__, :request_magic_link, %{
+            email: Ash.CiString.value(user.email)
+          })
+
+          {:ok, user}
+        end)
+      end
+    end
   end
 
   policies do
     bypass AshAuthentication.Checks.AshAuthenticationInteraction do
       authorize_if always()
+    end
+
+    bypass action(:invite) do
+      # FIXME: This is not ideal. A user (actor) should only be able
+      # to invite others into their couple. Maybe solvable with multitenancy?
+      authorize_if actor_present()
     end
 
     policy always() do
@@ -249,7 +313,6 @@ defmodule Wedid.Accounts.User do
     end
 
     attribute :hashed_password, :string do
-      allow_nil? false
       sensitive? true
     end
 

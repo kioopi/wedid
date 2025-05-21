@@ -1,7 +1,7 @@
 defmodule Wedid.Accounts.UserTest do
   use Wedid.DataCase
 
-  alias Wedid.Accounts.User
+  alias Wedid.Accounts.{User, Generator}
   alias AshAuthentication.Strategy
 
   @valid_email "test-user@example.com"
@@ -180,6 +180,25 @@ defmodule Wedid.Accounts.UserTest do
       assert %{caused_by: %{errors: [auth_error | _]}} = error
       assert %{caused_by: %{message: message}} = auth_error
       assert message == "Query returned no users"
+    end
+  end
+
+  describe "invitation" do
+    test "user is created when invited" do
+      inviter = Generator.generate(Generator.user())
+
+      # Create invitation attrs
+      invitation_attrs = %{
+        email: @valid_email,
+        couple_id: inviter.couple_id
+      }
+
+      # Attempt to invite the user
+      user = User
+        |> Ash.Changeset.for_create(:invite, invitation_attrs)
+        |> Ash.create!(actor: inviter)
+
+      assert to_string(user.email) == @valid_email
     end
   end
 end

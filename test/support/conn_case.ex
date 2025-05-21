@@ -51,6 +51,7 @@ defmodule WedidWeb.ConnCase do
       conn
       |> Phoenix.ConnTest.init_test_session(%{})
       |> AshAuthentication.Plug.Helpers.store_in_session(user)
+      |> Plug.Conn.assign(:current_user, user)
 
     %{context | conn: conn}
   end
