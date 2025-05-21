@@ -86,6 +86,7 @@ defmodule WedidWeb do
       import Phoenix.HTML
       # Core UI components
       import WedidWeb.CoreComponents
+      import WedidWeb.AppComponents
 
       # Common modules used in templates
       alias Phoenix.LiveView.JS

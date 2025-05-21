@@ -19,7 +19,7 @@ defmodule WedidWeb.Layouts do
       <Layouts.app flash={@flash}>
         <h1>Content</h1>
       </Layout.app>
-      
+
   """
   attr :flash, :map, required: true, doc: "the map of flash messages"
 
@@ -93,7 +93,7 @@ defmodule WedidWeb.Layouts do
         hidden
       >
         {gettext("Attempting to reconnect")}
-        <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
+        <.heroicon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
       </.flash>
 
       <.flash
@@ -105,7 +105,7 @@ defmodule WedidWeb.Layouts do
         hidden
       >
         {gettext("Attempting to reconnect")}
-        <.icon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
+        <.heroicon name="hero-arrow-path" class="ml-1 size-3 motion-safe:animate-spin" />
       </.flash>
     </div>
     """
@@ -125,21 +125,21 @@ defmodule WedidWeb.Layouts do
         phx-click={JS.dispatch("phx:set-theme", detail: %{theme: "system"})}
         class="flex p-2 cursor-pointer w-1/3"
       >
-        <.icon name="hero-computer-desktop-micro" class="size-4 opacity-75 hover:opacity-100" />
+        <.heroicon name="hero-computer-desktop-micro" class="size-4 opacity-75 hover:opacity-100" />
       </button>
 
       <button
         phx-click={JS.dispatch("phx:set-theme", detail: %{theme: "light"})}
         class="flex p-2 cursor-pointer w-1/3"
       >
-        <.icon name="hero-sun-micro" class="size-4 opacity-75 hover:opacity-100" />
+        <.heroicon name="hero-sun-micro" class="size-4 opacity-75 hover:opacity-100" />
       </button>
 
       <button
         phx-click={JS.dispatch("phx:set-theme", detail: %{theme: "dark"})}
         class="flex p-2 cursor-pointer w-1/3"
       >
-        <.icon name="hero-moon-micro" class="size-4 opacity-75 hover:opacity-100" />
+        <.heroicon name="hero-moon-micro" class="size-4 opacity-75 hover:opacity-100" />
       </button>
     </div>
     """

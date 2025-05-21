@@ -64,15 +64,15 @@ defmodule WedidWeb.CoreComponents do
         @kind == :info && "alert-info",
         @kind == :error && "alert-error"
       ]}>
-        <.icon :if={@kind == :info} name="hero-information-circle" class="size-5 shrink-0" />
-        <.icon :if={@kind == :error} name="hero-exclamation-circle" class="size-5 shrink-0" />
+        <.heroicon :if={@kind == :info} name="hero-information-circle" class="size-5 shrink-0" />
+        <.heroicon :if={@kind == :error} name="hero-exclamation-circle" class="size-5 shrink-0" />
         <div>
           <p :if={@title} class="font-semibold">{@title}</p>
           <p>{msg}</p>
         </div>
         <div class="flex-1" />
         <button type="button" class="group self-start cursor-pointer" aria-label={gettext("close")}>
-          <.icon name="hero-x-mark" class="size-5 opacity-40 group-hover:opacity-70" />
+          <.heroicon name="hero-x-mark" class="size-5 opacity-40 group-hover:opacity-70" />
         </button>
       </div>
     </div>
@@ -89,22 +89,33 @@ defmodule WedidWeb.CoreComponents do
       <.button navigate={~p"/"}>Home</.button>
   """
   attr :rest, :global, include: ~w(href navigate patch method)
-  attr :variant, :string, values: ~w(primary)
+  attr :variant, :string, values: ~w(primary large)
+  attr :class, :string, default: nil, doc: "additional classes"
   slot :inner_block, required: true
 
   def button(%{rest: rest} = assigns) do
-    variants = %{"primary" => "btn-primary", nil => "btn-primary btn-soft"}
-    assigns = assign(assigns, :class, Map.fetch!(variants, assigns[:variant]))
+    variants = %{
+      "primary" => "btn-primary",
+      "large" => "btn-primary btn-lg",
+      nil => "btn-primary btn-soft"
+    }
+
+    assigns =
+      assign(assigns, :class, [
+        assigns.class,
+        "btn",
+        Map.fetch!(variants, assigns[:variant])
+      ])
 
     if rest[:href] || rest[:navigate] || rest[:patch] do
       ~H"""
-      <.link class={["btn", @class]} {@rest}>
+      <.link class={@class} {@rest}>
         {render_slot(@inner_block)}
       </.link>
       """
     else
       ~H"""
-      <button class={["btn", @class]} {@rest}>
+      <button class={@class} {@rest}>
         {render_slot(@inner_block)}
       </button>
       """
@@ -268,7 +279,7 @@ defmodule WedidWeb.CoreComponents do
   defp error(assigns) do
     ~H"""
     <p class="mt-1.5 flex gap-2 items-center text-sm text-error">
-      <.icon name="hero-exclamation-circle" class="size-5" />
+      <.heroicon name="hero-exclamation-circle" class="size-5" />
       {render_slot(@inner_block)}
     </p>
     """
@@ -410,7 +421,7 @@ defmodule WedidWeb.CoreComponents do
   attr :name, :string, required: true
   attr :class, :string, default: "size-4"
 
-  def icon(%{name: "hero-" <> _} = assigns) do
+  def heroicon(%{name: "hero-" <> _} = assigns) do
     ~H"""
     <span class={[@name, @class]} />
     """
