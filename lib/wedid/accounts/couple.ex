@@ -19,4 +19,8 @@ defmodule Wedid.Accounts.Couple do
 
     timestamps()
   end
+
+  relationships do
+    has_many :users, Wedid.Accounts.User
+  end
 end

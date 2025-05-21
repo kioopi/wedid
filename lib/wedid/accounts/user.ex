@@ -166,6 +166,9 @@ defmodule Wedid.Accounts.User do
       # validates that the password matches the confirmation
       validate AshAuthentication.Strategy.Password.PasswordConfirmationValidation
 
+      # create a couple for the new user
+      change Wedid.Accounts.User.CreateCouple
+
       metadata :token, :string do
         description "A JWT that can be used to authenticate the user."
         allow_nil? false
@@ -251,6 +254,10 @@ defmodule Wedid.Accounts.User do
     end
 
     attribute :confirmed_at, :utc_datetime_usec
+  end
+
+  relationships do
+    belongs_to :couple, Wedid.Accounts.Couple
   end
 
   identities do
