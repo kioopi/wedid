@@ -23,4 +23,8 @@ defmodule Wedid.Accounts.Couple do
   relationships do
     has_many :users, Wedid.Accounts.User
   end
+
+  aggregates do
+    count :user_count, :users
+  end
 end

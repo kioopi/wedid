@@ -16,6 +16,7 @@ defmodule WedidWeb.ConnCase do
   """
 
   use ExUnit.CaseTemplate
+  alias Wedid.Accounts.{Generator, User}
 
   using do
     quote do
@@ -34,5 +35,23 @@ defmodule WedidWeb.ConnCase do
   setup tags do
     Wedid.DataCase.setup_sandbox(tags)
     {:ok, conn: Phoenix.ConnTest.build_conn()}
+  end
+
+  def register_and_log_in_user(%{conn: conn} = context) do
+    user = Generator.generate(Generator.user())
+    strategy = AshAuthentication.Info.strategy!(User, :password)
+
+    {:ok, user} =
+      AshAuthentication.Strategy.action(strategy, :sign_in, %{
+        email: user.email,
+        password: "password"
+      })
+
+    conn =
+      conn
+      |> Phoenix.ConnTest.init_test_session(%{})
+      |> AshAuthentication.Plug.Helpers.store_in_session(user)
+
+    %{context | conn: conn}
   end
 end
