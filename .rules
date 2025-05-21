@@ -1,0 +1,62 @@
+This is a Phoenix application, which uses Tailwind and daisyUI.
+Prefer using LiveView instead of regular Controllers.
+Once you are done with changes, run `mix compile` and fix any issues.
+Write tests for your changes and run `mix test` afterwards.
+
+We are using Ash for our data layer, and it is a powerful tool. Use it to its fullest extent, and don't be afraid to ask for help if you need it.
+
+## Generating Code
+
+Use `list_generators` to list available generators when available, otherwise `mix help`. If you have to run generator tasks, pass `--yes`. Always prefer to use generators as a basis for code generation, and then modify afterwards.
+The ash generators start with ash.gen
+
+## Ash
+
+Use code interfaces on domains to define the contract for calling into Ash resources. See the [Code interface guide for more](https://hexdocs.pm/ash/code-interfaces.html/).
+
+After creating or modifying Ash code, run `mix ash.codegen <short_name_describing_changes>` to ensure any required additional changes are made (like migrations are generated).
+
+If defining code interfaces, define them on the domain, i.e
+
+```elixir
+resource ResourceName do
+  define :fun_name, action: :action_name
+end
+```
+
+Always call functions on `Ash`, not the domain, that is outdated, i.e
+`Ash.read!(Resource)`.
+
+Additionally, keep in mind that when running adminstrative actions you can bypass authorization with `authorize?: false`. To run actions as a particular user, look that user up and pass it as the `actor` option.
+
+### Evals
+
+- `Ash.Info.mermaid_overview(:otp_app)` - Generates a mermaid diagram of the application's Ash Resource & Domain Model.
+
+## LiveView
+
+Use daisy components, and prefer to keep things consistent by modifying or adding and using core_components where possible.
+
+Don't use inline styles, prefer to use idiomatic Tailwind CSS, and keep the core components clean.
+
+## Tools
+
+Use tidewave MCP tools when available, as they let you interrogate the running application in various useful ways.
+
+
+
+## IMPORTANT RULES
+
+Think carefully and only take action on the specific task I have given you. Provide the most concise and elegant solution that changes as little code as possible.
+
+## Logs & Tests
+
+When you're done executing code, check the logs or run any applicable tests to see what effect your changes have had.
+
+## Use Eval
+
+Use the `project_eval` tool to execute code in the running instance of the application. Eval `h Module.fun` to get documentation for a module or function.
+
+## Ash First
+
+Always use Ash concepts, almost never ecto concepts directly. Think hard about the "Ash way" to do things. If you don't know, often look for information in the docs for Ash or in its other relevant packages. It is okay to spend time researching. Do not trust your innate knowledge, as Ash is a new and relatively unknown technocally. Use the `package_docs_search` tool early and often to search for documentation.
