@@ -48,7 +48,7 @@ config :spark,
 config :wedid,
   ecto_repos: [Wedid.Repo],
   generators: [timestamp_type: :utc_datetime],
-  ash_domains: [Wedid.Accounts]
+  ash_domains: [Wedid.Diaries, Wedid.Accounts]
 
 # Configures the endpoint
 config :wedid, WedidWeb.Endpoint,
