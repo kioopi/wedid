@@ -19,21 +19,10 @@ defmodule WedidWeb.Couple.CoupleLive do
        socket
        |> assign(:couple, current_user.couple)
        |> assign(:users, current_user.couple.users)
-       |> assign(:show_modal, false)
        |> assign(:form, to_form(form))}
     else
       {:ok, socket |> put_flash(:error, "You need to be part of a couple") |> redirect(to: "/")}
     end
-  end
-
-  @impl true
-  def handle_event("open_invite_modal", _, socket) do
-    {:noreply, assign(socket, :show_modal, true)}
-  end
-
-  @impl true
-  def handle_event("close_modal", _, socket) do
-    {:noreply, assign(socket, :show_modal, false)}
   end
 
   @impl true
@@ -50,12 +39,10 @@ defmodule WedidWeb.Couple.CoupleLive do
         {:noreply,
          socket
          |> assign(:users, users)
-         |> assign(:show_modal, false)
+         |> push_event("hideModal", %{id: "invite-modal"})
          |> put_flash(:info, "Partner invitation sent successfully!")}
 
       {:error, form} ->
-        IO.inspect(form, label: "Form error")
-
         {:noreply,
          socket
          |> put_flash(:error, "Failed to send partner invitation")
@@ -81,7 +68,7 @@ defmodule WedidWeb.Couple.CoupleLive do
         <.header>
           Your Couple: {@couple.name}
           <:actions>
-            <.button phx-click="open_invite_modal">
+            <.button phx-click={show_modal("invite-modal")}>
               <.heroicon name="hero-user-plus" class="size-4 mr-2" /> Invite Partner
             </.button>
           </:actions>
@@ -99,48 +86,26 @@ defmodule WedidWeb.Couple.CoupleLive do
           </div>
         </div>
 
-        <%= if @show_modal do %>
-          <div
-            id="invite-modal"
-            class="fixed inset-0 z-50 flex items-center justify-center"
-            phx-window-keydown="close_modal"
-            phx-key="escape"
-          >
-            <div class="fixed inset-0 bg-base-300 opacity-80" phx-click="close_modal"></div>
-            <div class="relative z-10 w-full max-w-md p-6 mx-auto bg-base-100 rounded-lg shadow-lg">
-              <div class="flex items-center justify-between mb-4">
-                <h2 class="text-xl font-semibold">Invite Partner</h2>
-                <button
-                  type="button"
-                  class="text-base-content/70 hover:text-base-content"
-                  aria-label="Close"
-                  phx-click="close_modal"
-                >
-                  <.heroicon name="hero-x-mark" class="size-5" />
-                </button>
-              </div>
+        <.modal id="invite-modal" title="Invite Partner">
+          <.form for={@form} phx-submit="invite_partner" phx-change="validate_partner_email">
+            <.input
+              field={@form[:email]}
+              type="email"
+              label="Partner's Email"
+              placeholder="partner@example.com"
+              required
+            />
 
-              <.form for={@form} phx-submit="invite_partner" phx-change="validate_partner_email">
-                <.input
-                  field={@form[:email]}
-                  type="email"
-                  label="Partner's Email"
-                  placeholder="partner@example.com"
-                  required
-                />
-
-                <div class="flex justify-end gap-3 mt-6">
-                  <.button type="button" phx-click="close_modal">
-                    Cancel
-                  </.button>
-                  <.button type="submit" variant="primary">
-                    Send Invitation
-                  </.button>
-                </div>
-              </.form>
+            <div class="flex justify-end gap-3 mt-6">
+              <.button type="button" aria-label="Close" phx-click={hide_modal("invite-modal")}>
+                Cancel
+              </.button>
+              <.button type="submit" variant="primary">
+                Send Invitation
+              </.button>
             </div>
-          </div>
-        <% end %>
+          </.form>
+        </.modal>
       </div>
     </Layouts.app>
     """

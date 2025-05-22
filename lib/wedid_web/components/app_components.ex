@@ -8,6 +8,7 @@ defmodule WedidWeb.AppComponents do
   use Phoenix.Component
   use WedidWeb, :verified_routes
   alias WedidWeb.CoreComponents, as: Core
+  alias Phoenix.LiveView.JS
 
   @doc """
   Renders the navigation bar with site branding and user authentication.
@@ -80,6 +81,57 @@ defmodule WedidWeb.AppComponents do
     <a href="/register" class="btn btn-secondary btn-sm ml-2">
       Sign up
     </a>
+    """
+  end
+
+  def hide_modal(id) do
+    JS.dispatch("hideModal", to: "##{id}")
+  end
+
+  def show_modal(id) do
+    JS.dispatch("showModal", to: "##{id}")
+  end
+
+  @doc """
+  Renders a modal dialog with a close button.
+
+  This component relies on a JavaScript hook in `assets/js/modal.js` to handle
+  opening and closing behaviors. Use the `show_modal/1` and `hide_modal/1`
+  functions to control the modal visibility.
+
+  ## Examples
+
+      <.modal id="my-modal" title="Important Information">
+        <div>Modal content goes here</div>
+        <.button phx-click={hide_modal("my-modal")}>Close</.button>
+      </.modal>
+
+      <.button phx-click={show_modal("my-modal")}>Open Modal</.button>
+  """
+  attr :id, :string, required: true, doc: "the dom id of the modal"
+  attr :title, :string, required: false, default: nil, doc: "the title of the modal"
+  slot :inner_block, required: true
+
+  def modal(assigns) do
+    ~H"""
+    <dialog id={@id} class="modal" phx-hook="Modal">
+      <div class="modal-box">
+        <div class="flex items-center justify-between mb-4">
+          <h2 :if={@title} class="text-xl font-semibold">{@title}</h2>
+          <button
+            type="button"
+            class="text-base-content/70 hover:text-base-content"
+            aria-label="Close"
+            phx-click={hide_modal(@id)}
+          >
+            <Core.heroicon name="hero-x-mark" class="size-5" />
+          </button>
+        </div>
+        <div class="modal-action">
+          {render_slot(@inner_block)}
+        </div>
+      </div>
+    </dialog>
     """
   end
 

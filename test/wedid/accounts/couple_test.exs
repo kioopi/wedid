@@ -2,8 +2,7 @@ defmodule Wedid.Accounts.CoupleTest do
   use Wedid.DataCase
   require Ash.Query
 
-  alias Wedid.Accounts.{Couple, User, Generator}
-  alias AshAuthentication.Strategy
+  alias Wedid.Accounts.{User, Generator}
 
   describe "Couple" do
     test "can list users" do
