@@ -1,6 +1,7 @@
 defmodule Wedid.Accounts do
   use Ash.Domain,
-    otp_app: :wedid
+    otp_app: :wedid,
+    extensions: [AshPhoenix]
 
   resources do
     resource Wedid.Accounts.Token

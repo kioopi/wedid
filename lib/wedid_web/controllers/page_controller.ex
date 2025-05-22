@@ -6,7 +6,7 @@ defmodule WedidWeb.PageController do
   def home(conn, _params) do
     current_user = conn.assigns[:current_user]
 
-    {:ok, current_user} = current_user |> Ash.load(couple: :user_count)
+    {:ok, current_user} = current_user |> Ash.load([couple: :user_count], actor: current_user)
 
     render(conn, :home, get_assigns(current_user))
   end
@@ -16,7 +16,8 @@ defmodule WedidWeb.PageController do
       couple: couple,
       has_partner: couple.user_count > 1,
       entries: [],
-      entries_by_day: %{}
+      entries_by_day: %{},
+      show_couple_link: true
     }
   end
 

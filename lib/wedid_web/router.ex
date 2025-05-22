@@ -24,6 +24,8 @@ defmodule WedidWeb.Router do
   scope "/", WedidWeb do
     pipe_through :browser
 
+    get "/", PageController, :home
+
     ash_authentication_live_session :authenticated_routes do
       # in each liveview, add one of the following at the top of the module:
       #
@@ -35,13 +37,10 @@ defmodule WedidWeb.Router do
       #
       # If an authenticated user must *not* be present:
       # on_mount {WedidWeb.LiveUserAuth, :live_no_user}
+
+      live "/couple", Couple.CoupleLive, :index
     end
-  end
 
-  scope "/", WedidWeb do
-    pipe_through :browser
-
-    get "/", PageController, :home
     auth_routes AuthController, Wedid.Accounts.User, path: "/auth"
     sign_out_route AuthController
 

@@ -299,6 +299,12 @@ defmodule Wedid.Accounts.User do
       authorize_if actor_present()
     end
 
+    bypass accessing_from(Wedid.Accounts.Couple, :users) do
+      # FIXME: This is not ideal.
+      # should test if actor is member of couple
+      authorize_if always()
+    end
+
     policy always() do
       forbid_if always()
     end

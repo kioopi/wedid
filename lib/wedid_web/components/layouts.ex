@@ -26,6 +26,8 @@ defmodule WedidWeb.Layouts do
   attr :current_scope, :map,
     default: nil,
     doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
+    
+  attr :current_user, :map, default: nil, doc: "the current authenticated user"
 
   slot :inner_block, required: true
 
@@ -40,6 +42,9 @@ defmodule WedidWeb.Layouts do
       </div>
       <div class="flex-none">
         <ul class="flex flex-column px-1 space-x-4 items-center">
+          <li :if={@current_scope && assigns[:current_user]}>
+            <.link href={~p"/couple"} class="btn btn-ghost">My Couple</.link>
+          </li>
           <li>
             <a href="https://phoenixframework.org/" class="btn btn-ghost">Website</a>
           </li>
