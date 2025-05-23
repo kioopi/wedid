@@ -2,11 +2,9 @@ defmodule Wedid.Accounts.CoupleTest do
   use Wedid.DataCase
   require Ash.Query
 
-  alias Wedid.Accounts.{User, Generator}
-
   describe "Couple" do
     test "can list users" do
-      user = Generator.generate(Generator.user())
+      user = generate(AccountsGenerator.user())
       email = Faker.Internet.email()
       Wedid.Accounts.invite_user!(email, user.couple_id, actor: user)
 

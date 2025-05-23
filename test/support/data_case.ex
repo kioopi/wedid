@@ -20,10 +20,18 @@ defmodule Wedid.DataCase do
     quote do
       alias Wedid.Repo
 
+      alias Wedid.Diaries
+      alias Wedid.Accounts
+      alias Diaries.Entry
+      alias Accounts.{User, Couple}
+      alias Accounts.Generator, as: AccountsGenerator
+      alias Diaries.Generator, as: DiariesGenerator
+
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
       import Wedid.DataCase
+      import Ash.Generator, only: [generate: 1]
     end
   end
 

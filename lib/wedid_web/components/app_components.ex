@@ -164,7 +164,9 @@ defmodule WedidWeb.AppComponents do
         <%= if Enum.empty?(@entries) do %>
           <.empty_entries_placeholder />
         <% else %>
-          <.timeline entries_by_day={@entries_by_day} />
+          <%= for entry <- @entries do %>
+            <.entry_card entry={entry} />
+          <% end %>
 
           <div class="mt-8 text-center">
             <.add_moment_button />
@@ -243,16 +245,13 @@ defmodule WedidWeb.AppComponents do
           <div class="flex items-center gap-2">
             <div class="avatar placeholder">
               <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
-                <span>{String.first(@entry.user.email)}</span>
+                <span>{String.first(to_string(@entry.user.email))}</span>
               </div>
             </div>
             <p class="text-sm opacity-70">
-              {@entry.user.email}
+              {to_string(@entry.user.email)}
             </p>
           </div>
-          <%= if @entry.category do %>
-            <span class="badge badge-secondary">{@entry.category}</span>
-          <% end %>
         </div>
         <p class="text-lg">{@entry.content}</p>
       </div>

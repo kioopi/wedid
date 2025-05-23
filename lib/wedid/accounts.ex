@@ -8,6 +8,7 @@ defmodule Wedid.Accounts do
 
     resource Wedid.Accounts.User do
       define :invite_user, action: :invite, args: [:email, :couple_id]
+      define :list_users, action: :read
     end
 
     resource Wedid.Accounts.Couple

@@ -1,10 +1,6 @@
 defmodule Wedid.Diaries.EntryTest do
   use Wedid.DataCase
 
-  alias Wedid.Diaries.Entry
-  alias Wedid.Accounts.Generator, as: AccountsGenerator
-  alias Wedid.Diaries.Generator, as: DiariesGenerator
-  alias Ash.Generator
   require Ash.Query
 
   @valid_content "This is a test entry content"
@@ -12,11 +8,11 @@ defmodule Wedid.Diaries.EntryTest do
   describe "Entry" do
     setup do
       # Create a user for testing
-      user = Generator.generate(AccountsGenerator.user())
+      user = generate(AccountsGenerator.user())
       partner = Wedid.Accounts.invite_user!(Faker.Internet.email(), user.couple_id, actor: user)
 
       # Create another user with different couple
-      another_user = Generator.generate(AccountsGenerator.user())
+      another_user = generate(AccountsGenerator.user())
 
       %{
         user: user,
@@ -44,7 +40,7 @@ defmodule Wedid.Diaries.EntryTest do
     end
 
     test "user can update entry", %{user: user} do
-      entry = Generator.generate(DiariesGenerator.entry(actor: user))
+      entry = generate(DiariesGenerator.entry(actor: user))
 
       entry_attrs = %{
         content: @valid_content,
@@ -60,7 +56,7 @@ defmodule Wedid.Diaries.EntryTest do
     end
 
     test "partner can update entry", %{user: user, partner: partner} do
-      entry = Generator.generate(DiariesGenerator.entry(actor: user))
+      entry = generate(DiariesGenerator.entry(actor: user))
 
       entry_attrs = %{
         content: @valid_content,
@@ -77,7 +73,7 @@ defmodule Wedid.Diaries.EntryTest do
     end
 
     test "other user can not update entry", %{user: user, other_user: other_user} do
-      entry = Generator.generate(DiariesGenerator.entry(actor: user))
+      entry = generate(DiariesGenerator.entry(actor: user))
 
       entry_attrs = %{
         content: @valid_content,
@@ -91,7 +87,7 @@ defmodule Wedid.Diaries.EntryTest do
     end
 
     test "entry's couple relationship cannot be updated", %{user: user} do
-      entry = Generator.generate(DiariesGenerator.entry(actor: user))
+      entry = generate(DiariesGenerator.entry(actor: user))
 
       # Try to update the couple_id
       # This should fail since couple_id is not accepted in the update action
@@ -102,7 +98,7 @@ defmodule Wedid.Diaries.EntryTest do
     end
 
     test "entry's user relationship cannot be updated", %{user: user} do
-      entry = Generator.generate(DiariesGenerator.entry(actor: user))
+      entry = generate(DiariesGenerator.entry(actor: user))
 
       assert {:error, %Ash.Error.Invalid{}} =
                entry
@@ -114,12 +110,12 @@ defmodule Wedid.Diaries.EntryTest do
   describe "Entry authorization" do
     setup do
       # Create a user for testing
-      user1 = Generator.generate(AccountsGenerator.user())
+      user1 = generate(AccountsGenerator.user())
 
       # Create another user with different couple
-      user2 = Generator.generate(AccountsGenerator.user())
+      user2 = generate(AccountsGenerator.user())
 
-      entry = Generator.generate(DiariesGenerator.entry(actor: user1))
+      entry = generate(DiariesGenerator.entry(actor: user1))
 
       %{
         user: user1,
