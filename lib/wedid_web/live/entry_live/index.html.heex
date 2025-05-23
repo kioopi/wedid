@@ -1,66 +1,105 @@
 <Layouts.app flash={@flash}>
-  <.header>
-    Listing Entries
-    <:actions>
-      <.button variant="primary" navigate={~p"/entries/new"}>
-        <.heroicon name="hero-plus" /> New Entry
-      </.button>
-    </:actions>
-  </.header>
-
-  <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">
-    <%= for {id, entry} <- @streams.entries do %>
-      <li id={id} class="group">
-        <hr class="group-first:hidden" />
-        <div class="timeline-middle">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            class="h-5 w-5"
-          >
-            <path
-              fill-rule="evenodd"
-              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-              clip-rule="evenodd"
-            />
-          </svg>
+  <div class="min-h-screen bg-gradient-to-b from-base-100 to-base-200">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+      <.header>
+        <div class="flex items-center gap-2">
+          <.heroicon name="hero-book-open" class="size-6 text-primary" />
+          <span>Our Journal Entries</span>
         </div>
-        <%= if @current_user && entry.user_id == @current_user.id do %>
-          <div class="timeline-end md:mb-10">
-            <time class="font-mono italic"><%= Calendar.strftime(entry.created_at, "%b %d, %Y at %I:%M %p") %></time>
-            <div class="text-lg font-black">You</div>
-            <p><%= entry.content %></p>
-            <div class="flex gap-2 mt-2">
-              <.link navigate={~p"/entries/#{entry}"} class="btn btn-xs">Show</.link>
-              <.link navigate={~p"/entries/#{entry}/edit"} class="btn btn-xs">Edit</.link>
-              <.link
-                phx-click={JS.push("delete", value: %{id: entry.id}) |> hide("##{id}")}
-                data-confirm="Are you sure?"
-                class="btn btn-xs btn-error"
-              >
-                Delete
-              </.link>
-            </div>
-          </div>
-        <% else %>
-          <div class="timeline-start mb-10 md:text-end">
-            <time class="font-mono italic"><%= Calendar.strftime(entry.created_at, "%b %d, %Y at %I:%M %p") %></time>
-            <div class="text-lg font-black">
-              <%= if entry.user && entry.user.email do %>
-                <%= Ash.CiString.value(entry.user.email) %>
+        <:subtitle>Share your thoughts and moments with your partner</:subtitle>
+        <:actions>
+          <.button variant="primary" navigate={~p"/entries/new"}>
+            <.heroicon name="hero-plus" class="size-4 mr-1" /> New Entry
+          </.button>
+        </:actions>
+      </.header>
+
+      <div class="mt-8">
+        <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">
+          <%= for {id, entry} <- @streams.entries do %>
+            <li id={id} class="group">
+              <hr class="group-first:hidden" />
+              <div class="timeline-middle">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                  class="h-5 w-5 text-primary"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                    clip-rule="evenodd"
+                  />
+                </svg>
+              </div>
+              <%= if @current_user && entry.user_id == @current_user.id do %>
+                <div class="timeline-end md:mb-10">
+                  <div class="card bg-base-200 shadow-md border-l-4 border-primary p-4">
+                    <time class="font-mono text-xs text-base-content/70 italic">
+                      <%= Calendar.strftime(entry.created_at, "%b %d, %Y at %I:%M %p") %>
+                    </time>
+                    <div class="text-lg font-bold text-primary">You</div>
+                    <p class="py-2"><%= entry.content %></p>
+                    <div class="flex gap-2 mt-2 justify-end">
+                      <.link navigate={~p"/entries/#{entry}"} class="btn btn-xs btn-ghost">
+                        <.heroicon name="hero-eye" class="size-4 mr-1" /> View
+                      </.link>
+                      <.link navigate={~p"/entries/#{entry}/edit"} class="btn btn-xs btn-ghost">
+                        <.heroicon name="hero-pencil-square" class="size-4 mr-1" /> Edit
+                      </.link>
+                      <.link
+                        phx-click={JS.push("delete", value: %{id: entry.id}) |> hide("##{id}")}
+                        data-confirm="Are you sure you want to delete this entry?"
+                        class="btn btn-xs btn-error btn-outline"
+                      >
+                        <.heroicon name="hero-trash" class="size-4 mr-1" /> Delete
+                      </.link>
+                    </div>
+                  </div>
+                </div>
               <% else %>
-                Partner
+                <div class="timeline-start mb-10 md:text-end">
+                  <div class="card bg-base-200 shadow-md border-r-4 border-secondary p-4">
+                    <time class="font-mono text-xs text-base-content/70 italic">
+                      <%= Calendar.strftime(entry.created_at, "%b %d, %Y at %I:%M %p") %>
+                    </time>
+                    <div class="text-lg font-bold text-secondary">
+                      <%= if entry.user && entry.user.email do %>
+                        <%= Ash.CiString.value(entry.user.email) %>
+                      <% else %>
+                        Partner
+                      <% end %>
+                    </div>
+                    <p class="py-2"><%= entry.content %></p>
+                    <div class="flex gap-2 mt-2">
+                      <.link navigate={~p"/entries/#{entry}"} class="btn btn-xs btn-ghost">
+                        <.heroicon name="hero-eye" class="size-4 mr-1" /> View
+                      </.link>
+                    </div>
+                  </div>
+                </div>
               <% end %>
-            </div>
-            <p><%= entry.content %></p>
-            <div class="flex gap-2 mt-2 justify-end">
-              <.link navigate={~p"/entries/#{entry}"} class="btn btn-xs">Show</.link>
+              <hr class="group-last:hidden" />
+            </li>
+          <% end %>
+        </ul>
+
+        <%= if Enum.empty?(@streams.entries.inserts) do %>
+          <div class="flex flex-col items-center justify-center py-10">
+            <div class="bg-base-200 p-8 rounded-lg shadow-lg text-center max-w-md">
+              <.heroicon name="hero-book-open" class="size-16 mx-auto text-base-content/30" />
+              <h3 class="text-xl font-bold mt-4">No entries yet</h3>
+              <p class="text-base-content/70 mt-2">
+                Share your thoughts, experiences, and special moments with your partner by creating your first entry.
+              </p>
+              <.button variant="primary" navigate={~p"/entries/new"} class="mt-6">
+                <.heroicon name="hero-plus" class="size-4 mr-1" /> Create Your First Entry
+              </.button>
             </div>
           </div>
         <% end %>
-        <hr class="group-last:hidden" />
-      </li>
-    <% end %>
-  </ul>
+      </div>
+    </div>
+  </div>
 </Layouts.app>

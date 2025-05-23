@@ -5,27 +5,56 @@ defmodule WedidWeb.EntryLive.Show do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-      <.header>
-        Entry {@entry.id}
-        <:subtitle>This is a entry record from your database.</:subtitle>
+      <div class="min-h-screen bg-gradient-to-b from-base-100 to-base-200">
+        <div class="container mx-auto px-4 py-8 max-w-4xl">
+          <.header>
+            <div class="flex items-center gap-2">
+              <.heroicon name="hero-book-open" class="size-6 text-primary" />
+              <span>Entry Details</span>
+            </div>
+            <:subtitle>
+              Viewing entry from {Calendar.strftime(@entry.created_at, "%b %d, %Y")}
+            </:subtitle>
 
-        <:actions>
-          <.button navigate={~p"/entries"}>
-            <.heroicon name="hero-arrow-left" />
-          </.button>
-          <.button variant="primary" navigate={~p"/entries/#{@entry}/edit?return_to=show"}>
-            <.heroicon name="hero-pencil-square" /> Edit Entry
-          </.button>
-        </:actions>
-      </.header>
+            <:actions>
+              <.button navigate={~p"/entries"} class="btn btn-ghost">
+                <.heroicon name="hero-arrow-left" class="size-4 mr-1" /> Back to Entries
+              </.button>
+              <.button variant="primary" navigate={~p"/entries/#{@entry}/edit?return_to=show"}>
+                <.heroicon name="hero-pencil-square" class="size-4 mr-1" /> Edit Entry
+              </.button>
+            </:actions>
+          </.header>
 
-      <.list>
-        <:item title="Id">{@entry.id}</:item>
+          <div class="card bg-base-100 shadow-lg mt-6">
+            <div class="card-body">
+              <h2 class="card-title font-bold text-primary">
+                <%= if @entry.user && @entry.user.email do %>
+                  Entry by {Ash.CiString.value(@entry.user.email)}
+                <% else %>
+                  Entry
+                <% end %>
+              </h2>
 
-        <:item title="Content">{@entry.content}</:item>
+              <div class="divider"></div>
 
-        <:item title="Created at">{@entry.created_at}</:item>
-      </.list>
+              <.list>
+                <:item title="Id"><span class="badge badge-neutral">{@entry.id}</span></:item>
+                <:item title="Content">
+                  <div class="bg-base-200 p-4 rounded-lg mt-2">
+                    {@entry.content}
+                  </div>
+                </:item>
+                <:item title="Created at">
+                  <span class="font-mono text-sm">
+                    {Calendar.strftime(@entry.created_at, "%b %d, %Y at %I:%M %p")}
+                  </span>
+                </:item>
+              </.list>
+            </div>
+          </div>
+        </div>
+      </div>
     </Layouts.app>
     """
   end
@@ -40,7 +69,10 @@ defmodule WedidWeb.EntryLive.Show do
     {:noreply,
      socket
      |> assign(:page_title, page_title(socket.assigns.live_action))
-     |> assign(:entry, Ash.get!(Wedid.Diaries.Entry, id, actor: socket.assigns.current_user))}
+     |> assign(
+       :entry,
+       Ash.get!(Wedid.Diaries.Entry, id, actor: socket.assigns.current_user, load: [:user])
+     )}
   end
 
   defp page_title(:show), do: "Show Entry"

@@ -7,18 +7,35 @@ defmodule WedidWeb.EntryLive.Form do
   def render(assigns) do
     ~H"""
     <Layouts.app flash={@flash}>
-      <.header>
-        {@page_title}
-        <:subtitle>Use this form to manage entry records in your database.</:subtitle>
-      </.header>
+      <div class="min-h-screen bg-gradient-to-b from-base-100 to-base-200">
+        <div class="container mx-auto px-4 py-8 max-w-md">
+          <.header>
+            <div class="flex items-center gap-2">
+              <.heroicon name="hero-pencil-square" class="size-6 text-primary" />
+              <span>{@page_title}</span>
+            </div>
+            <:subtitle>Share your thoughts and moments with your partner</:subtitle>
+          </.header>
 
-      <.form for={@form} id="entry-form" phx-change="validate" phx-submit="save">
-        <.input field={@form[:content]} type="text" label="Content" />
-        <.input field={@form[:created_at]} type="datetime-local" label="Created at" />
+          <div class="card bg-base-100 shadow-lg mt-6">
+            <div class="card-body">
+              <.form for={@form} id="entry-form" phx-change="validate" phx-submit="save">
+                <.input field={@form[:content]} type="textarea" label="Content" class="textarea textarea-primary" />
+                <.input field={@form[:created_at]} type="datetime-local" label="Created at" class="input input-primary" />
 
-        <.button phx-disable-with="Saving..." variant="primary">Save Entry</.button>
-        <.button navigate={return_path(@return_to, @entry)}>Cancel</.button>
-      </.form>
+                <div class="flex justify-end gap-2 mt-6">
+                  <.button navigate={return_path(@return_to, @entry)} class="btn btn-ghost">
+                    <.heroicon name="hero-x-mark" class="size-4 mr-1" /> Cancel
+                  </.button>
+                  <.button phx-disable-with="Saving..." variant="primary">
+                    <.heroicon name="hero-check" class="size-4 mr-1" /> Save Entry
+                  </.button>
+                </div>
+              </.form>
+            </div>
+          </div>
+        </div>
+      </div>
     </Layouts.app>
     """
   end
