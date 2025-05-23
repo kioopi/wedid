@@ -21,7 +21,7 @@ defmodule WedidWeb.PageController do
       entries:
         Diaries.list_entries!(
           actor: user,
-          query: Ash.Query.filter(Entry, couple_id != ^user.id)
+          query: Ash.Query.filter(Entry, user_id != ^user.id)
         ),
       entries_by_day: %{},
       show_couple_link: true

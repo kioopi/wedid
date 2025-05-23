@@ -270,13 +270,8 @@ defmodule WedidWeb.AppComponents do
 
   def add_moment_button(assigns) do
     ~H"""
-    <a href="#" class={[@class, "animate-pulse"]}>
-      <.icon name="plus" />
-      <%= if @class =~ "btn-lg" do %>
-        Add new moment
-      <% else %>
-        Add moment
-      <% end %>
+    <a href={~p"/entries"} class={[@class, "animate-pulse"]}>
+      <.icon name="plus" /> See all moments
     </a>
     """
   end
