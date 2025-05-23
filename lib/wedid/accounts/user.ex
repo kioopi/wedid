@@ -269,6 +269,7 @@ defmodule Wedid.Accounts.User do
       description "Invite a user to join a couple."
       accept [:email]
 
+      # FIXME: change this to take couple_id from the actor
       argument :couple_id, :uuid do
         allow_nil? false
       end

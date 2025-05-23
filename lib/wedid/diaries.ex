@@ -6,6 +6,7 @@ defmodule Wedid.Diaries do
   resources do
     resource Wedid.Diaries.Entry do
       define :create_entry, action: :create, args: [:content, :created_at]
+      define :list_entries, action: :list
     end
   end
 end

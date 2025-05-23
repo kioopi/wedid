@@ -6,6 +6,8 @@ defmodule Wedid.Diaries.Entry do
     authorizers: [Ash.Policy.Authorizer],
     extensions: [AshAuthentication]
 
+  require Ash.Query
+
   postgres do
     table "entries"
     repo Wedid.Repo
@@ -20,21 +22,26 @@ defmodule Wedid.Diaries.Entry do
       change relate_actor(:user)
       change set_attribute(:couple_id, actor(:couple_id))
     end
+
+    read :list do
+      prepare build(sort: [created_at: :asc], load: [:user])
+      filter expr(couple_id == ^actor(:couple_id))
+    end
   end
 
   policies do
     policy action_type(:update) do
-      authorize_if expr(user_id == ^actor(:id))
       authorize_if expr(couple_id == ^actor(:couple_id))
+      authorize_if expr(user_id == ^actor(:id))
     end
 
     policy action_type(:destroy) do
-      authorize_if relates_to_actor_via(:couple)
+      authorize_if expr(couple_id == ^actor(:couple_id))
       authorize_if expr(user_id == ^actor(:id))
     end
 
     policy action_type(:read) do
-      authorize_if relates_to_actor_via(:couple)
+      authorize_if expr(couple_id == ^actor(:couple_id))
       authorize_if expr(user_id == ^actor(:id))
     end
 
@@ -53,6 +60,7 @@ defmodule Wedid.Diaries.Entry do
 
     attribute :created_at, :utc_datetime do
       allow_nil? false
+      default &DateTime.utc_now/0
       public? true
     end
 

@@ -3,9 +3,12 @@ defmodule WedidWeb.EntryLive.Index do
 
   @impl true
   def mount(_params, _session, socket) do
+    entries =
+      Wedid.Diaries.list_entries!(actor: socket.assigns.current_user)
+
     {:ok,
      socket
-     |> stream(:entries, Ash.read!(Wedid.Diaries.Entry, actor: socket.assigns[:current_user]))
+     |> stream(:entries, entries)
      |> assign_new(:current_user, fn -> nil end)}
   end
 
