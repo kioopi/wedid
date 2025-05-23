@@ -39,6 +39,13 @@ defmodule WedidWeb.Router do
       # on_mount {WedidWeb.LiveUserAuth, :live_no_user}
 
       live "/couple", Couple.CoupleLive, :index
+
+      live "/entries", EntryLive.Index, :index
+      live "/entries/new", EntryLive.Form, :new
+      live "/entries/:id/edit", EntryLive.Form, :edit
+
+      live "/entries/:id", EntryLive.Show, :show
+      live "/entries/:id/show/edit", EntryLive.Show, :edit
     end
 
     auth_routes AuthController, Wedid.Accounts.User, path: "/auth"
