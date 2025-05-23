@@ -11,6 +11,60 @@ defmodule WedidWeb.AppComponents do
   alias Phoenix.LiveView.JS
 
   @doc """
+  Renders a single entry in the journal.
+
+  ## Examples
+
+      <.journal_entry entry={entry} current_user={@current_user} />
+  """
+  attr :entry, :map, required: true, doc: "the entry data"
+  attr :current_user, :map, default: nil, doc: "the current user"
+  attr :id, :any, default: nil, doc: "the id for phx-update"
+
+  def journal_entry(assigns) do
+    ~H"""
+    <div class="card bg-base-200 shadow-md p-4">
+      <div class="mb-1 text-sm text-base-content/70">
+        {Calendar.strftime(@entry.created_at, "%b %d, %Y")}
+      </div>
+
+      <div class="py-2 text-lg">
+        {@entry.content}
+      </div>
+
+      <div class="flex justify-between items-end mt-2">
+        <div class="text-sm font-semibold text-base-content/80">
+          <%= if @current_user && @entry.user_id == @current_user.id do %>
+            <span class="text-primary">You</span>
+          <% else %>
+            <%= if @entry.user && @entry.user.email do %>
+              <span class="text-secondary">{Ash.CiString.value(@entry.user.email)}</span>
+            <% else %>
+              <span class="text-secondary">Partner</span>
+            <% end %>
+          <% end %>
+        </div>
+
+        <%= if @current_user && @entry.user_id == @current_user.id do %>
+          <div class="flex gap-1 ml-auto">
+            <.link navigate={~p"/entries/#{@entry}/edit"} class="btn btn-xs btn-ghost">
+              <Core.heroicon name="hero-pencil-square" class="size-4" />
+            </.link>
+            <.link
+              phx-click={JS.push("delete", value: %{id: @entry.id})}
+              data-confirm="Are you sure you want to delete this entry?"
+              class="btn btn-xs btn-ghost text-error"
+            >
+              <Core.heroicon name="hero-trash" class="size-4" />
+            </.link>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    """
+  end
+
+  @doc """
   Renders the navigation bar with site branding and user authentication.
 
   ## Examples

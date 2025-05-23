@@ -20,37 +20,20 @@ defmodule WedidWeb.EntryLive.Show do
               <.button navigate={~p"/entries"} class="btn btn-ghost">
                 <.heroicon name="hero-arrow-left" class="size-4 mr-1" /> Back to Entries
               </.button>
-              <.button variant="primary" navigate={~p"/entries/#{@entry}/edit?return_to=show"}>
-                <.heroicon name="hero-pencil-square" class="size-4 mr-1" /> Edit Entry
-              </.button>
             </:actions>
           </.header>
 
-          <div class="card bg-base-100 shadow-lg mt-6">
-            <div class="card-body">
-              <h2 class="card-title font-bold text-primary">
-                <%= if @entry.user && @entry.user.email do %>
-                  Entry by {Ash.CiString.value(@entry.user.email)}
-                <% else %>
-                  Entry
-                <% end %>
-              </h2>
-
-              <div class="divider"></div>
-
-              <.list>
-                <:item title="Id"><span class="badge badge-neutral">{@entry.id}</span></:item>
-                <:item title="Content">
-                  <div class="bg-base-200 p-4 rounded-lg mt-2">
-                    {@entry.content}
-                  </div>
-                </:item>
-                <:item title="Created at">
-                  <span class="font-mono text-sm">
-                    {Calendar.strftime(@entry.created_at, "%b %d, %Y at %I:%M %p")}
-                  </span>
-                </:item>
-              </.list>
+          <div class="max-w-2xl mx-auto mt-6">
+            <.journal_entry entry={@entry} current_user={@current_user} />
+            
+            <div class="card bg-base-100 shadow-md mt-6 p-4">
+              <h3 class="text-sm font-semibold mb-2">Additional Information</h3>
+              <div class="text-xs text-base-content/70">
+                <div class="flex justify-between mb-1">
+                  <span>Entry ID:</span>
+                  <span class="badge badge-sm badge-neutral">{@entry.id}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -72,7 +55,8 @@ defmodule WedidWeb.EntryLive.Show do
      |> assign(
        :entry,
        Ash.get!(Wedid.Diaries.Entry, id, actor: socket.assigns.current_user, load: [:user])
-     )}
+     )
+     |> assign(:current_user, socket.assigns.current_user)}
   end
 
   defp page_title(:show), do: "Show Entry"
