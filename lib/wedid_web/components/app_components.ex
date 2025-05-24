@@ -106,7 +106,7 @@ defmodule WedidWeb.AppComponents do
     <div class="dropdown dropdown-end">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">
         <div class="bg-neutral-focus text-neutral-content rounded-full w-10">
-          <span>{Ash.CiString.value(@current_user.email) |> String.first()}</span>
+          <span>{to_string(@current_user.email) |> String.first()}</span>
         </div>
       </div>
       <ul
@@ -114,6 +114,7 @@ defmodule WedidWeb.AppComponents do
         class="menu dropdown-content z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52 mt-4"
       >
         <li class="menu-title font-medium">{@current_user.email}</li>
+        <li><.link navigate={~p"/settings"}>Settings</.link></li>
         <li><a href="/sign-out">Sign out</a></li>
       </ul>
     </div>

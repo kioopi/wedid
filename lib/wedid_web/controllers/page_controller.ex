@@ -18,15 +18,19 @@ defmodule WedidWeb.PageController do
     %{
       couple: couple,
       has_partner: couple.user_count > 1,
-      entries:
-        Diaries.list_entries!(
-          actor: user,
-          query: Ash.Query.filter(Entry, user_id != ^user.id)
-        ),
+      entries: list_entries_of_partners!(user),
       entries_by_day: %{},
       show_couple_link: true
     }
   end
 
   defp get_assigns(nil), do: %{}
+
+  defp list_entries_of_partners!(user) do
+    Diaries.list_entries!(actor: user, query: only_entries_of_partners_query(user))
+  end
+
+  defp only_entries_of_partners_query(user) do
+    Ash.Query.filter(Entry, user_id != ^user.id)
+  end
 end

@@ -35,6 +35,21 @@ defmodule Wedid.Diaries.DiariesTest do
       assert first_entry.user.email == user.email
     end
 
+    test "list_entries contains the display_name of the users" do
+      user = generate(AccountsGenerator.user())
+      generate(DiariesGenerator.entry(actor: user))
+
+      user = Accounts.update_user_profile!(user, "james joice", actor: user)
+
+      entries = Diaries.list_entries!(actor: user)
+
+      assert length(entries) == 1
+      [first_entry] = entries
+
+      # user is loaded
+      assert first_entry.user.display_name == "james joice"
+    end
+
     test "list_entries with a query" do
       user = generate(AccountsGenerator.user())
       generate(DiariesGenerator.entry(actor: user))
@@ -52,6 +67,9 @@ defmodule Wedid.Diaries.DiariesTest do
       [first_entry] = entries
       # entry only contains the partner's entry
       assert first_entry.user.email == partner.email
+
+      assert first_entry.user.display_name ==
+               to_string(partner.email) |> String.split("@") |> List.first()
     end
   end
 end
