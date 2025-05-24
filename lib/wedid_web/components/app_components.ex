@@ -37,8 +37,8 @@ defmodule WedidWeb.AppComponents do
           <%= if @current_user && @entry.user_id == @current_user.id do %>
             <span class="text-primary">You</span>
           <% else %>
-            <%= if @entry.user && @entry.user.email do %>
-              <span class="text-secondary">{Ash.CiString.value(@entry.user.email)}</span>
+            <%= if @entry.user do %>
+              <span class="text-secondary">{@entry.user.display_name}</span>
             <% else %>
               <span class="text-secondary">Partner</span>
             <% end %>
@@ -299,11 +299,11 @@ defmodule WedidWeb.AppComponents do
           <div class="flex items-center gap-2">
             <div class="avatar placeholder">
               <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
-                <span>{String.first(to_string(@entry.user.email))}</span>
+                <span>{String.first(@entry.user.display_name)}</span>
               </div>
             </div>
             <p class="text-sm opacity-70">
-              {to_string(@entry.user.email)}
+              {@entry.user.display_name}
             </p>
           </div>
         </div>

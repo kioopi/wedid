@@ -1,6 +1,8 @@
 defmodule WedidWeb.EntryLive.Index do
   use WedidWeb, :live_view
 
+  on_mount {WedidWeb.LiveUserAuth, :live_user_required}
+
   @impl true
   def mount(_params, _session, socket) do
     entries =

@@ -24,7 +24,7 @@ defmodule Wedid.Diaries.Entry do
     end
 
     read :list do
-      prepare build(sort: [created_at: :asc], load: [:user])
+      prepare build(sort: [created_at: :asc], load: [user: [:display_name]])
       filter expr(couple_id == ^actor(:couple_id))
     end
   end

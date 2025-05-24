@@ -1,6 +1,8 @@
 defmodule WedidWeb.EntryLive.Show do
   use WedidWeb, :live_view
 
+  on_mount {WedidWeb.LiveUserAuth, :live_user_required}
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -25,7 +27,7 @@ defmodule WedidWeb.EntryLive.Show do
 
           <div class="max-w-2xl mx-auto mt-6">
             <.journal_entry entry={@entry} current_user={@current_user} />
-            
+
             <div class="card bg-base-100 shadow-md mt-6 p-4">
               <h3 class="text-sm font-semibold mb-2">Additional Information</h3>
               <div class="text-xs text-base-content/70">

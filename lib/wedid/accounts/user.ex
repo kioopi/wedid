@@ -61,6 +61,10 @@ defmodule Wedid.Accounts.User do
   actions do
     defaults [:read]
 
+    update :update_profile do
+      accept [:name]
+    end
+
     read :get_by_subject do
       description "Get a user by the subject claim in a JWT"
       argument :subject, :string, allow_nil?: false
@@ -312,6 +316,10 @@ defmodule Wedid.Accounts.User do
       authorize_if always()
     end
 
+    bypass action(:update_profile) do
+      authorize_if expr(id == ^actor(:id))
+    end
+
     policy always() do
       forbid_if always()
     end
@@ -325,6 +333,11 @@ defmodule Wedid.Accounts.User do
       public? true
     end
 
+    attribute :name, :string do
+      allow_nil? true
+      public? true
+    end
+
     attribute :hashed_password, :string do
       sensitive? true
     end
@@ -334,6 +347,17 @@ defmodule Wedid.Accounts.User do
 
   relationships do
     belongs_to :couple, Wedid.Accounts.Couple
+  end
+
+  calculations do
+    calculate :display_name,
+              :string,
+              expr(
+                cond do
+                  is_nil(name) -> fragment("split_part(?, '@', 1)", email)
+                  true -> name
+                end
+              )
   end
 
   identities do
