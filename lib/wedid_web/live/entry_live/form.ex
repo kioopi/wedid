@@ -6,7 +6,7 @@ defmodule WedidWeb.EntryLive.Form do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} current_user={@current_user}>
       <div class="min-h-screen bg-gradient-to-b from-base-100 to-base-200">
         <div class="container mx-auto px-4 py-8 max-w-md">
           <.header>
@@ -20,8 +20,18 @@ defmodule WedidWeb.EntryLive.Form do
           <div class="card bg-base-100 shadow-lg mt-6">
             <div class="card-body">
               <.form for={@form} id="entry-form" phx-change="validate" phx-submit="save">
-                <.input field={@form[:content]} type="textarea" label="Content" class="textarea textarea-primary" />
-                <.input field={@form[:created_at]} type="datetime-local" label="Created at" class="input input-primary" />
+                <.input
+                  field={@form[:content]}
+                  type="textarea"
+                  label="Content"
+                  class="textarea textarea-primary"
+                />
+                <.input
+                  field={@form[:created_at]}
+                  type="datetime-local"
+                  label="Created at"
+                  class="input input-primary"
+                />
 
                 <div class="flex justify-end gap-2 mt-6">
                   <.button navigate={return_path(@return_to, @entry)} class="btn btn-ghost">

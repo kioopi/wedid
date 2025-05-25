@@ -330,7 +330,7 @@ defmodule WedidWeb.CoreComponents do
       </div>
       <ul
         tabindex="0"
-        class="menu dropdown-content z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52 mt-4"
+        class="menu dropdown-content z-[1] p-2 shadow-lg bg-base-100 text-base-content rounded-box w-52 mt-4"
       >
         <li class="menu-title font-medium">{@current_user.email}</li>
         <li><.link navigate={~p"/settings"}>Settings</.link></li>

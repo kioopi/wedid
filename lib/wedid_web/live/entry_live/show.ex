@@ -6,7 +6,7 @@ defmodule WedidWeb.EntryLive.Show do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} current_user={@current_user}>
       <div class="min-h-screen bg-gradient-to-b from-base-100 to-base-200">
         <div class="container mx-auto px-4 py-8 max-w-4xl">
           <.header>

@@ -26,12 +26,39 @@ defmodule WedidWeb.Layouts do
   attr :current_scope, :map,
     default: nil,
     doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
-    
+
   attr :current_user, :map, default: nil, doc: "the current authenticated user"
 
   slot :inner_block, required: true
 
   def app(assigns) do
+    ~H"""
+    <.navbar current_user={@current_user} />
+
+    <main class="px-4 py-20 sm:px-6 lg:px-8">
+      <div class="mx-auto max-w-2xl space-y-4">
+        {render_slot(@inner_block)}
+      </div>
+    </main>
+
+    <.flash_group flash={@flash} />
+    """
+  end
+
+  @doc """
+  Renders the app header
+
+  ## Examples
+
+      <Layouts.app_header current_scope={@current_scope} current_user={@current_user} />
+  """
+  attr :current_scope, :map,
+    default: nil,
+    doc: "the current [scope](https://hexdocs.pm/phoenix/scopes.html)"
+
+  attr :current_user, :map, default: nil, doc: "the current authenticated user"
+
+  def app_header(assigns) do
     ~H"""
     <header class="navbar px-4 sm:px-6 lg:px-8">
       <div class="flex-1">
@@ -42,7 +69,7 @@ defmodule WedidWeb.Layouts do
       </div>
       <div class="flex-none">
         <ul class="flex flex-column px-1 space-x-4 items-center">
-          <li :if={@current_scope && assigns[:current_user]}>
+          <li :if={@current_scope && @current_user}>
             <.link href={~p"/couple"} class="btn btn-ghost">My Couple</.link>
           </li>
           <li>
@@ -62,14 +89,6 @@ defmodule WedidWeb.Layouts do
         </ul>
       </div>
     </header>
-
-    <main class="px-4 py-20 sm:px-6 lg:px-8">
-      <div class="mx-auto max-w-2xl space-y-4">
-        {render_slot(@inner_block)}
-      </div>
-    </main>
-
-    <.flash_group flash={@flash} />
     """
   end
 

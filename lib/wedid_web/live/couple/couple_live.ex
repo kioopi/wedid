@@ -10,7 +10,8 @@ defmodule WedidWeb.Couple.CoupleLive do
   def mount(_params, _session, socket) do
     current_user = socket.assigns.current_user
 
-    {:ok, current_user} = Ash.load(current_user, [couple: [users: [:display_name]]], actor: current_user)
+    {:ok, current_user} =
+      Ash.load(current_user, [couple: [users: [:display_name]]], actor: current_user)
 
     form = Accounts.form_to_invite_user(actor: current_user)
 
@@ -33,7 +34,9 @@ defmodule WedidWeb.Couple.CoupleLive do
     case AshPhoenix.Form.submit(socket.assigns.form, params: form_data) do
       {:ok, _invited_user} ->
         # Fixme: new user shoud just be appended assigns.users
-        {:ok, current_user} = Ash.load(current_user, [couple: [users: [:display_name]]], actor: current_user)
+        {:ok, current_user} =
+          Ash.load(current_user, [couple: [users: [:display_name]]], actor: current_user)
+
         users = current_user.couple.users
 
         {:noreply,
@@ -63,7 +66,7 @@ defmodule WedidWeb.Couple.CoupleLive do
   @impl true
   def render(assigns) do
     ~H"""
-    <Layouts.app flash={@flash}>
+    <Layouts.app flash={@flash} current_user={@current_user}>
       <div class="container mx-auto p-6">
         <.header>
           Your Couple: {@couple.name}
