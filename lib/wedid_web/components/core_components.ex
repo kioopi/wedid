@@ -28,6 +28,7 @@ defmodule WedidWeb.CoreComponents do
   """
   use Phoenix.Component
   use Gettext, backend: WedidWeb.Gettext
+  use WedidWeb, :verified_routes
 
   alias Phoenix.LiveView.JS
 
@@ -307,6 +308,35 @@ defmodule WedidWeb.CoreComponents do
       </div>
       <div class="flex-none">{render_slot(@actions)}</div>
     </header>
+    """
+  end
+
+  @doc """
+  Renders the user menu dropdown.
+
+  ## Examples
+
+      <.user_menu current_user={@current_user} />
+  """
+  attr :current_user, :map, required: true, doc: "the current user"
+
+  def user_menu(assigns) do
+    ~H"""
+    <div class="dropdown dropdown-end">
+      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">
+        <div class="bg-neutral-focus text-neutral-content rounded-full w-10">
+          <span>{to_string(@current_user.email) |> String.first()}</span>
+        </div>
+      </div>
+      <ul
+        tabindex="0"
+        class="menu dropdown-content z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52 mt-4"
+      >
+        <li class="menu-title font-medium">{@current_user.email}</li>
+        <li><.link navigate={~p"/settings"}>Settings</.link></li>
+        <li><a href="/sign-out">Sign out</a></li>
+      </ul>
+    </div>
     """
   end
 

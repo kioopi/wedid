@@ -75,40 +75,11 @@ defmodule WedidWeb.AppComponents do
       </div>
       <div class="navbar-end">
         <%= if @current_user do %>
-          <.user_menu current_user={@current_user} />
+          <Core.user_menu current_user={@current_user} />
         <% else %>
           <.auth_buttons />
         <% end %>
       </div>
-    </div>
-    """
-  end
-
-  @doc """
-  Renders the user menu dropdown.
-
-  ## Examples
-
-      <.user_menu current_user={@current_user} />
-  """
-  attr :current_user, :map, required: true, doc: "the current user"
-
-  def user_menu(assigns) do
-    ~H"""
-    <div class="dropdown dropdown-end">
-      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">
-        <div class="bg-neutral-focus text-neutral-content rounded-full w-10">
-          <span>{to_string(@current_user.email) |> String.first()}</span>
-        </div>
-      </div>
-      <ul
-        tabindex="0"
-        class="menu dropdown-content z-[1] p-2 shadow-lg bg-base-100 rounded-box w-52 mt-4"
-      >
-        <li class="menu-title font-medium">{@current_user.email}</li>
-        <li><.link navigate={~p"/settings"}>Settings</.link></li>
-        <li><a href="/sign-out">Sign out</a></li>
-      </ul>
     </div>
     """
   end
