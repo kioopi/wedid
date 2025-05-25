@@ -11,4 +11,4 @@ for plugin in "${plugins[@]}"; do
 done
 
 echo "Installation complete."
-echo "Please restart your terminal or source your profile file.
+echo "Please restart your terminal or source your profile file."

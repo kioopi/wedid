@@ -69,17 +69,26 @@ The first version of **WeDid** will focus on simplicity and usability:
 This is a small passion project, and contributors are welcome! Whether you're into design, Elixir/Phoenix, UI writing, or psychology-informed UX—jump in.
 
 To get started:
+
+Install Erlang and Elixir using [asdf](https://asdf-vm.com/):
+```bash
+./scripts/asdf_plugins.sh
+asdf install
+```
+
+Clone the repository and set up the project:
+
 ```bash
 git clone https://github.com/yourname/wedid.git
 cd wedid
-mix deps.get
+mix setup
+```
+
+
+Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+```bash
 mix phx.server
-
-
-To start your Phoenix server:
-
-  * Run `mix ash.setup` to install and setup dependencies
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
+```
 
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
