@@ -15,11 +15,11 @@ defmodule WedidWeb.AppComponents do
 
   ## Examples
 
-      <.journal_entry entry={entry} current_user={@current_user} />
+      <.journal_entry entry={entry} show_links={false} />
   """
   attr :entry, :map, required: true, doc: "the entry data"
-  attr :current_user, :map, default: nil, doc: "the current user"
   attr :id, :any, default: nil, doc: "the id for phx-update"
+  attr :show_links, :boolean, default: true, doc: "whether to show edit/delete links"
 
   def journal_entry(assigns) do
     ~H"""
@@ -34,18 +34,10 @@ defmodule WedidWeb.AppComponents do
 
       <div class="flex justify-between items-end mt-2">
         <div class="text-sm font-semibold text-base-content/80">
-          <%= if @current_user && @entry.user_id == @current_user.id do %>
-            <span class="text-primary">You</span>
-          <% else %>
-            <%= if @entry.user do %>
-              <span class="text-secondary">{@entry.user.display_name}</span>
-            <% else %>
-              <span class="text-secondary">Partner</span>
-            <% end %>
-          <% end %>
+          <span class="text-secondary">{@entry.user.display_name}</span>
         </div>
 
-        <%= if @current_user && @entry.user_id == @current_user.id do %>
+        <%= if @show_links do %>
           <div class="flex gap-1 ml-auto">
             <.link navigate={~p"/entries/#{@entry}/edit"} class="btn btn-xs btn-ghost">
               <Core.heroicon name="hero-pencil-square" class="size-4" />
@@ -220,7 +212,7 @@ defmodule WedidWeb.AppComponents do
           <.empty_entries_placeholder />
         <% else %>
           <%= for entry <- @entries do %>
-            <.entry_card entry={entry} />
+            <.journal_entry entry={entry} show_links={false} />
           <% end %>
 
           <div class="mt-8 text-center">
@@ -248,68 +240,6 @@ defmodule WedidWeb.AppComponents do
         This is where you'll see all the special moments you and your partner share. Start your journey of gratitude today!
       </p>
       <.add_moment_button />
-    </div>
-    """
-  end
-
-  @doc """
-  Renders a timeline of entries grouped by day.
-
-  ## Examples
-
-      <.timeline entries_by_day={@entries_by_day} />
-  """
-  attr :entries_by_day, :map, required: true, doc: "entries grouped by day"
-
-  def timeline(assigns) do
-    ~H"""
-    <div class="timeline timeline-compact timeline-snap-icon">
-      <%= for {day, day_entries} <- @entries_by_day do %>
-        <div class="timeline-item">
-          <div class="timeline-middle">
-            <div class="badge badge-primary badge-lg">
-              <.icon name="calendar" class="w-4 h-4 mr-1" />
-              {day}
-            </div>
-          </div>
-          <div class="timeline-end">
-            <%= for entry <- day_entries do %>
-              <.entry_card entry={entry} />
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
-    """
-  end
-
-  @doc """
-  Renders a card for a single entry.
-
-  ## Examples
-
-      <.entry_card entry={entry} />
-  """
-  attr :entry, :map, required: true, doc: "the entry data"
-
-  def entry_card(assigns) do
-    ~H"""
-    <div class="card bg-base-200 mb-4 hover:shadow-lg transition-all duration-300 border-l-4 border-secondary">
-      <div class="card-body p-5">
-        <div class="flex justify-between items-center mb-3">
-          <div class="flex items-center gap-2">
-            <div class="avatar placeholder">
-              <div class="bg-neutral-focus text-neutral-content rounded-full w-8">
-                <span>{String.first(@entry.user.display_name)}</span>
-              </div>
-            </div>
-            <p class="text-sm opacity-70">
-              {@entry.user.display_name}
-            </p>
-          </div>
-        </div>
-        <p class="text-lg">{@entry.content}</p>
-      </div>
     </div>
     """
   end
