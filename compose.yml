@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:17.4
+    healthcheck:
+      test: ["CMD", "pg_isready", "--username=${HETZNER_USERNAME:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-qwertz.com}
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: ${HETZNER_USERNAME:-postgres}
+      POSTGRES_DB: wedid_prod
+    ports:
+      - ${POSTGRES_PORT:-5432}
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  web:
+    image: ${WEB_IMAGE:-ghcr.io/kioopi/wedid:latest}
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      DATABASE_URL: ecto://${HETZNER_USERNAME:-postgres}:${POSTGRES_PASSWORD:-qwertz.com}@db/wedid_prod
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE:-gec2qwy9teACXroH46HWYfBnJf7boWWxFRnoXW3HbGTEF3SqbwPNV05pz9S/Tlon}
+      PHX_HOST: ${PHX_HOST:-localhost}
+    ports:
+      - 4000:4000
+    depends_on:
+      - db
+    command: >
+      bash -c "bin/migrate && bin/server"
+
+volumes:
+  db_data:
