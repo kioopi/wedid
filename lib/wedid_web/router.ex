@@ -13,6 +13,7 @@ defmodule WedidWeb.Router do
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :load_from_session
+    plug WedidWeb.LoadUserRelationships
   end
 
   pipeline :api do
@@ -39,7 +40,7 @@ defmodule WedidWeb.Router do
       # on_mount {WedidWeb.LiveUserAuth, :live_no_user}
 
       live "/couple", Couple.CoupleLive, :index
-      
+
       live "/settings", User.SettingsLive, :index
 
       live "/entries", EntryLive.Index, :index

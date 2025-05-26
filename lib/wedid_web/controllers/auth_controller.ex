@@ -12,8 +12,6 @@ defmodule WedidWeb.AuthController do
         _ -> "You are now signed in"
       end
 
-    {:ok, user} = Ash.load(user, [:display_name, :couple])
-
     conn
     |> delete_session(:return_to)
     |> store_in_session(user)

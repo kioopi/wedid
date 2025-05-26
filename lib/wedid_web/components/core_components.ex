@@ -325,7 +325,7 @@ defmodule WedidWeb.CoreComponents do
     <div class="dropdown dropdown-end">
       <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar placeholder">
         <div class="bg-neutral-focus text-neutral-content rounded-full w-10">
-          <span>{to_string(@current_user.email) |> String.first()}</span>
+          <span>{to_string(@current_user.display_name) |> String.first()}</span>
         </div>
       </div>
       <ul

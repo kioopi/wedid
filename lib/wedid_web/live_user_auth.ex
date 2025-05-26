@@ -4,6 +4,8 @@ defmodule WedidWeb.LiveUserAuth do
   """
 
   import Phoenix.Component
+  import WedidWeb.LoadUserRelationships, only: [load_user_relationships: 1]
+
   use WedidWeb, :verified_routes
 
   # This is used for nested liveviews to fetch the current user.
@@ -15,7 +17,7 @@ defmodule WedidWeb.LiveUserAuth do
 
   def on_mount(:live_user_optional, _params, _session, socket) do
     if socket.assigns[:current_user] do
-      {:cont, socket}
+      {:cont, ensure_user_loaded(socket)}
     else
       {:cont, assign(socket, :current_user, nil)}
     end
@@ -23,7 +25,7 @@ defmodule WedidWeb.LiveUserAuth do
 
   def on_mount(:live_user_required, _params, _session, socket) do
     if socket.assigns[:current_user] do
-      {:cont, socket}
+      {:cont, ensure_user_loaded(socket)}
     else
       {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/sign-in")}
     end
@@ -36,4 +38,10 @@ defmodule WedidWeb.LiveUserAuth do
       {:cont, assign(socket, :current_user, nil)}
     end
   end
+
+  defp ensure_user_loaded(%{assigns: %{current_user: current_user}} = socket) do
+    assign(socket, :current_user, load_user_relationships(current_user))
+  end
+
+  defp ensure_user_loaded(socket), do: socket
 end
