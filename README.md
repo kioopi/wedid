@@ -79,7 +79,7 @@ asdf install
 Clone the repository and set up the project:
 
 ```bash
-git clone https://github.com/yourname/wedid.git
+git clone https://github.com/kioopi/wedid.git
 cd wedid
 mix setup
 ```
