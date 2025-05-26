@@ -135,6 +135,7 @@ jobs:
           ssh ${{ secrets.HETZNER_USERNAME }}@${{ secrets.HETZNER_HOST_IP }} "cd ~/wedid && \
           export WEB_IMAGE=ghcr.io/kioopi/wedid:latest && \
           export SECRET_KEY_BASE=${{ secrets.SECRET_KEY_BASE }} && \
-          export PHX_HOST=${{ secrets.HETZNER_HOST_IP }} && \
+          export PHX_HOST=${{ secrets.PHX_HOST }} && \
           export GHCR_PAT=${{ secrets.GH_PAT }} && \
+          export TOKEN_SIGNING_SECRET=${{ secrets.TOKEN_SIGNING_SECRET }} && \
           ./deploy.sh"
