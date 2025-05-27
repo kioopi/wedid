@@ -11,9 +11,6 @@ defmodule Wedid.Accounts.User.Senders.SendMagicLinkEmail do
 
   @impl true
   def send(user_or_email, token, _) do
-    # if you get a user, its for a user that already exists.
-    # if you get an email, then the user does not yet exist.
-
     email =
       case user_or_email do
         %{email: email} -> email
@@ -22,9 +19,9 @@ defmodule Wedid.Accounts.User.Senders.SendMagicLinkEmail do
 
     new()
     # TODO: Replace with your email
-    |> from({"noreply", "noreply@example.com"})
+    |> from({"Vangelis", "wedid@codevise.de"})
     |> to(to_string(email))
-    |> subject("Your login link")
+    |> subject("Your WeDid login link")
     |> html_body(body(token: token, email: email))
     |> Mailer.deliver!()
   end

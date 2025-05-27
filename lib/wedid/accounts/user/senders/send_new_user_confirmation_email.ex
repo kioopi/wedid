@@ -12,20 +12,23 @@ defmodule Wedid.Accounts.User.Senders.SendNewUserConfirmationEmail do
 
   @impl true
   def send(user, token, _) do
+    create_email(user, token) |> Mailer.deliver!()
+  end
+
+  def create_email(user, token) do
     new()
-    # TODO: Replace with your email
-    |> from({"noreply", "noreply@example.com"})
+    # TODO: Move this to a config file
+    |> from({"Vangelis", "wedid@codevise.de"})
     |> to(to_string(user.email))
-    |> subject("Confirm your email address")
+    |> subject("WeDid Confirm your email address")
     |> html_body(body(token: token))
-    |> Mailer.deliver!()
   end
 
   defp body(params) do
     url = url(~p"/confirm_new_user/#{params[:token]}")
 
     """
-    <p>Click this link to confirm your email:</p>
+    <p>Click this link to confirm your email for WeDid:</p>
     <p><a href="#{url}">#{url}</a></p>
     """
   end
