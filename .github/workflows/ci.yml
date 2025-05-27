@@ -138,8 +138,6 @@ jobs:
           export PHX_HOST=${{ secrets.PHX_HOST }} && \
           export GHCR_PAT=${{ secrets.GH_PAT }} && \
           export TOKEN_SIGNING_SECRET=${{ secrets.TOKEN_SIGNING_SECRET }} && \
-          export SMTP_SERVER=${{ secrets.SMTP_SERVER }} && \
-          export SMTP_PORT=${{ secrets.SMTP_PORT }} && \
-          export SMTP_USERNAME=${{ secrets.SMTP_USERNAME }} && \
-          export SMTP_PASSWORD=${{ secrets.SMTP_PASSWORD }} && \
+          export MAILJET_API_KEY=${{ secrets.MAILJET_API_KEY }} && \
+          export MAILJET_SECRET=${{ secrets.MAILJET_SECRET }} && \
           ./deploy.sh"

@@ -105,28 +105,10 @@ if config_env() == :prod do
   # Check `Plug.SSL` for all available options in `force_ssl`.
 
   # ## Configuring the mailer
-  #
-  # In production you need to configure the mailer to use a different adapter.
-  # Also, you may need to configure the Swoosh API client of your choice if you
-  # are not using SMTP. Here is an example of the configuration:
-  #
   config :wedid, Wedid.Mailer,
-    adapter: Swoosh.Adapters.SMTP,
-    relay: System.get_env("SMTP_SERVER"),
-    port: String.to_integer(System.get_env("SMTP_PORT") || "25"),
-    ssl: false,
-    tls: :if_available,
-    tls_options: [{:verify, :verify_none}],
-    auth: :always,
-    username: System.get_env("SMTP_USERNAME"),
-    password: System.get_env("SMTP_PASSWORD"),
-    # dkim: [
-    #  s: "default",
-    #  d: "domain.com",
-    #  private_key: {:pem_plain, File.read!("priv/keys/domain.private")}
-    # ],
-    retries: 2,
-    no_mx_lookups: false
+    adapter: Swoosh.Adapters.Mailjet,
+    api_key: System.get_env("MAILJET_API_KEY"),
+    secret: System.get_env("MAILJET_SECRET")
 
   # For this example you need include a HTTP client required by Swoosh API client.
   # Swoosh supports Hackney, Req and Finch out of the box:

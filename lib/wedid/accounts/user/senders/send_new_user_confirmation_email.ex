@@ -18,7 +18,7 @@ defmodule Wedid.Accounts.User.Senders.SendNewUserConfirmationEmail do
   def create_email(user, token) do
     new()
     # TODO: Move this to a config file
-    |> from({"Vangelis", "wedid@codevise.de"})
+    |> from(Keyword.get(Application.get_env(:wedid, Wedid.Mailer), :sender))
     |> to(to_string(user.email))
     |> subject("WeDid Confirm your email address")
     |> html_body(body(token: token))

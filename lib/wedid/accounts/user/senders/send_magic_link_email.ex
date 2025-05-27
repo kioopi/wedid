@@ -18,8 +18,7 @@ defmodule Wedid.Accounts.User.Senders.SendMagicLinkEmail do
       end
 
     new()
-    # TODO: Replace with your email
-    |> from({"Vangelis", "wedid@codevise.de"})
+    |> from(Keyword.get(Application.get_env(:wedid, Wedid.Mailer), :sender))
     |> to(to_string(email))
     |> subject("Your WeDid login link")
     |> html_body(body(token: token, email: email))

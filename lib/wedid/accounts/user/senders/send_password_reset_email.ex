@@ -18,7 +18,7 @@ defmodule Wedid.Accounts.User.Senders.SendPasswordResetEmail do
 
   def create_email(user, token) do
     new()
-    |> from({"Vangelis", "wedid@codevise.de"})
+    |> from(Keyword.get(Application.get_env(:wedid, Wedid.Mailer), :sender))
     |> to(to_string(user.email))
     |> subject("Reset your WeDid password")
     |> html_body(body(token: token))

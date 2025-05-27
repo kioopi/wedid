@@ -68,7 +68,9 @@ config :wedid, WedidWeb.Endpoint,
 #
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
-config :wedid, Wedid.Mailer, adapter: Swoosh.Adapters.Local
+config :wedid, Wedid.Mailer,
+  adapter: Swoosh.Adapters.Local,
+  sender: {"Vangelis", "kioopi@gmail.com"}
 
 # Configure esbuild (the version is required)
 config :esbuild,
