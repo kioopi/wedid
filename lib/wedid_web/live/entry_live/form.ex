@@ -27,6 +27,14 @@ defmodule WedidWeb.EntryLive.Form do
                   class="textarea textarea-primary"
                 />
                 <.input
+                  field={@form[:tags_in]}
+                  type="select"
+                  multiple
+                  label="Tags"
+                  options={Enum.map(@available_tags, fn tag -> {tag.name, tag.id} end)}
+                  class="select select-primary"
+                />
+                <.input
                   field={@form[:created_at]}
                   type="datetime-local"
                   label="Created at"
@@ -53,11 +61,14 @@ defmodule WedidWeb.EntryLive.Form do
   @impl true
   def mount(params, _session, socket) do
     current_user = socket.assigns.current_user
+    current_user = Ash.load!(socket.assigns.current_user, [couple: [:tags]], actor: current_user)
+    available_tags = current_user.couple.tags || []
+    socket = assign(socket, :available_tags, available_tags)
 
     entry =
       case params["id"] do
         nil -> nil
-        id -> Ash.get!(Wedid.Diaries.Entry, id, actor: current_user)
+        id -> Ash.get!(Wedid.Diaries.Entry, id, actor: current_user, load: [:tags]) # Added load: [:tags]
       end
 
     action = if is_nil(entry), do: "New", else: "Edit"
@@ -80,7 +91,22 @@ defmodule WedidWeb.EntryLive.Form do
   end
 
   def handle_event("save", %{"entry" => entry_params}, socket) do
-    case AshPhoenix.Form.submit(socket.assigns.form, params: entry_params) do
+    # The entry_params will now contain "tags_in" field with a list of strings (tag IDs)
+    # if the form field was correctly named :tags_in.
+    # This is passed directly to the action, which uses the TransformTagInput change.
+
+    # If entry_params["tags_in"] is nil (e.g. no tags selected, and form doesn't send empty list),
+    # the TransformTagInput change handles it by setting the relationship argument to [].
+    # Phoenix forms usually send `""` for unselected multiple selects or just omit the key.
+    # Ensure `tags_in` is at least an empty list if not present for the custom change.
+    processed_params =
+      if Map.has_key?(entry_params, "tags_in") do
+        entry_params
+      else
+        Map.put(entry_params, "tags_in", [])
+      end
+
+    case AshPhoenix.Form.submit(socket.assigns.form, params: processed_params) do
       {:ok, entry} ->
         notify_parent({:saved, entry})
 

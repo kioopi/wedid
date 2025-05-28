@@ -24,6 +24,7 @@ defmodule Wedid.Accounts.Couple do
 
   relationships do
     has_many :users, User
+    has_many :tags, Wedid.Diaries.Tag # Added this line
   end
 
   aggregates do

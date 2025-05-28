@@ -14,13 +14,27 @@ defmodule Wedid.Diaries.Entry do
   end
 
   actions do
-    defaults [:read, :destroy, update: [:content, :created_at]]
+    defaults [:read, :destroy] # Removed update: [:content, :created_at]
 
     create :create do
       primary? true
       accept [:content, :created_at]
+      argument :tags_in, {:array, :string}, default: [], allow_nil?: true
+      argument :tags, {:array, :map}, default: [], allow_nil?: true # Added for manage_relationship
       change relate_actor(:user)
       change set_attribute(:couple_id, actor(:couple_id))
+      change Wedid.Diaries.Entry.Changes.TransformTagInput
+      change manage_relationship(:tags, type: :direct_control)
+    end
+
+    update :update do
+      primary? true
+      require_atomic? false
+      accept [:content, :created_at]
+      argument :tags_in, {:array, :string}, allow_nil?: true
+      argument :tags, {:array, :map}, allow_nil?: true # Added for manage_relationship
+      change Wedid.Diaries.Entry.Changes.TransformTagInput
+      change manage_relationship(:tags, type: :direct_control)
     end
 
     read :list do
@@ -70,5 +84,11 @@ defmodule Wedid.Diaries.Entry do
   relationships do
     belongs_to :couple, Wedid.Accounts.Couple
     belongs_to :user, Wedid.Accounts.User
+
+    many_to_many :tags, Wedid.Diaries.Tag do
+      through Wedid.Diaries.EntryTag
+      source_attribute_on_join_resource :entry_id
+      destination_attribute_on_join_resource :tag_id
+    end
   end
 end
