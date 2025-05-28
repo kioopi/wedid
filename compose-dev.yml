@@ -1,0 +1,42 @@
+services:
+  db:
+    image: postgres:17.4
+    healthcheck:
+      test: ["CMD", "pg_isready", "--username=${HETZNER_USERNAME:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    deploy:
+      restart_policy:
+        condition: on-failure
+    environment:
+      POSTGRES_PASSWORD: postgres
+      PGDATA: /var/lib/postgresql/data/pgdata
+      POSTGRES_USER: postgres
+      POSTGRES_DB: wedid_dev
+    ports:
+      - 5432
+    volumes:
+      - db_data:/var/lib/postgresql/data
+
+  web:
+    image: wediddev:latest
+    entrypoint: mix server
+    tty: true
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    environment:
+      POSTGRES_HOST: db
+    ports:
+      - 4000:4000
+    depends_on:
+      - db
+    volumes:
+      - .:/app
+
+volumes:
+  db_data:

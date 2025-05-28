@@ -93,7 +93,8 @@ defmodule Wedid.MixProject do
         "tailwind wedid --minify",
         "esbuild wedid --minify",
         "phx.digest"
-      ]
+      ],
+      server: ["deps.get", "ash.setup", "phx.server"]
     ]
   end
 end

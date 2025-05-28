@@ -1,0 +1,54 @@
+# Find eligible builder and runner images on Docker Hub. We use Ubuntu/Debian
+# instead of Alpine to avoid DNS resolution issues in production.
+#
+# https://hub.docker.com/r/hexpm/elixir/tags?name=ubuntu
+# https://hub.docker.com/_/ubuntu/tags
+#
+# This file is based on these images:
+#
+#   - https://hub.docker.com/r/hexpm/elixir/tags - for the build image
+#   - https://hub.docker.com/_/debian/tags?name=bookworm-20250113-slim - for the release image
+#   - https://pkgs.org/ - resource for finding needed packages
+#   - Ex: docker.io/hexpm/elixir:1.18.1-erlang-27.2-debian-bookworm-20250113-slim
+#
+ARG ELIXIR_VERSION=1.18.1
+ARG OTP_VERSION=27.2
+ARG DEBIAN_VERSION=bookworm-20250113-slim
+
+ARG BUILDER_IMAGE="docker.io/hexpm/elixir:${ELIXIR_VERSION}-erlang-${OTP_VERSION}-debian-${DEBIAN_VERSION}"
+
+FROM ${BUILDER_IMAGE} AS builder
+
+# install build dependencies
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends build-essential git
+
+# install hex + rebar
+RUN apt-get install -y --no-install-recommends libstdc++6 openssl libncurses5 locales ca-certificates inotify-tools \
+  && rm -rf /var/lib/apt/lists/*
+
+# install hex + rebar
+RUN mix local.hex --force \
+  && mix local.rebar --force
+
+# prepare build dir
+WORKDIR /app
+
+# set build ENV
+ENV MIX_ENV="dev"
+
+# Set the locale
+RUN sed -i '/en_US.UTF-8/s/^# //g' /etc/locale.gen \
+  && locale-gen
+
+ENV LANG=en_US.UTF-8
+ENV LANGUAGE=en_US:en
+ENV LC_ALL=en_US.UTF-8
+
+# ENTRYPOINT ["mix", "setup", "&&"]
+# CMD mix phx.server
+
+# Build this image with:
+# docker build -f Dockerfile-dev --tag wediddev .
+# Run this image with:
+# docker run -v $(pwd):/app -p 4000:4000 -it --rm wediddev
