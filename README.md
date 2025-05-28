@@ -93,3 +93,21 @@ mix phx.server
 Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
 
 Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
+
+### Developing in a docker container
+
+Build the Docker image
+
+```bash
+  docker build -f Dockerfile-dv --tag wediddev .
+```
+
+Run it with the current directory mounted as a volume:
+```bash
+  docker compose -f compose-dev.yml up -d
+```
+
+Run the tests
+```bash
+docker exec -e MIX_ENV=test -e POSTGRES_HOST=db wedid-web-1 mix test
+```
