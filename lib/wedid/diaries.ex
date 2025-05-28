@@ -5,7 +5,8 @@ defmodule Wedid.Diaries do
 
   resources do
     resource Wedid.Diaries.Entry do
-      define :create_entry, action: :create, args: [:content, :created_at]
+      define :create_entry, action: :create, args: [:content]
+      define :update_entry, action: :update, args: [:content]
       define :list_entries, action: :list
       define :update_entry, action: :update
       define :read_entry_by_id!, action: :read, get_by: [:id] # Removed bang?: true
