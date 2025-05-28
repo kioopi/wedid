@@ -58,6 +58,22 @@ defmodule Wedid.Accounts.User do
     repo Wedid.Repo
   end
 
+  code_interface do
+    define :get_by_email, action: :get_by_email, args: [:email]
+
+    define :change_password,
+      action: :change_password,
+      args: [:current_password, :password, :password_confirmation]
+
+    define :request_password_reset,
+      action: :request_password_reset_token,
+      args: [:email]
+
+    define :request_magic_link,
+      action: :request_magic_link,
+      args: [:email]
+  end
+
   actions do
     defaults [:read]
 
@@ -280,6 +296,7 @@ defmodule Wedid.Accounts.User do
 
       change set_attribute(:couple_id, arg(:couple_id))
 
+      # TODO move into own file
       change fn changeset, _context ->
         Ash.Changeset.after_action(changeset, fn changeset, user ->
           # this should probably become a code_interface action
@@ -318,6 +335,12 @@ defmodule Wedid.Accounts.User do
 
     bypass action(:update_profile) do
       authorize_if expr(id == ^actor(:id))
+    end
+
+    # FIXME: Should probalby become an additional action like request_my_password_reset_token
+    # and only allow the user to request a reset for their own account.
+    bypass action(:request_password_reset_token) do
+      authorize_if always()
     end
 
     policy always() do

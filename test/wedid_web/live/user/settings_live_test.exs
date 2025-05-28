@@ -9,8 +9,7 @@ defmodule WedidWeb.User.SettingsLiveTest do
     test "renders profile form", %{conn: conn} do
       {:ok, view, _html} = live(conn, ~p"/settings")
 
-      assert has_element?(view, "h2", "Profile Information")
-      assert has_element?(view, "form")
+      assert has_element?(view, "h2", "Profile information")
       assert has_element?(view, "input[name='form[name]']")
     end
 
@@ -20,7 +19,7 @@ defmodule WedidWeb.User.SettingsLiveTest do
       name = "Updated Test Name"
 
       view
-      |> form("form", %{"form[name]" => name})
+      |> form("form.profile-form", %{"form[name]" => name})
       |> render_submit()
 
       # Check that flash message appears
