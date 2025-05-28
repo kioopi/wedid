@@ -12,7 +12,7 @@ defmodule Wedid.Diaries.DiariesTest do
       entry =
         Diaries.create_entry!(
           @valid_content,
-          DateTime.utc_now(),
+          %{created_at: DateTime.utc_now()},
           actor: user
         )
 
