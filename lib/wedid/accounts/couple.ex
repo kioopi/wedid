@@ -1,4 +1,11 @@
 defmodule Wedid.Accounts.Couple do
+  @moduledoc """
+  Represents a couple in the diary application.
+
+  A couple is the core organizational unit that groups users and their shared content.
+  Each couple has their own isolated space for diary entries, tags, and other shared
+  resources.
+  """
   use Ash.Resource, otp_app: :wedid, domain: Wedid.Accounts, data_layer: AshPostgres.DataLayer
 
   alias Wedid.Accounts.User
@@ -24,6 +31,7 @@ defmodule Wedid.Accounts.Couple do
 
   relationships do
     has_many :users, User
+    has_many :tags, Wedid.Diaries.Tag
   end
 
   aggregates do

@@ -3,7 +3,7 @@ defmodule Wedid.Diaries.ActionsTest do
 
   import ExUnitProperties
   import Ash.Generator, only: [generate: 1]
-  import Wedid.Accounts.Generator, only: [user: 1]
+  import Wedid.Accounts.Generator, only: [user: 0]
   alias Wedid.Diaries
   alias Diaries.Entry
 

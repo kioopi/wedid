@@ -13,44 +13,51 @@ defmodule WedidWeb.AppComponents do
   @doc """
   Renders a single entry in the journal.
 
-  ## Examples
-
       <.journal_entry entry={entry} show_links={false} />
   """
+
   attr :entry, :map, required: true, doc: "the entry data"
   attr :id, :any, default: nil, doc: "the id for phx-update"
-  attr :show_links, :boolean, default: true, doc: "whether to show edit/delete links"
 
+  # Renders a journal entry card with tag display and user attribution.
+  #
+  # Displays a diary entry in a card format with the following elements:
+  # - Tag name (if entry has tags) displayed prominently at the top
+  # - Entry content in the main body
+  # - Creation date and author attribution at the bottom
+  #
+  # ## Examples
+  #     # Entry with tags
+  #     <.journal_entry entry={%Entry{
+  #       content: "Great day!",
+  #       tags: [%Tag{name: "Holiday"}],
+  #       user: %User{display_name: "Alice"}
+  #     }} />
+  #
+  #     # Entry without tags
+  #     <.journal_entry entry={%Entry{
+  #       content: "Regular day",
+  #       tags: [],
+  #       user: %User{display_name: "Bob"}
+  #     }} />
+  #
   def journal_entry(assigns) do
     ~H"""
     <div class="card bg-base-200 shadow-md p-4">
-      <div class="mb-1 text-sm text-base-content/70">
-        {Calendar.strftime(@entry.created_at, "%b %d, %Y")}
+      <div :if={is_list(@entry.tags) && length(@entry.tags) > 0} class="py-2 text-m bold w-full">
+        {hd(@entry.tags).name}
       </div>
-
-      <div class="py-2 text-lg">
+      <div class="py-2 text-lg w-full">
         {@entry.content}
       </div>
 
-      <div class="flex justify-between items-end mt-2">
+      <div class="flex flex-row justify-between items-end mt-2">
+        <div class="mb-1 text-sm text-base-content/70">
+          {Calendar.strftime(@entry.created_at, "%b %d, %Y")}
+        </div>
         <div class="text-sm font-semibold text-base-content/80">
           <span class="text-secondary">{@entry.user.display_name}</span>
         </div>
-
-        <%= if @show_links do %>
-          <div class="flex gap-1 ml-auto">
-            <.link navigate={~p"/entries/#{@entry}/edit"} class="btn btn-xs btn-ghost">
-              <Core.heroicon name="hero-pencil-square" class="size-4" />
-            </.link>
-            <.link
-              phx-click={JS.push("delete", value: %{id: @entry.id})}
-              data-confirm="Are you sure you want to delete this entry?"
-              class="btn btn-xs btn-ghost text-error"
-            >
-              <Core.heroicon name="hero-trash" class="size-4" />
-            </.link>
-          </div>
-        <% end %>
       </div>
     </div>
     """
@@ -183,7 +190,7 @@ defmodule WedidWeb.AppComponents do
           <.empty_entries_placeholder />
         <% else %>
           <%= for entry <- @entries do %>
-            <.journal_entry entry={entry} show_links={false} />
+            <.journal_entry entry={entry} />
           <% end %>
 
           <div class="mt-8 text-center">

@@ -1,7 +1,16 @@
 defmodule WedidWeb.EntryLive.Form do
+  @moduledoc """
+  LiveView for creating and editing diary entries with tag assignment.
+
+  This form provides a comprehensive interface for managing diary entries,
+  including content editing, timestamp management, and tag assignment from
+  the couple's shared tag library.
+  """
   use WedidWeb, :live_view
 
   on_mount {WedidWeb.LiveUserAuth, :live_user_required}
+
+  alias Wedid.Diaries
 
   @impl true
   def render(assigns) do
@@ -25,6 +34,14 @@ defmodule WedidWeb.EntryLive.Form do
                   type="textarea"
                   label="Content"
                   class="textarea textarea-primary"
+                />
+                <.input
+                  field={@form[:tags]}
+                  type="select"
+                  label="Select Tag"
+                  options={Enum.map(@available_tags, fn tag -> {tag.name, tag.id} end)}
+                  class="select select-primary"
+                  value={tag_value(@form[:tags].value)}
                 />
                 <.input
                   field={@form[:created_at]}
@@ -53,11 +70,14 @@ defmodule WedidWeb.EntryLive.Form do
   @impl true
   def mount(params, _session, socket) do
     current_user = socket.assigns.current_user
+    current_user = Ash.load!(socket.assigns.current_user, [couple: [:tags]], actor: current_user)
+    available_tags = current_user.couple.tags || []
+    socket = assign(socket, :available_tags, available_tags)
 
     entry =
       case params["id"] do
         nil -> nil
-        id -> Ash.get!(Wedid.Diaries.Entry, id, actor: current_user)
+        id -> Ash.get!(Wedid.Diaries.Entry, id, actor: current_user, load: [:tags])
       end
 
     action = if is_nil(entry), do: "New", else: "Edit"
@@ -75,11 +95,37 @@ defmodule WedidWeb.EntryLive.Form do
   defp return_to(_), do: "index"
 
   @impl true
-  def handle_event("validate", %{"entry" => entry_params}, socket) do
+  def handle_event("validate", %{"form" => %{"tags" => tags}} = params, socket)
+      when not is_list(tags) do
+    # Convert single tag selection to array format expected by the backend
+    # This handles the case where the form sends a single value instead of an array
+    handle_event("validate", put_in(params["form"]["tags"], [tags]), socket)
+  end
+
+  def handle_event("validate", %{"form" => entry_params}, socket) do
+    # Real-time validation of form fields as user types
+    # Provides immediate feedback on validation errors
     {:noreply, assign(socket, form: AshPhoenix.Form.validate(socket.assigns.form, entry_params))}
   end
 
-  def handle_event("save", %{"entry" => entry_params}, socket) do
+  # TODO: Move form data transformation to a dedicated change module
+  # This pattern could be extracted to a reusable change for better organization
+  def handle_event("save", %{"form" => %{"tags" => tags}} = params, socket)
+      when not is_list(tags) do
+    # Ensure tags are always in array format for relationship management
+    # Single select dropdowns send strings, but backend expects arrays
+    handle_event("save", put_in(params["form"]["tags"], [tags]), socket)
+  end
+
+  def handle_event("save", %{"form" => %{"created_at" => ""}} = params, socket) do
+    # Remove empty created_at field to use default timestamp
+    # Empty datetime inputs should fall back to "now"
+    handle_event("save", update_in(params["form"], &Map.delete(&1, "created_at")), socket)
+  end
+
+  def handle_event("save", %{"form" => entry_params}, socket) do
+    IO.inspect(entry_params, label: "Entry Params ------ ")
+
     case AshPhoenix.Form.submit(socket.assigns.form, params: entry_params) do
       {:ok, entry} ->
         notify_parent({:saved, entry})
@@ -101,15 +147,12 @@ defmodule WedidWeb.EntryLive.Form do
   defp assign_form(%{assigns: %{entry: entry}} = socket) do
     form =
       if entry do
-        AshPhoenix.Form.for_update(entry, :update,
-          as: "entry",
+        Diaries.form_to_update_entry(
+          entry,
           actor: socket.assigns.current_user
         )
       else
-        AshPhoenix.Form.for_create(Wedid.Diaries.Entry, :create,
-          as: "entry",
-          actor: socket.assigns.current_user
-        )
+        Diaries.form_to_create_entry(actor: socket.assigns.current_user)
       end
 
     assign(socket, form: to_form(form))
@@ -117,4 +160,9 @@ defmodule WedidWeb.EntryLive.Form do
 
   defp return_path("index", _entry), do: ~p"/entries"
   defp return_path("show", entry), do: ~p"/entries/#{entry.id}"
+
+  # Helper function to extract tag value for form display.
+  defp tag_value([tag | _]), do: tag_value(tag)
+  defp tag_value(%Diaries.Tag{id: id}), do: id
+  defp tag_value(id), do: id
 end

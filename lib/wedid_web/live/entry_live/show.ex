@@ -26,7 +26,23 @@ defmodule WedidWeb.EntryLive.Show do
           </.header>
 
           <div class="max-w-2xl mx-auto mt-6">
-            <.journal_entry entry={@entry} show_links={true} />
+            <.journal_entry entry={@entry} />
+
+            <div class="card bg-base-100 shadow-md mt-6 p-4">
+              <h3 class="text-sm font-semibold mb-2">Actions</h3>
+              <div class="flex gap-1">
+                <.link navigate={~p"/entries/#{@entry}/edit"} class="btn btn-xs btn-ghost">
+                  <.heroicon name="hero-pencil-square" class="size-4" /> Edit
+                </.link>
+                <.link
+                  phx-click={JS.push("delete", value: %{id: @entry.id})}
+                  data-confirm="Are you sure you want to delete this entry?"
+                  class="btn btn-xs btn-ghost text-error self-end"
+                >
+                  <.heroicon name="hero-trash" class="size-4" /> Delete
+                </.link>
+              </div>
+            </div>
 
             <div class="card bg-base-100 shadow-md mt-6 p-4">
               <h3 class="text-sm font-semibold mb-2">Additional Information</h3>
@@ -56,7 +72,10 @@ defmodule WedidWeb.EntryLive.Show do
      |> assign(:page_title, page_title(socket.assigns.live_action))
      |> assign(
        :entry,
-       Ash.get!(Wedid.Diaries.Entry, id, actor: socket.assigns.current_user, load: [:user])
+       Ash.get!(Wedid.Diaries.Entry, id,
+         actor: socket.assigns.current_user,
+         load: [:tags, user: [:display_name]]
+       )
      )
      |> assign(:current_user, socket.assigns.current_user)}
   end

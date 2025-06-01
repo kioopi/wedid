@@ -1,4 +1,4 @@
-defmodule Wedid.Diaries.ActionsTest do
+defmodule Wedid.Diaries.AuthorizationTest do
   use Wedid.DataCase
 
   import Ash.Generator, only: [generate: 1]
@@ -10,8 +10,7 @@ defmodule Wedid.Diaries.ActionsTest do
     test "user can update their own entries" do
       user = generate(user())
       entry = generate(entry(actor: user))
-
-      assert Diaries.can_update_entry?(user, entry, "Great day!")
+      assert Diaries.can_update_entry?(user, entry, %{content: "Great day!"})
     end
 
     test "others can not update others entries" do
@@ -19,15 +18,14 @@ defmodule Wedid.Diaries.ActionsTest do
       other = generate(user())
       entry = generate(entry(actor: other))
 
-      refute Diaries.can_update_entry?(user, entry, "Great day!")
+      refute Diaries.can_update_entry?(user, entry, %{content: "Great day!"})
     end
 
     test "others can update couples entries" do
       user = generate(user())
       entry = generate(entry(actor: user))
       partner = Accounts.invite_user!(Faker.Internet.email(), user.couple_id, actor: user)
-
-      assert Diaries.can_update_entry?(partner, entry, "Great day!")
+      assert Diaries.can_update_entry?(partner, entry, %{content: "Great day!"})
     end
   end
 end

@@ -53,6 +53,9 @@ defmodule WedidWeb.ConnCase do
       |> AshAuthentication.Plug.Helpers.store_in_session(user)
       |> Plug.Conn.assign(:current_user, user)
 
-    %{context | conn: conn}
+    # Ensure the modified conn is placed back into the context
+    context
+    |> Map.put(:user, user)
+    |> Map.put(:conn, conn)
   end
 end

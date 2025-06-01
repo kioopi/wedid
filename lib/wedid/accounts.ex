@@ -11,6 +11,7 @@ defmodule Wedid.Accounts do
       define :list_users, action: :read
       define :update_user_profile, action: :update_profile, args: [:name]
       define :change_password, action: :change_password
+      define :get_user!, action: :read, get_by: [:id] # Added this line
     end
 
     resource Wedid.Accounts.Couple
