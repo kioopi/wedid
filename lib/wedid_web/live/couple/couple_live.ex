@@ -1,6 +1,7 @@
 defmodule WedidWeb.Couple.CoupleLive do
   use WedidWeb, :live_view
   import WedidWeb.CoreComponents
+  alias Wedid.Diaries
 
   on_mount {WedidWeb.LiveUserAuth, :live_user_required}
 
@@ -11,10 +12,10 @@ defmodule WedidWeb.Couple.CoupleLive do
     current_user = socket.assigns.current_user
 
     {:ok, current_user} =
-      Ash.load(current_user, [couple: [:tags, users: [:display_name]]], actor: current_user) # Corrected order
+      Ash.load(current_user, [couple: [:tags, users: [:display_name]]], actor: current_user)
 
     form = Accounts.form_to_invite_user(actor: current_user)
-    tag_form = AshPhoenix.Form.for_create(Wedid.Diaries.Tag, :create, as: "new_tag", actor: socket.assigns.current_user)
+    tag_form = Diaries.form_to_create_tag(actor: current_user)
 
     if current_user.couple_id do
       {:ok,
@@ -67,33 +68,25 @@ defmodule WedidWeb.Couple.CoupleLive do
   end
 
   @impl true
-  def handle_event("validate_tag", %{"new_tag" => tag_params}, socket) do
+  def handle_event("validate_tag", %{"form" => tag_params}, socket) do
     form = AshPhoenix.Form.validate(socket.assigns.tag_form, tag_params)
     {:noreply, assign(socket, tag_form: form)}
   end
 
   @impl true
-  def handle_event("save_tag", %{"new_tag" => tag_params}, socket) do
+  def handle_event("save_tag", %{"form" => tag_params}, socket) do
     current_user = socket.assigns.current_user
-    # The tag form should automatically set the couple_id via a change in the Tag resource's create action.
-    # If not, it would need to be added here:
-    # params = Map.put(tag_params, "couple_id", current_user.couple_id)
 
     case AshPhoenix.Form.submit(socket.assigns.tag_form, params: tag_params, actor: current_user) do
       {:ok, new_tag} ->
-        # Reload couple with tags to get the new list
-        {:ok, reloaded_couple} = Wedid.Accounts.Couple
-        |> Ash.get!(current_user.couple_id, actor: current_user)
-        |> Ash.load!([:tags], actor: current_user)
-
-        new_tag_form = AshPhoenix.Form.for_create(Wedid.Diaries.Tag, :create, as: "new_tag", actor: current_user)
+        tag_form = Diaries.form_to_create_tag(actor: current_user)
 
         socket =
           socket
-          |> assign(tags: reloaded_couple.tags)
-          |> assign(tag_form: to_form(new_tag_form))
+          |> assign(tags: [new_tag | socket.assigns.tags])
+          |> assign(tag_form: to_form(tag_form))
           |> put_flash(:info, "Tag '#{new_tag.name}' created successfully!")
-          |> push_event("hideModal", %{id: "tag-modal"}) # Assumes modal ID will be "tag-modal"
+          |> push_event("hideModal", %{id: "tag-modal"})
 
         {:noreply, socket}
 
@@ -172,25 +165,20 @@ defmodule WedidWeb.Couple.CoupleLive do
   defp tag_list(assigns) do
     ~H"""
     <div class="space-y-2">
-      <if {@tags == []}>
-        <p class="text-neutral-content">No tags created yet.</p>
-      </if>
-      <for tag <- @tags>
-        <div class="flex items-center justify-between p-2 rounded-lg hover:bg-base-200">
-          <div class="flex items-center">
-            <span class="mr-2">
-              <if {tag.icon && String.trim(tag.icon) != ""}>
-                <.heroicon name={tag.icon} class="size-5" />
-              <else>
-                <.heroicon name="hero-tag" class="size-5" />
-              </else>
-              </if>
-            </span>
-            <span style={"color: #{tag.color};"}>{tag.name}</span>
-          </div>
-          <%!-- Future: Add edit/delete buttons here --%>
+      <p :if={Enum.empty?(@tags)} class="text-neutral-content">No tags created yet.</p>
+      <div
+        :for={tag <- @tags}
+        class="flex items-center justify-between p-2 rounded-lg hover:bg-base-200"
+      >
+        <div class="flex items-center">
+          <span class="mr-2">
+            <.heroicon :if={tag.icon} name={tag.icon} class="size-5" />
+            <.heroicon :if={!tag.icon} name="hero-tag" class="size-5" />
+          </span>
+          <span style={"color: #{tag.color};"}>{tag.name}</span>
         </div>
-      </for>
+        <%!-- Future: Add edit/delete buttons here --%>
+      </div>
     </div>
     """
   end
@@ -200,9 +188,26 @@ defmodule WedidWeb.Couple.CoupleLive do
     ~H"""
     <.modal id="tag-modal" title="Add New Tag">
       <.form for={@tag_form} phx-submit="save_tag" phx-change="validate_tag" id="tag-form">
-        <.input field={@tag_form[:name]} label="Tag Name" placeholder="e.g., Holiday, Important, Funny" required />
-        <.input field={@tag_form[:icon]} label="Icon (Optional)" placeholder="e.g., hero-sparkles (see heroicons.com)" />
-        <.input field={@tag_form[:color]} label="Color (Optional)" placeholder="e.g., #ff00ff or text-blue-500" />
+        <.input
+          field={@tag_form[:name]}
+          label="Tag Name"
+          placeholder="e.g., Holiday, Important, Funny"
+          required
+        />
+        <div class="hidden">
+          <!-- for now these are hidden because icon and color are not used in the outpt -->
+          <.input
+            field={@tag_form[:icon]}
+            label="Icon (Optional)"
+            placeholder="e.g., hero-sparkles (see heroicons.com)"
+            class="hidden"
+          />
+          <.input
+            field={@tag_form[:color]}
+            label="Color (Optional)"
+            placeholder="e.g., #ff00ff or text-blue-500"
+          />
+        </div>
 
         <div class="flex justify-end gap-3 mt-6">
           <.button type="button" aria-label="Close" phx-click={hide_modal("tag-modal")}>

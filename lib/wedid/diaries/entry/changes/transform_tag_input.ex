@@ -4,15 +4,12 @@ defmodule Wedid.Diaries.Entry.Changes.TransformTagInput do
   @impl true
   def change(changeset, _opts, _context) do
     input_key = :tags_in
-    output_key = :tags # This is the argument manage_relationship will use
+    # This is the argument manage_relationship will use
+    output_key = :tags
 
-    # Get the :tags_in argument. It might be a list of IDs, nil (if explicitly passed), 
+    # Get the :tags_in argument. It might be a list of IDs, nil (if explicitly passed),
     # or not present (in which case action default [] should apply, or get_argument returns :error).
-    tag_id_list_input =
-      case Ash.Changeset.get_argument(changeset, input_key) do
-        {:ok, value} -> value # value can be a list of IDs, or nil if allow_nil?: true and nil was passed
-        :error      -> []    # Argument was not present in the call, default to empty list
-      end
+    tag_id_list_input = Ash.Changeset.get_argument(changeset, input_key)
 
     # Ensure we are working with a list; if input was nil, convert to empty list.
     actual_tag_id_list = tag_id_list_input || []
@@ -26,9 +23,9 @@ defmodule Wedid.Diaries.Entry.Changes.TransformTagInput do
     tags_data_for_relationship =
       Enum.map(processed_tag_ids, fn tag_id ->
         # Assuming tag_ids from multi-select are already strings (e.g., UUIDs)
-        %{tag_id: tag_id, role: :main} 
+        %{tag_id: tag_id}
       end)
 
-    Ash.Changeset.force_argument(changeset, output_key, tags_data_for_relationship)
+    Ash.Changeset.force_set_argument(changeset, output_key, tags_data_for_relationship)
   end
 end

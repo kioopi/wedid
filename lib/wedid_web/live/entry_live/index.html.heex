@@ -34,15 +34,25 @@
                 </svg>
               </div>
               <%= if @current_user && entry.user_id == @current_user.id do %>
-                <div class="timeline-end md:mb-10">
+                <div class="timeline-end mb-10 w-full">
                   <div class="border-l-4 border-primary">
+                  <.link
+                    navigate={~p"/entries/#{entry}"}
+                    class="block hover:bg-base-100 transition-colors duration-200"
+                  >
                     <.journal_entry entry={entry} id={id} />
+                  </.link>
                   </div>
                 </div>
               <% else %>
-                <div class="timeline-start mb-10 md:text-end">
+                <div class="timeline-start mb-10 md:text-end w-full">
                   <div class="border-r-4 border-primary">
+                  <.link
+                    navigate={~p"/entries/#{entry}"}
+                    class="block hover:bg-base-100 transition-colors duration-200"
+                  >
                     <.journal_entry entry={entry} id={id} />
+                    </.link>
                   </div>
                 </div>
               <% end %>

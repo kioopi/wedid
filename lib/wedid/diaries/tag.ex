@@ -28,12 +28,10 @@ defmodule Wedid.Diaries.Tag do
 
     destroy :destroy do
       primary? true
-      # Removed require_atomic? false for now, unless it's specifically needed for other reasons.
-      # The main fix is to use the validate macro directly.
-      validate {Ash.Changeset, :validate_associated_not_exists, [
-        relationship_path: [:entries],
-        message: "Cannot delete a tag that is currently assigned to entries."
-      ]}
+      #    validate {Ash.Changeset, :validate_associated_not_exists, [
+      #      relationship_path: [:entries],
+      #      message: "Cannot delete a tag that is currently assigned to entries."
+      #    ]}
     end
   end
 

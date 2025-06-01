@@ -9,40 +9,36 @@ defmodule Wedid.Diaries.EntryTag do
     table "entry_tags"
     repo Wedid.Repo
 
-    identity_wheres_to_sql [
-      unique_main_tag_for_entry: "role = 'main'"
-    ]
-  end
-
-  identities do
-    identity :unique_main_tag_for_entry, [:entry_id, :role] do
-      where expr(role == :main)
-    end
+    identity_wheres_to_sql unique_main_tag_for_entry: "role = 'main'"
   end
 
   actions do
-    defaults [:read, :destroy, create: [:role], update: [:role]]
+    defaults [:read, :destroy, create: [:entry_id, :tag_id, :role], update: [:role]]
   end
 
   policies do
     policy action(:create) do
-      authorize_if relates_to_actor_via([:entry, :couple])
-      authorize_if relates_to_actor_via([:tag, :couple])
+      # User must be part of the couple that owns both the entry and tag
+      authorize_if Wedid.Diaries.EntryTag.Checks.SameCouple
     end
 
     policy action(:read) do
-      authorize_if relates_to_actor_via([:entry, :couple])
-      authorize_if relates_to_actor_via([:tag, :couple])
+      authorize_if expr(
+                     entry.couple_id == ^actor(:couple_id) and tag.couple_id == ^actor(:couple_id)
+                   )
     end
 
     policy action(:update) do
-      authorize_if relates_to_actor_via([:entry, :couple])
-      authorize_if relates_to_actor_via([:tag, :couple])
+      authorize_if expr(
+                     entry.couple_id == ^actor(:couple_id) and tag.couple_id == ^actor(:couple_id)
+                   )
     end
 
     policy action(:destroy) do
-      # Only need to check one side, as unlinking primarily depends on rights to modify the "parent" (Entry)
-      authorize_if relates_to_actor_via([:entry, :couple])
+      # User must be part of the couple that owns both the entry and tag
+      authorize_if expr(
+                     entry.couple_id == ^actor(:couple_id) and tag.couple_id == ^actor(:couple_id)
+                   )
     end
   end
 
@@ -55,7 +51,13 @@ defmodule Wedid.Diaries.EntryTag do
   end
 
   relationships do
-    belongs_to :entry, Wedid.Diaries.Entry
-    belongs_to :tag, Wedid.Diaries.Tag
+    belongs_to :entry, Wedid.Diaries.Entry, allow_nil?: false
+    belongs_to :tag, Wedid.Diaries.Tag, allow_nil?: false
+  end
+
+  identities do
+    identity :unique_main_tag_for_entry, [:entry_id, :role] do
+      where expr(role == :main)
+    end
   end
 end

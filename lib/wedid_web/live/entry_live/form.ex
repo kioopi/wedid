@@ -3,6 +3,8 @@ defmodule WedidWeb.EntryLive.Form do
 
   on_mount {WedidWeb.LiveUserAuth, :live_user_required}
 
+  alias Wedid.Diaries
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -27,12 +29,12 @@ defmodule WedidWeb.EntryLive.Form do
                   class="textarea textarea-primary"
                 />
                 <.input
-                  field={@form[:tags_in]}
+                  field={@form[:tags]}
                   type="select"
-                  multiple
-                  label="Tags"
+                  label="Select Tag"
                   options={Enum.map(@available_tags, fn tag -> {tag.name, tag.id} end)}
                   class="select select-primary"
+                  value={tag_value(@form[:tags].value)}
                 />
                 <.input
                   field={@form[:created_at]}
@@ -68,7 +70,8 @@ defmodule WedidWeb.EntryLive.Form do
     entry =
       case params["id"] do
         nil -> nil
-        id -> Ash.get!(Wedid.Diaries.Entry, id, actor: current_user, load: [:tags]) # Added load: [:tags]
+        # Added load: [:tags]
+        id -> Ash.get!(Wedid.Diaries.Entry, id, actor: current_user, load: [:tags])
       end
 
     action = if is_nil(entry), do: "New", else: "Edit"
@@ -86,27 +89,29 @@ defmodule WedidWeb.EntryLive.Form do
   defp return_to(_), do: "index"
 
   @impl true
-  def handle_event("validate", %{"entry" => entry_params}, socket) do
+  def handle_event("validate", %{"form" => %{"tags" => tags}} = params, socket)
+      when not is_list(tags) do
+    handle_event("validate", put_in(params["form"]["tags"], [tags]), socket)
+  end
+
+  def handle_event("validate", %{"form" => entry_params}, socket) do
     {:noreply, assign(socket, form: AshPhoenix.Form.validate(socket.assigns.form, entry_params))}
   end
 
-  def handle_event("save", %{"entry" => entry_params}, socket) do
-    # The entry_params will now contain "tags_in" field with a list of strings (tag IDs)
-    # if the form field was correctly named :tags_in.
-    # This is passed directly to the action, which uses the TransformTagInput change.
+  # FIXME: I feel this clauses massaging the form data should somehow live in a changes module?
+  def handle_event("save", %{"form" => %{"tags" => tags}} = params, socket)
+      when not is_list(tags) do
+    handle_event("save", put_in(params["form"]["tags"], [tags]), socket)
+  end
 
-    # If entry_params["tags_in"] is nil (e.g. no tags selected, and form doesn't send empty list),
-    # the TransformTagInput change handles it by setting the relationship argument to [].
-    # Phoenix forms usually send `""` for unselected multiple selects or just omit the key.
-    # Ensure `tags_in` is at least an empty list if not present for the custom change.
-    processed_params =
-      if Map.has_key?(entry_params, "tags_in") do
-        entry_params
-      else
-        Map.put(entry_params, "tags_in", [])
-      end
+  def handle_event("save", %{"form" => %{"created_at" => ""}} = params, socket) do
+    handle_event("save", update_in(params["form"], &Map.delete(&1, "created_at")), socket)
+  end
 
-    case AshPhoenix.Form.submit(socket.assigns.form, params: processed_params) do
+  def handle_event("save", %{"form" => entry_params}, socket) do
+    IO.inspect(entry_params, label: "Entry Params ------ ")
+
+    case AshPhoenix.Form.submit(socket.assigns.form, params: entry_params) do
       {:ok, entry} ->
         notify_parent({:saved, entry})
 
@@ -127,15 +132,12 @@ defmodule WedidWeb.EntryLive.Form do
   defp assign_form(%{assigns: %{entry: entry}} = socket) do
     form =
       if entry do
-        AshPhoenix.Form.for_update(entry, :update,
-          as: "entry",
+        Diaries.form_to_update_entry(
+          entry,
           actor: socket.assigns.current_user
         )
       else
-        AshPhoenix.Form.for_create(Wedid.Diaries.Entry, :create,
-          as: "entry",
-          actor: socket.assigns.current_user
-        )
+        Diaries.form_to_create_entry(actor: socket.assigns.current_user)
       end
 
     assign(socket, form: to_form(form))
@@ -143,4 +145,9 @@ defmodule WedidWeb.EntryLive.Form do
 
   defp return_path("index", _entry), do: ~p"/entries"
   defp return_path("show", entry), do: ~p"/entries/#{entry.id}"
+
+  # This is just to pretent there is only one tag selected for an entry for now
+  defp tag_value([tag | _]), do: tag_value(tag)
+  defp tag_value(%Diaries.Tag{id: id}), do: id
+  defp tag_value(id), do: id
 end

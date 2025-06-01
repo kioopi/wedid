@@ -8,37 +8,36 @@ defmodule Wedid.Diaries.Entry do
 
   require Ash.Query
 
+  alias Wedid.Diaries
+  alias Wedid.Accounts
+
   postgres do
     table "entries"
     repo Wedid.Repo
   end
 
   actions do
-    defaults [:read, :destroy] # Removed update: [:content, :created_at]
+    defaults [:read, :destroy]
 
     create :create do
       primary? true
       accept [:content, :created_at]
-      argument :tags_in, {:array, :string}, default: [], allow_nil?: true
-      argument :tags, {:array, :map}, default: [], allow_nil?: true # Added for manage_relationship
+      argument :tags, {:array, :uuid}, allow_nil?: true
+      change manage_relationship(:tags, type: :append)
       change relate_actor(:user)
       change set_attribute(:couple_id, actor(:couple_id))
-      change Wedid.Diaries.Entry.Changes.TransformTagInput
-      change manage_relationship(:tags, type: :direct_control)
     end
 
     update :update do
       primary? true
       require_atomic? false
       accept [:content, :created_at]
-      argument :tags_in, {:array, :string}, allow_nil?: true
-      argument :tags, {:array, :map}, allow_nil?: true # Added for manage_relationship
-      change Wedid.Diaries.Entry.Changes.TransformTagInput
-      change manage_relationship(:tags, type: :direct_control)
+      argument :tags, {:array, :uuid}, allow_nil?: true
+      change manage_relationship(:tags, type: :append_and_remove)
     end
 
     read :list do
-      prepare build(sort: [created_at: :asc], load: [user: [:display_name]])
+      prepare build(sort: [created_at: :asc], load: [:tags, user: [:display_name]])
       filter expr(couple_id == ^actor(:couple_id))
     end
   end
@@ -82,11 +81,11 @@ defmodule Wedid.Diaries.Entry do
   end
 
   relationships do
-    belongs_to :couple, Wedid.Accounts.Couple
-    belongs_to :user, Wedid.Accounts.User
+    belongs_to :couple, Accounts.Couple
+    belongs_to :user, Accounts.User
 
-    many_to_many :tags, Wedid.Diaries.Tag do
-      through Wedid.Diaries.EntryTag
+    many_to_many :tags, Diaries.Tag do
+      through Diaries.EntryTag
       source_attribute_on_join_resource :entry_id
       destination_attribute_on_join_resource :tag_id
     end
