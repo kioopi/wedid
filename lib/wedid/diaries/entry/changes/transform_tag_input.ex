@@ -1,4 +1,63 @@
 defmodule Wedid.Diaries.Entry.Changes.TransformTagInput do
+  @moduledoc """
+  Legacy change module for transforming tag input data during entry creation and updates.
+
+  ## ⚠️ Deprecation Notice
+
+  This module is currently unused and maintained for historical reference only.
+  The tag input transformation logic has been simplified to directly accept
+  UUID arrays in entry actions, making this change unnecessary.
+
+  ## Original Purpose
+
+  This change was originally designed to transform the `:tags_in` argument
+  (array of tag ID strings) into the format expected by `manage_relationship/2`:
+  an array of maps with `tag_id` and `role` fields.
+
+  ## Historical Implementation
+
+  The change performed the following transformations:
+
+  1. Retrieved the `:tags_in` argument from the changeset
+  2. Filtered out blank/empty string values from form submissions
+  3. Converted each tag ID into a map: `%{tag_id: id, role: :main}`
+  4. Set the result as the `:tags` argument for relationship management
+
+  ## Current Alternative
+
+  Entry actions now directly accept a `:tags` argument as an array of UUIDs,
+  which is simpler and more straightforward:
+
+      # Old approach (using this change)
+      argument :tags_in, {:array, :string}
+      change TransformTagInput
+
+      # New approach (current implementation)
+      argument :tags, {:array, :uuid}
+
+  ## Migration Path
+
+  If you need to reintroduce complex tag input transformation:
+
+  1. Update the entry actions to use `:tags_in` argument
+  2. Add this change back to the action definitions
+  3. Modify the UI forms to submit tag data in the expected format
+
+  ## Examples
+
+      # Historical usage (no longer active):
+      create :create do
+        argument :tags_in, {:array, :string}
+        change TransformTagInput
+        change manage_relationship(:tags, type: :direct_control)
+      end
+
+      # Current usage:
+      create :create do
+        argument :tags, {:array, :uuid}
+        change manage_relationship(:tags, type: :append)
+      end
+  """
   use Ash.Resource.Change
 
   @impl true

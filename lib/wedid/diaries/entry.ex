@@ -1,4 +1,25 @@
 defmodule Wedid.Diaries.Entry do
+  @moduledoc """
+  Represents a diary entry within the couple's shared journal.
+
+  Entries are the core content pieces of the diary application, allowing partners
+  to record their thoughts, experiences, and memories. Each entry belongs to both
+  a specific user (the author) and a couple (shared context).
+
+  ## Examples
+
+      # Create an entry without tags
+      iex> Wedid.Diaries.create_entry("Today was amazing!", actor: user)
+      {:ok, %Entry{content: "Today was amazing!", user_id: user_id}}
+
+      # Create an entry with tags
+      iex> Wedid.Diaries.create_entry("Vacation photos", %{tags: [holiday_tag.id, photo_tag.id]}, actor: user)
+      {:ok, %Entry{content: "Vacation photos", tags: [%Tag{name: "Holiday"}, %Tag{name: "Photos"}]}}
+
+      # Update entry tags
+      iex> Wedid.Diaries.update_entry(entry, %{tags: [new_tag.id]}, actor: user)
+      {:ok, %Entry{tags: [%Tag{name: "New Tag"}]}}
+  """
   use Ash.Resource,
     otp_app: :wedid,
     domain: Wedid.Diaries,

@@ -1,4 +1,11 @@
 defmodule WedidWeb.Couple.CoupleLive do
+  @moduledoc """
+  LiveView for managing couple information and shared resources.
+
+  This LiveView provides the main interface for couples to manage their shared
+  resources, including inviting partners and creating/managing tags for
+  organizing diary entries.
+  """
   use WedidWeb, :live_view
   import WedidWeb.CoreComponents
   alias Wedid.Diaries
@@ -195,7 +202,7 @@ defmodule WedidWeb.Couple.CoupleLive do
           required
         />
         <div class="hidden">
-          <!-- for now these are hidden because icon and color are not used in the outpt -->
+          <!-- for now these are hidden because icon and color are not used in the output -->
           <.input
             field={@tag_form[:icon]}
             label="Icon (Optional)"

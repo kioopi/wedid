@@ -13,14 +13,34 @@ defmodule WedidWeb.AppComponents do
   @doc """
   Renders a single entry in the journal.
 
-  ## Examples
-
       <.journal_entry entry={entry} show_links={false} />
   """
+
   attr :entry, :map, required: true, doc: "the entry data"
   attr :id, :any, default: nil, doc: "the id for phx-update"
-  attr :show_links, :boolean, default: true, doc: "whether to show edit/delete links"
 
+  # Renders a journal entry card with tag display and user attribution.
+  #
+  # Displays a diary entry in a card format with the following elements:
+  # - Tag name (if entry has tags) displayed prominently at the top
+  # - Entry content in the main body
+  # - Creation date and author attribution at the bottom
+  #
+  # ## Examples
+  #     # Entry with tags
+  #     <.journal_entry entry={%Entry{
+  #       content: "Great day!",
+  #       tags: [%Tag{name: "Holiday"}],
+  #       user: %User{display_name: "Alice"}
+  #     }} />
+  #
+  #     # Entry without tags
+  #     <.journal_entry entry={%Entry{
+  #       content: "Regular day",
+  #       tags: [],
+  #       user: %User{display_name: "Bob"}
+  #     }} />
+  #
   def journal_entry(assigns) do
     ~H"""
     <div class="card bg-base-200 shadow-md p-4">

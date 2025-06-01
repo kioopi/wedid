@@ -1,4 +1,25 @@
 defmodule Wedid.Diaries.Tag do
+  @moduledoc """
+  Represents a tag that can be assigned to diary entries for organization and categorization.
+
+  Tags are scoped to couples, allowing partners to create shared tags for organizing
+  their entries. Each tag can have a name, optional icon, and optional color for
+  visual identification.
+
+  ## Examples
+
+      # Create a new tag for a couple
+      iex> Wedid.Diaries.create_tag(%{name: "Holiday"}, actor: user)
+      {:ok, %Tag{name: "Holiday", couple_id: couple_id}}
+
+      # Create a tag with icon and color
+      iex> Wedid.Diaries.create_tag(%{
+      ...>   name: "Important",
+      ...>   icon: "hero-star",
+      ...>   color: "#ff0000"
+      ...> }, actor: user)
+      {:ok, %Tag{name: "Important", icon: "hero-star", color: "#ff0000"}}
+  """
   use Ash.Resource,
     otp_app: :wedid,
     domain: Wedid.Diaries,
