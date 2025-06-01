@@ -104,7 +104,7 @@ Build the Docker image
 
 Run it with the current directory mounted as a volume:
 ```bash
-  docker compose -f compose-dev.yml up -d
+  docker compose -u $(whoami) -f compose-dev.yml up -d
 ```
 
 Run the tests
