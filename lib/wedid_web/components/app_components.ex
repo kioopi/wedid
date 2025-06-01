@@ -76,10 +76,44 @@ defmodule WedidWeb.AppComponents do
     ~H"""
     <div class="navbar bg-primary text-primary-content shadow-md">
       <div class="navbar-start">
+        <!-- Mobile dropdown -->
+        <div class="dropdown lg:hidden">
+          <div tabindex="0" role="button" class="btn btn-ghost">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h8m-8 6h16"
+              />
+            </svg>
+          </div>
+          <ul
+            tabindex="0"
+            class="menu menu-sm dropdown-content bg-primary rounded-box z-[1] mt-3 w-52 p-2 shadow"
+          >
+            <.nav_items current_user={@current_user} />
+          </ul>
+        </div>
+        <!-- Brand logo -->
         <a href="/" class="text-xl font-bold btn btn-ghost normal-case">
           <span class="text-2xl">❤️</span> WeDid
         </a>
       </div>
+      
+    <!-- Desktop center menu -->
+      <div class="navbar-center hidden lg:flex">
+        <ul class="menu menu-horizontal px-1">
+          <.nav_items current_user={@current_user} />
+        </ul>
+      </div>
+
       <div class="navbar-end">
         <%= if @current_user do %>
           <Core.user_menu current_user={@current_user} />
@@ -92,11 +126,29 @@ defmodule WedidWeb.AppComponents do
   end
 
   @doc """
+  Renders navigation items
+
+  ## Examples
+
+      <.nav_items />
+
+  """
+  def nav_items(assigns) do
+    ~H"""
+    <%= if @current_user do %>
+      <li><a href="/entries" class="hover:bg-primary-focus">Entries</a></li>
+      <li><a href="/couple" class="hover:bg-primary-focus">Couple</a></li>
+    <% end %>
+    """
+  end
+
+  @doc """
   Renders authentication buttons for non-authenticated users.
 
   ## Examples
 
       <.auth_buttons />
+
   """
   def auth_buttons(assigns) do
     ~H"""
