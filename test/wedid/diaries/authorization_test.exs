@@ -10,7 +10,6 @@ defmodule Wedid.Diaries.AuthorizationTest do
     test "user can update their own entries" do
       user = generate(user())
       entry = generate(entry(actor: user))
-
       assert Diaries.can_update_entry?(user, entry, %{content: "Great day!"})
     end
 
@@ -26,7 +25,6 @@ defmodule Wedid.Diaries.AuthorizationTest do
       user = generate(user())
       entry = generate(entry(actor: user))
       partner = Accounts.invite_user!(Faker.Internet.email(), user.couple_id, actor: user)
-
       assert Diaries.can_update_entry?(partner, entry, %{content: "Great day!"})
     end
   end
