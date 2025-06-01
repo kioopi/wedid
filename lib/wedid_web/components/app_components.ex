@@ -190,7 +190,7 @@ defmodule WedidWeb.AppComponents do
           <.empty_entries_placeholder />
         <% else %>
           <%= for entry <- @entries do %>
-            <.journal_entry entry={entry} show_links={false} />
+            <.journal_entry entry={entry} />
           <% end %>
 
           <div class="mt-8 text-center">

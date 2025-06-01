@@ -26,7 +26,7 @@ defmodule WedidWeb.EntryLive.Show do
           </.header>
 
           <div class="max-w-2xl mx-auto mt-6">
-            <.journal_entry entry={@entry} show_links={true} />
+            <.journal_entry entry={@entry} />
 
             <div class="card bg-base-100 shadow-md mt-6 p-4">
               <h3 class="text-sm font-semibold mb-2">Actions</h3>
