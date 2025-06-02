@@ -173,7 +173,7 @@ defmodule WedidWeb.AppComponents do
 
   def couple_card(assigns) do
     ~H"""
-    <div class="card bg-base-100 shadow-xl border-t-4 border-primary">
+    <div class="card bg-base-100 border-t-4 border-primary">
       <div class="card-body">
         <div class="flex items-center justify-center gap-3 mb-6">
           <.icon name="heart" />
@@ -233,7 +233,7 @@ defmodule WedidWeb.AppComponents do
 
   def add_moment_button(assigns) do
     ~H"""
-    <a href={~p"/entries"} class={[@class, "animate-pulse"]}>
+    <a href={~p"/entries"} class={@class}>
       <.icon name="plus" /> See all moments
     </a>
     """

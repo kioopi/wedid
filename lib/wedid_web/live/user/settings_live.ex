@@ -87,6 +87,24 @@ defmodule WedidWeb.User.SettingsLive do
     end
   end
 
+  attr :theme, :string, required: true, doc: "name of the theme"
+  attr :label, :string, required: true, doc: "name of the theme"
+
+  defp theme_button(assigns) do
+    ~H"""
+    <li>
+      <input
+        type="radio"
+        name="theme-dropdown"
+        class="theme-controller btn btn-sm btn-block btn-ghost justify-start checked:btn-active checked:bg-primary"
+        aria-label={@label}
+        value={@theme}
+        data-set-theme={@theme}
+      />
+    </li>
+    """
+  end
+
   @impl true
   def render(assigns) do
     ~H"""
@@ -97,7 +115,11 @@ defmodule WedidWeb.User.SettingsLive do
         </.header>
 
         <.card title="Color theme">
-          <WedidWeb.Layouts.theme_toggle />
+          <p>Select a color theme for the application.</p>
+
+          <:actions>
+            <.theme_switcher id="theme-switcher" />
+          </:actions>
         </.card>
 
         <.card title="Profile information">
@@ -113,29 +135,88 @@ defmodule WedidWeb.User.SettingsLive do
             Use this to set your password after being invited to the application or if you have
             forgotten your password and signed-in with a magic link.
           </p>
-          <.button
-            type="submit"
-            variant="primary"
-            phx-click="request_password_reset"
-            phx-disable-with="Requesting..."
-          >
-            Request password reset link
-          </.button>
+
+          <:actions>
+            <.button
+              type="submit"
+              variant="primary"
+              phx-click="request_password_reset"
+              phx-disable-with="Requesting..."
+            >
+              Request password reset link
+            </.button>
+          </:actions>
         </.card>
       </div>
     </Layouts.app>
     """
   end
 
+  attr :id, :string, required: true, doc: "the dom id of the modal"
+
+  def theme_switcher(assigns) do
+    ~H"""
+    <div class="dropdown " title="Change Theme" id={@id} phx-hook="ThemeSwitcher">
+      <div tabindex="0" role="button" class="btn btn-primary">
+        Theme
+        <svg
+          width="12px"
+          height="12px"
+          class="h-2 w-2 fill-current opacity-60 inline-block"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 2048 2048"
+        >
+          <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+        </svg>
+      </div>
+      <ul tabindex="0" class="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52">
+        <.theme_button theme="light" label="Default" />
+        <.theme_button theme="dark" label="Dark" />
+        <.theme_button theme="cupcake" label="Cupcake" />
+        <.theme_button theme="bumblebee" label="Bumblebee" />
+        <.theme_button theme="emerald" label="Emerald" />
+        <.theme_button theme="corporate" label="Corporate" />
+        <.theme_button theme="synthwave" label="Synthwave" />
+        <.theme_button theme="retro" label="Retro" />
+        <.theme_button theme="cyberpunk" label="Cyberpunk" />
+        <.theme_button theme="valentine" label="Valentine" />
+        <.theme_button theme="halloween" label="Halloween" />
+        <.theme_button theme="garden" label="Garden" />
+        <.theme_button theme="forest" label="Forest" />
+        <.theme_button theme="aqua" label="Aqua" />
+        <.theme_button theme="lofi" label="Lofi" />
+        <.theme_button theme="pastel" label="Pastel" />
+        <.theme_button theme="fantasy" label="Fantasy" />
+        <.theme_button theme="wireframe" label="Wireframe" />
+        <.theme_button theme="black" label="Black" />
+        <.theme_button theme="luxury" label="Luxury" />
+        <.theme_button theme="dracula" label="Dracula" />
+        <.theme_button theme="cmyk" label="CMYK" />
+        <.theme_button theme="autumn" label="Autumn" />
+        <.theme_button theme="business" label="Business" />
+        <.theme_button theme="acid" label="Acid" />
+        <.theme_button theme="lemonade" label="Lemonade" />
+        <.theme_button theme="night" label="Night" />
+        <.theme_button theme="coffee" label="Coffee" />
+        <.theme_button theme="winter" label="Winter" />
+      </ul>
+    </div>
+    """
+  end
+
   attr :title, :string, required: true, doc: "the title of the card"
   slot :inner_block, required: true, doc: "the content to render inside the card"
+  slot :actions, required: false, doc: "optional actions to render in the card footer"
 
   def card(assigns) do
     ~H"""
-    <div class="card bg-base-100 shadow-xl mb-6">
+    <div class="card card-border mb-6">
       <div class="card-body">
         <h2 class="card-title">{@title}</h2>
         {render_slot(@inner_block)}
+        <div :if={@actions != []} class="card-actions mt-5 justify-end">
+          {render_slot(@actions)}
+        </div>
       </div>
     </div>
     """

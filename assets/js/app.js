@@ -24,6 +24,7 @@ import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
 import topbar from "../vendor/topbar";
 import Modal from "./modal";
+import ThemeSwitcher, { initTheme } from "./theme_switcher";
 
 const csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -31,7 +32,7 @@ const csrfToken = document
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: { _csrf_token: csrfToken },
-  hooks: { Modal },
+  hooks: { Modal, ThemeSwitcher },
   dom: {
     // enuse that the <dialog> and <details> elements stay open when liveview updates
     onBeforeElUpdated: (fromEl, toEl) => {
@@ -51,6 +52,7 @@ window.addEventListener("phx:page-loading-stop", (_info) => topbar.hide());
 
 // connect if there are any LiveViews on the page
 liveSocket.connect();
+initTheme();
 
 // expose liveSocket on window for web console debug logs and latency simulation:
 // >> liveSocket.enableDebug()
