@@ -47,9 +47,8 @@ export default ThemeSwitcher = {
 
 function loadTheme(onLoaded) {
   const savedTheme = localStorage.getItem("theme");
-  if (savedTheme) {
-    onLoaded(savedTheme || "light");
-  }
+  const themeToLoad = savedTheme || "light";
+  onLoaded(themeToLoad);
 }
 
 function setTheme(theme) {
