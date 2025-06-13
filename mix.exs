@@ -34,6 +34,7 @@ defmodule Wedid.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:usage_rules, "~> 0.1", only: [:dev]},
       {:live_debugger, "~> 0.2", only: [:dev]},
       {:faker, "~> 0.18", only: [:test]},
       {:bcrypt_elixir, "~> 3.0"},
