@@ -8,7 +8,6 @@ defmodule WedidWeb.Couple.CoupleLive do
   """
   use WedidWeb, :live_view
   import WedidWeb.CoreComponents
-  alias Wedid.Diaries
 
   on_mount {WedidWeb.LiveUserAuth, :live_user_required}
 
@@ -22,7 +21,6 @@ defmodule WedidWeb.Couple.CoupleLive do
       Ash.load(current_user, [couple: [:tags, users: [:display_name]]], actor: current_user)
 
     form = Accounts.form_to_invite_user(actor: current_user)
-    tag_form = Diaries.form_to_create_tag(actor: current_user)
 
     if current_user.couple_id do
       {:ok,
@@ -30,8 +28,7 @@ defmodule WedidWeb.Couple.CoupleLive do
        |> assign(:couple, current_user.couple)
        |> assign(:users, current_user.couple.users)
        |> assign(:tags, current_user.couple.tags)
-       |> assign(:form, to_form(form))
-       |> assign(:tag_form, to_form(tag_form))}
+       |> assign(:form, to_form(form))}
     else
       {:ok, socket |> put_flash(:error, "You need to be part of a couple") |> redirect(to: "/")}
     end
@@ -75,31 +72,48 @@ defmodule WedidWeb.Couple.CoupleLive do
   end
 
   @impl true
-  def handle_event("validate_tag", %{"form" => tag_params}, socket) do
-    form = AshPhoenix.Form.validate(socket.assigns.tag_form, tag_params)
-    {:noreply, assign(socket, tag_form: form)}
+  def handle_info({:tag_created, message}, socket) do
+    current_user = socket.assigns.current_user
+    current_user = Ash.load!(current_user, [couple: [:tags]], actor: current_user)
+    
+    {:noreply,
+     socket
+     |> assign(:tags, current_user.couple.tags || [])
+     |> put_flash(:info, message)}
   end
 
   @impl true
-  def handle_event("save_tag", %{"form" => tag_params}, socket) do
+  def handle_info({:tag_updated, message}, socket) do
     current_user = socket.assigns.current_user
+    current_user = Ash.load!(current_user, [couple: [:tags]], actor: current_user)
+    
+    {:noreply,
+     socket
+     |> assign(:tags, current_user.couple.tags || [])
+     |> put_flash(:info, message)}
+  end
 
-    case AshPhoenix.Form.submit(socket.assigns.tag_form, params: tag_params, actor: current_user) do
-      {:ok, new_tag} ->
-        tag_form = Diaries.form_to_create_tag(actor: current_user)
+  @impl true
+  def handle_info({:tag_deleted, message}, socket) do
+    current_user = socket.assigns.current_user
+    current_user = Ash.load!(current_user, [couple: [:tags]], actor: current_user)
+    
+    {:noreply,
+     socket
+     |> assign(:tags, current_user.couple.tags || [])
+     |> put_flash(:info, message)}
+  end
 
-        socket =
-          socket
-          |> assign(tags: [new_tag | socket.assigns.tags])
-          |> assign(tag_form: to_form(tag_form))
-          |> put_flash(:info, "Tag '#{new_tag.name}' created successfully!")
-          |> push_event("hideModal", %{id: "tag-modal"})
+  @impl true
+  def handle_info({:tag_error, message}, socket) do
+    {:noreply,
+     socket
+     |> put_flash(:error, message)}
+  end
 
-        {:noreply, socket}
-
-      {:error, form} ->
-        {:noreply, assign(socket, tag_form: form)}
-    end
+  @impl true
+  def handle_info(_msg, socket) do
+    {:noreply, socket}
   end
 
   @impl true
@@ -131,13 +145,13 @@ defmodule WedidWeb.Couple.CoupleLive do
 
         <div class="card bg-base-100 shadow-xl mb-6">
           <div class="card-body">
-            <div class="flex justify-between items-center mb-4">
-              <h2 class="card-title">Tags</h2>
-              <.button phx-click={show_modal("tag-modal")}>
-                <.heroicon name="hero-plus-circle" class="size-4 mr-2" /> Add Tag
-              </.button>
-            </div>
-            <.tag_list tags={@tags} />
+            <h2 class="card-title mb-4">Tag Management</h2>
+            <.live_component
+              module={WedidWeb.Couple.TagManagementComponent}
+              id="tag-management"
+              tags={@tags}
+              current_user={@current_user}
+            />
           </div>
         </div>
 
@@ -161,71 +175,8 @@ defmodule WedidWeb.Couple.CoupleLive do
             </div>
           </.form>
         </.modal>
-
-        <.tag_modal tag_form={@tag_form} />
       </div>
     </Layouts.app>
-    """
-  end
-
-  # Function component for displaying the list of tags
-  defp tag_list(assigns) do
-    ~H"""
-    <div class="space-y-2">
-      <p :if={Enum.empty?(@tags)} class="text-neutral-content">No tags created yet.</p>
-      <div
-        :for={tag <- @tags}
-        class="flex items-center justify-between p-2 rounded-lg hover:bg-base-200"
-      >
-        <div class="flex items-center">
-          <span class="mr-2">
-            <.heroicon :if={tag.icon} name={tag.icon} class="size-5" />
-            <.heroicon :if={!tag.icon} name="hero-tag" class="size-5" />
-          </span>
-          <span style={"color: #{tag.color};"}>{tag.name}</span>
-        </div>
-        <%!-- Future: Add edit/delete buttons here --%>
-      </div>
-    </div>
-    """
-  end
-
-  # Function component for the tag creation modal
-  defp tag_modal(assigns) do
-    ~H"""
-    <.modal id="tag-modal" title="Add New Tag">
-      <.form for={@tag_form} phx-submit="save_tag" phx-change="validate_tag" id="tag-form">
-        <.input
-          field={@tag_form[:name]}
-          label="Tag Name"
-          placeholder="e.g., Holiday, Important, Funny"
-          required
-        />
-        <div class="hidden">
-          <!-- for now these are hidden because icon and color are not used in the output -->
-          <.input
-            field={@tag_form[:icon]}
-            label="Icon (Optional)"
-            placeholder="e.g., hero-sparkles (see heroicons.com)"
-            class="hidden"
-          />
-          <.input
-            field={@tag_form[:color]}
-            label="Color (Optional)"
-            placeholder="e.g., #ff00ff or text-blue-500"
-          />
-        </div>
-
-        <div class="flex justify-end gap-3 mt-6">
-          <.button type="button" aria-label="Close" phx-click={hide_modal("tag-modal")}>
-            Cancel
-          </.button>
-          <.button type="submit" variant="primary" phx-disable-with="Saving...">
-            Save Tag
-          </.button>
-        </div>
-      </.form>
-    </.modal>
     """
   end
 end

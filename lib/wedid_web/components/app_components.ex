@@ -44,8 +44,9 @@ defmodule WedidWeb.AppComponents do
   def journal_entry(assigns) do
     ~H"""
     <div class="card bg-base-200 shadow-md p-4">
-      <div :if={is_list(@entry.tags) && length(@entry.tags) > 0} class="py-2 text-m bold w-full">
-        {hd(@entry.tags).name}
+      <div :if={is_list(@entry.tags) && length(@entry.tags) > 0} class="py-2 text-m bold w-full flex items-center gap-2">
+        <span :if={hd(@entry.tags).icon} class="text-lg">{hd(@entry.tags).icon}</span>
+        <span>{hd(@entry.tags).name}</span>
       </div>
       <div class="py-2 text-lg w-full">
         {@entry.content}

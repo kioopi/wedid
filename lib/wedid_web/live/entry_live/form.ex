@@ -39,7 +39,12 @@ defmodule WedidWeb.EntryLive.Form do
                   field={@form[:tags]}
                   type="select"
                   label="Select Tag"
-                  options={Enum.map(@available_tags, fn tag -> {tag.name, tag.id} end)}
+                  options={
+                    Enum.map(@available_tags, fn tag ->
+                      display_name = if tag.icon, do: "#{tag.icon} #{tag.name}", else: tag.name
+                      {display_name, tag.id}
+                    end)
+                  }
                   class="select select-primary"
                   value={tag_value(@form[:tags].value)}
                 />
@@ -124,8 +129,6 @@ defmodule WedidWeb.EntryLive.Form do
   end
 
   def handle_event("save", %{"form" => entry_params}, socket) do
-    IO.inspect(entry_params, label: "Entry Params ------ ")
-
     case AshPhoenix.Form.submit(socket.assigns.form, params: entry_params) do
       {:ok, entry} ->
         notify_parent({:saved, entry})
