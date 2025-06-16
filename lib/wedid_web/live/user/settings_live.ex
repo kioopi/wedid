@@ -8,6 +8,7 @@ defmodule WedidWeb.User.SettingsLive do
   @impl true
   def mount(_params, _session, socket) do
     current_user = socket.assigns.current_user
+
     profile_form = Accounts.form_to_update_user_profile(current_user, actor: current_user)
     change_password_form = Accounts.form_to_change_password(current_user, actor: current_user)
 

@@ -205,4 +205,48 @@ defmodule Wedid.Diaries.DiariesTest do
       assert length(entry.tags) == 0
     end
   end
+
+  describe "Tag with Icons" do
+    test "creates a tag with icon and displays correctly" do
+      user = generate(user())
+      
+      # Create a tag with an emoji icon
+      {:ok, tag} = Diaries.create_tag(%{name: "Holiday", icon: "🏖️", color: "#ff5722"}, actor: user)
+      
+      assert tag.name == "Holiday"
+      assert tag.icon == "🏖️"
+      assert tag.color == "#ff5722"
+      
+      # Create an entry with this tag
+      entry = Diaries.create_entry!("Great beach day!", %{tags: [tag.id]}, actor: user)
+      
+      assert length(entry.tags) == 1
+      assert hd(entry.tags).icon == "🏖️"
+    end
+
+    test "creates a tag without icon" do
+      user = generate(user())
+      
+      # Create a tag without icon
+      {:ok, tag} = Diaries.create_tag(%{name: "Work", color: "#2196f3"}, actor: user)
+      
+      assert tag.name == "Work"
+      assert is_nil(tag.icon)
+      assert tag.color == "#2196f3"
+    end
+
+    test "updates a tag to add an icon" do
+      user = generate(user())
+      
+      # Create a tag without icon first
+      {:ok, tag} = Diaries.create_tag(%{name: "Exercise"}, actor: user)
+      assert is_nil(tag.icon)
+      
+      # Update to add an icon
+      {:ok, updated_tag} = Diaries.update_tag(tag, %{icon: "💪"}, actor: user)
+      
+      assert updated_tag.name == "Exercise"
+      assert updated_tag.icon == "💪"
+    end
+  end
 end
