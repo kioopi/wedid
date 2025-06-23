@@ -6,7 +6,7 @@ defmodule Wedid.Accounts.CoupleTest do
     test "can list users" do
       user = generate(AccountsGenerator.user())
       email = Faker.Internet.email()
-      Wedid.Accounts.invite_user!(email, user.couple_id, actor: user)
+      Wedid.Accounts.invite_user!(email, actor: user)
 
       # users with the couple id exist
       users = Ash.Query.filter(User, couple_id == ^user.couple_id) |> Ash.read!(authorize?: false)

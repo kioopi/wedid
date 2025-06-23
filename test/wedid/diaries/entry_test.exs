@@ -9,7 +9,7 @@ defmodule Wedid.Diaries.EntryTest do
     setup do
       # Create a user for testing
       user = generate(AccountsGenerator.user())
-      partner = Wedid.Accounts.invite_user!(Faker.Internet.email(), user.couple_id, actor: user)
+      partner = Wedid.Accounts.invite_user!(Faker.Internet.email(), actor: user)
 
       # Create another user with different couple
       another_user = generate(AccountsGenerator.user())

@@ -37,7 +37,6 @@ defmodule WedidWeb.Couple.CoupleLive do
   @impl true
   def handle_event("invite_partner", %{"form" => form_data}, socket) do
     current_user = socket.assigns.current_user
-    form_data = Map.put(form_data, "couple_id", current_user.couple_id)
 
     case AshPhoenix.Form.submit(socket.assigns.form, params: form_data) do
       {:ok, _invited_user} ->
