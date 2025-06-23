@@ -7,7 +7,7 @@ defmodule Wedid.Accounts do
     resource Wedid.Accounts.Token
 
     resource Wedid.Accounts.User do
-      define :invite_user, action: :invite, args: [:email, :couple_id]
+      define :invite_user, action: :invite, args: [:email]
       define :list_users, action: :read
       define :update_user_profile, action: :update_profile, args: [:name]
       define :change_password, action: :change_password

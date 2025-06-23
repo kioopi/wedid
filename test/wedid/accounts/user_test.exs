@@ -187,19 +187,17 @@ defmodule Wedid.Accounts.UserTest do
     test "user is created when invited" do
       inviter = generate(AccountsGenerator.user())
 
-      # Create invitation attrs
-      invitation_attrs = %{
-        email: @valid_email,
-        couple_id: inviter.couple_id
-      }
-
-      # Attempt to invite the user
-      user =
-        User
-        |> Ash.Changeset.for_create(:invite, invitation_attrs)
-        |> Ash.create!(actor: inviter)
+      user = Accounts.invite_user!(@valid_email, actor: inviter)
 
       assert to_string(user.email) == @valid_email
+    end
+
+    test "invited user belongs to inviters couple" do
+      inviter = generate(AccountsGenerator.user())
+
+      user = Accounts.invite_user!(Faker.Internet.email(), actor: inviter)
+
+      assert user.couple_id == inviter.couple_id
     end
   end
 
