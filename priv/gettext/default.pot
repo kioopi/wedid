@@ -1,0 +1,226 @@
+## This file is a PO Template file.
+##
+## "msgid"s here are often extracted from source code.
+## Add new messages manually only if they're dynamic
+## messages that can't be statically extracted.
+##
+## Run "mix gettext.extract" to bring this file up to
+## date. Leave "msgstr"s empty as changing them here has no
+## effect: edit them in PO (.po) files instead.
+#
+msgid ""
+msgstr ""
+
+#: lib/wedid_web/components/core_components.ex:380
+#, elixir-autogen, elixir-format
+msgid "Actions"
+msgstr ""
+
+#: lib/wedid_web/components/layouts.ex:119
+#: lib/wedid_web/components/layouts.ex:131
+#, elixir-autogen, elixir-format
+msgid "Attempting to reconnect"
+msgstr ""
+
+#: lib/wedid_web/components/layouts.ex:126
+#, elixir-autogen, elixir-format
+msgid "Something went wrong!"
+msgstr ""
+
+#: lib/wedid_web/components/layouts.ex:114
+#, elixir-autogen, elixir-format
+msgid "We can't find the internet"
+msgstr ""
+
+#: lib/wedid_web/components/core_components.ex:75
+#, elixir-autogen, elixir-format
+msgid "close"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:153
+#: lib/wedid_web/live/user/settings_live.ex:330
+#, elixir-autogen, elixir-format
+msgid "Change password"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:319
+#, elixir-autogen, elixir-format
+msgid "Change your password"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:133
+#, elixir-autogen, elixir-format
+msgid "Color theme"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:142
+#, elixir-autogen, elixir-format
+msgid "Couple"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:323
+#, elixir-autogen, elixir-format
+msgid "Current password"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:141
+#, elixir-autogen, elixir-format
+msgid "Entries"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:89
+#, elixir-autogen, elixir-format
+msgid "Failed to send password reset link: %{reason}"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:71
+#, elixir-autogen, elixir-format
+msgid "Failed to update password."
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:45
+#, elixir-autogen, elixir-format
+msgid "Failed to update profile."
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:412
+#, elixir-autogen, elixir-format
+msgid "Get Started"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:141
+#, elixir-autogen, elixir-format
+msgid "Language"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:300
+#, elixir-autogen, elixir-format
+msgid "Name"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:325
+#, elixir-autogen, elixir-format
+msgid "New password"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:326
+#, elixir-autogen, elixir-format
+msgid "New password confirmation"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:84
+#, elixir-autogen, elixir-format
+msgid "Password reset link sent to your email."
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:62
+#, elixir-autogen, elixir-format
+msgid "Password updated successfully."
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:149
+#, elixir-autogen, elixir-format
+msgid "Profile information"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:36
+#, elixir-autogen, elixir-format
+msgid "Profile updated successfully."
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:170
+#, elixir-autogen, elixir-format
+msgid "Request password reset link"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:168
+#, elixir-autogen, elixir-format
+msgid "Requesting..."
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:157
+#, elixir-autogen, elixir-format
+msgid "Reset password"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:307
+#, elixir-autogen, elixir-format
+msgid "Save Changes"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:306
+#: lib/wedid_web/live/user/settings_live.ex:329
+#, elixir-autogen, elixir-format
+msgid "Saving..."
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:134
+#, elixir-autogen, elixir-format
+msgid "Select a color theme for the application."
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:142
+#, elixir-autogen, elixir-format
+msgid "Select your preferred language for the application."
+msgstr ""
+
+#: lib/wedid_web/components/core_components.ex:336
+#: lib/wedid_web/live/user/settings_live.ex:18
+#, elixir-autogen, elixir-format
+msgid "Settings"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:414
+#, elixir-autogen, elixir-format
+msgid "Sign In"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:158
+#, elixir-autogen, elixir-format
+msgid "Sign in"
+msgstr ""
+
+#: lib/wedid_web/components/core_components.ex:337
+#, elixir-autogen, elixir-format
+msgid "Sign out"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:161
+#, elixir-autogen, elixir-format
+msgid "Sign up"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:185
+#, elixir-autogen, elixir-format
+msgid "Theme"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:302
+#, elixir-autogen, elixir-format
+msgid "This is how you will appear to others in the application."
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:291
+#, elixir-autogen, elixir-format
+msgid "Update your account's profile information."
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:159
+#, elixir-autogen, elixir-format
+msgid "Use this to set your password after being invited to the application or if you have"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:130
+#, elixir-autogen, elixir-format
+msgid "User Settings"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:300
+#, elixir-autogen, elixir-format
+msgid "Your name"
+msgstr ""
+
+#: lib/wedid_web/live/user/settings_live.ex:160
+#, elixir-autogen, elixir-format
+msgid "forgotten your password and signed-in with a magic link."
+msgstr ""

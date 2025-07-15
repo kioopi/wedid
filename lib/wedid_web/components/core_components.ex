@@ -333,8 +333,8 @@ defmodule WedidWeb.CoreComponents do
         class="menu dropdown-content z-[1] p-2 shadow-lg bg-base-100 text-base-content rounded-box w-52 mt-4"
       >
         <li class="menu-title font-medium">{@current_user.email}</li>
-        <li><.link navigate={~p"/settings"}>Settings</.link></li>
-        <li><a href="/sign-out">Sign out</a></li>
+        <li><.link navigate={~p"/settings"}><%= gettext("Settings") %></.link></li>
+        <li><a href="/sign-out"><%= gettext("Sign out") %></a></li>
       </ul>
     </div>
     """

@@ -7,6 +7,7 @@ defmodule WedidWeb.AppComponents do
   """
   use Phoenix.Component
   use WedidWeb, :verified_routes
+  use Gettext, backend: WedidWeb.Gettext
   alias WedidWeb.CoreComponents, as: Core
   alias Phoenix.LiveView.JS
 
@@ -137,8 +138,8 @@ defmodule WedidWeb.AppComponents do
   def nav_items(assigns) do
     ~H"""
     <%= if @current_user do %>
-      <li><a href="/entries" class="hover:bg-primary-focus">Entries</a></li>
-      <li><a href="/couple" class="hover:bg-primary-focus">Couple</a></li>
+      <li><a href="/entries" class="hover:bg-primary-focus"><%= gettext("Entries") %></a></li>
+      <li><a href="/couple" class="hover:bg-primary-focus"><%= gettext("Couple") %></a></li>
     <% end %>
     """
   end
@@ -154,10 +155,10 @@ defmodule WedidWeb.AppComponents do
   def auth_buttons(assigns) do
     ~H"""
     <a href="/sign-in" class="btn btn-ghost btn-sm">
-      Sign in
+      <%= gettext("Sign in") %>
     </a>
     <a href="/register" class="btn btn-secondary btn-sm ml-2">
-      Sign up
+      <%= gettext("Sign up") %>
     </a>
     """
   end
@@ -408,9 +409,9 @@ defmodule WedidWeb.AppComponents do
           </div>
           <div class="mt-8 flex gap-4">
             <a href="/register" class="btn btn-primary btn-lg gap-2">
-              <.icon name="plus" class="w-6 h-6" /> Get Started
+              <.icon name="plus" class="w-6 h-6" /> <%= gettext("Get Started") %>
             </a>
-            <a href="/sign-in" class="btn btn-outline btn-lg">Sign In</a>
+            <a href="/sign-in" class="btn btn-outline btn-lg"><%= gettext("Sign In") %></a>
           </div>
         </div>
       </div>

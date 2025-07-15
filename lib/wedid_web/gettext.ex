@@ -21,5 +21,7 @@ defmodule WedidWeb.Gettext do
 
   See the [Gettext Docs](https://hexdocs.pm/gettext) for detailed usage.
   """
-  use Gettext.Backend, otp_app: :wedid
+  use Gettext.Backend, 
+    otp_app: :wedid,
+    default_locale: "en"
 end
