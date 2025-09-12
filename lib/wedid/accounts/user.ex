@@ -257,20 +257,16 @@ defmodule Wedid.Accounts.User do
       change AshAuthentication.GenerateTokenChange
     end
 
-    create :sign_in_with_magic_link do
-      description "Sign in or register a user with magic link."
+    read :sign_in_with_magic_link do
+      description "Sign in a user with magic link."
 
       argument :token, :string do
         description "The token from the magic link that was sent to the user"
         allow_nil? false
       end
 
-      upsert? false
-      upsert_identity :unique_email
-      upsert_fields [:email]
-
-      # Uses the information from the token to create or sign in the user
-      change AshAuthentication.Strategy.MagicLink.SignInChange
+      # Uses the information from the token to sign in the user
+      prepare AshAuthentication.Strategy.MagicLink.SignInPreparation
 
       metadata :token, :string do
         allow_nil? false
