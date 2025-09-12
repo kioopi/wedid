@@ -289,7 +289,7 @@ defmodule Wedid.Diaries.EntryTagTest do
     test "partner can create EntryTags for entries in the shared couple" do
       user = generate(user())
       partner = Accounts.invite_user!(Faker.Internet.email(), user.couple_id, actor: user)
-      
+
       # Create entry by user, tag by partner
       entry = generate(entry(actor: user))
       tag = generate(tag(actor: partner))
@@ -311,7 +311,7 @@ defmodule Wedid.Diaries.EntryTagTest do
     test "partner can manage EntryTags in the shared couple" do
       user = generate(user())
       partner = Accounts.invite_user!(Faker.Internet.email(), user.couple_id, actor: user)
-      
+
       entry = generate(entry(actor: user))
       tag = generate(tag(actor: user))
 

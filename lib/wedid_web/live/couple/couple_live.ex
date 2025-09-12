@@ -75,7 +75,7 @@ defmodule WedidWeb.Couple.CoupleLive do
   def handle_info({:tag_created, message}, socket) do
     current_user = socket.assigns.current_user
     current_user = Ash.load!(current_user, [couple: [:tags]], actor: current_user)
-    
+
     {:noreply,
      socket
      |> assign(:tags, current_user.couple.tags || [])
@@ -86,7 +86,7 @@ defmodule WedidWeb.Couple.CoupleLive do
   def handle_info({:tag_updated, message}, socket) do
     current_user = socket.assigns.current_user
     current_user = Ash.load!(current_user, [couple: [:tags]], actor: current_user)
-    
+
     {:noreply,
      socket
      |> assign(:tags, current_user.couple.tags || [])
@@ -97,7 +97,7 @@ defmodule WedidWeb.Couple.CoupleLive do
   def handle_info({:tag_deleted, message}, socket) do
     current_user = socket.assigns.current_user
     current_user = Ash.load!(current_user, [couple: [:tags]], actor: current_user)
-    
+
     {:noreply,
      socket
      |> assign(:tags, current_user.couple.tags || [])

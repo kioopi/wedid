@@ -3,51 +3,67 @@ export default LocaleSwitcher = {
     // Handle locale change events from the server
     this.handleEvent("locale-changed", ({locale, shouldReload = true}) => {
       this.setLocale(locale);
-      // Always reload to ensure proper locale application across all components
+
       if (shouldReload) {
-        window.location.reload();
+        // Reload with a URL parameter to ensure the server picks up the change
+        this.reloadWithLocale(locale);
       }
     });
 
-    // Load saved locale on page load and sync with server if different
-    const savedLocale = localStorage.getItem("locale");
-    const currentLocale = this.el.dataset.currentLocale;
-    
-    // If there's no saved locale, save the current one
-    if (!savedLocale) {
-      localStorage.setItem("locale", currentLocale);
-      document.documentElement.setAttribute("lang", currentLocale);
-    } else if (savedLocale !== currentLocale) {
-      // Sync silently without reload for initial load
-      this.pushEvent("sync_locale", {locale: savedLocale});
-    } else {
-      // Ensure document language is set
-      document.documentElement.setAttribute("lang", currentLocale);
-    }
+    this.ensureCorrectLocale();
   },
+
+  selectedLocale() {
+    return this.el.dataset.currentLocale;
+	},
 
   setLocale(locale) {
     localStorage.setItem("locale", locale);
     document.documentElement.setAttribute("lang", locale);
+  },
+
+  ensureCorrectLocale() {
+    const locale = deviceLocale();
+
+    setDeviceLocale(locale);
+
+    if (this.selectedLocale() !== locale) {
+      this.pushEvent("sync_locale", { locale });
+    }
+	},
+
+  setLocaleCookie(locale) {
+    const expires = new Date();
+    expires.setTime(expires.getTime() + (365 * 24 * 60 * 60 * 1000)); // 1 year
+    document.cookie = `locale=${locale}; path=/; expires=${expires.toUTCString()}`;
+  },
+
+  reloadWithLocale(locale) {
+    const url = new URL(window.location);
+    url.searchParams.set('locale', locale);
+    setTimeout(() => {
+      window.location.href = url.toString();
+    }, 100);
   }
 };
 
+function deviceLocale() {
+  return localStorage.getItem("locale") || 'de';
+}
+
+function setDeviceLocale(locale) {
+	localStorage.setItem("locale", locale);
+	document.documentElement.setAttribute("lang", locale);
+}
+
 // Initialize locale immediately when script loads
 export function initLocale() {
-  const savedLocale = localStorage.getItem("locale");
-  if (savedLocale) {
-    // Set document language attribute
-    document.documentElement.setAttribute("lang", savedLocale);
-  } else {
-    // Set default language if no saved locale
-    document.documentElement.setAttribute("lang", "en");
-  }
+  document.documentElement.setAttribute("lang", deviceLocale());
 }
 
 // Export function to change locale programmatically
 export function changeLocale(locale) {
-  localStorage.setItem("locale", locale);
-  document.documentElement.setAttribute("lang", locale);
+  setDeviceLocale(locale);
   
   // Trigger a custom event that LiveView can listen to
   window.dispatchEvent(new CustomEvent("locale-change", { 
