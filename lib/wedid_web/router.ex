@@ -12,6 +12,7 @@ defmodule WedidWeb.Router do
     plug :put_root_layout, html: {WedidWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug WedidWeb.Plugs.SetLocale
     plug :load_from_session
     plug WedidWeb.LoadUserRelationships
   end

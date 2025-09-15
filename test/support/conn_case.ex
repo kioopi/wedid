@@ -47,9 +47,12 @@ defmodule WedidWeb.ConnCase do
         password: "password"
       })
 
+    Gettext.put_locale(WedidWeb.Gettext, "en")
+
     conn =
       conn
       |> Phoenix.ConnTest.init_test_session(%{})
+      |> Plug.Conn.put_session(:locale, "en")
       |> AshAuthentication.Plug.Helpers.store_in_session(user)
       |> Plug.Conn.assign(:current_user, user)
 

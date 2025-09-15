@@ -41,7 +41,8 @@ defmodule WedidWeb.CoupleLiveTest do
 
       # Fill in and submit the tag form
       tag_name = "Holiday Memories"
-      tag_icon = "🏖️"  # Using emoji instead of heroicon
+      # Using emoji instead of heroicon
+      tag_icon = "🏖️"
       tag_color = "#34D399"
 
       view

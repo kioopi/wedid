@@ -23,7 +23,7 @@ defmodule WedidWeb.EntryLive.Form do
               <.heroicon name="hero-pencil-square" class="size-6 text-primary" />
               <span>{@page_title}</span>
             </div>
-            <:subtitle>Share your thoughts and moments with your partner</:subtitle>
+            <:subtitle>{gettext("Share your thoughts and moments with your partner")}</:subtitle>
           </.header>
 
           <div class="card bg-base-100 shadow-lg mt-6">
@@ -32,13 +32,13 @@ defmodule WedidWeb.EntryLive.Form do
                 <.input
                   field={@form[:content]}
                   type="textarea"
-                  label="Content"
+                  label={gettext("Content")}
                   class="textarea textarea-primary"
                 />
                 <.input
                   field={@form[:tags]}
                   type="select"
-                  label="Select Tag"
+                  label={gettext("Select Tag")}
                   options={
                     Enum.map(@available_tags, fn tag ->
                       display_name = if tag.icon, do: "#{tag.icon} #{tag.name}", else: tag.name
@@ -51,16 +51,16 @@ defmodule WedidWeb.EntryLive.Form do
                 <.input
                   field={@form[:created_at]}
                   type="datetime-local"
-                  label="Created at"
+                  label={gettext("Created at")}
                   class="input input-primary"
                 />
 
                 <div class="flex justify-end gap-2 mt-6">
                   <.button navigate={return_path(@return_to, @entry)} class="btn btn-ghost">
-                    <.heroicon name="hero-x-mark" class="size-4 mr-1" /> Cancel
+                    <.heroicon name="hero-x-mark" class="size-4 mr-1" /> {gettext("Cancel")}
                   </.button>
-                  <.button phx-disable-with="Saving..." variant="primary">
-                    <.heroicon name="hero-check" class="size-4 mr-1" /> Save Entry
+                  <.button phx-disable-with={gettext("Saving...")} variant="primary">
+                    <.heroicon name="hero-check" class="size-4 mr-1" /> {gettext("Save Entry")}
                   </.button>
                 </div>
               </.form>
@@ -85,8 +85,8 @@ defmodule WedidWeb.EntryLive.Form do
         id -> Ash.get!(Wedid.Diaries.Entry, id, actor: current_user, load: [:tags])
       end
 
-    action = if is_nil(entry), do: "New", else: "Edit"
-    page_title = action <> " " <> "Entry"
+    action = if is_nil(entry), do: gettext("New"), else: gettext("Edit")
+    page_title = action <> " " <> gettext("Entry")
 
     {:ok,
      socket
@@ -135,7 +135,7 @@ defmodule WedidWeb.EntryLive.Form do
 
         socket =
           socket
-          |> put_flash(:info, "Entry #{socket.assigns.form.source.type}d successfully")
+          |> put_flash(:info, gettext("Entry %{action}d successfully", action: socket.assigns.form.source.type))
           |> push_navigate(to: return_path(socket.assigns.return_to, entry))
 
         {:noreply, socket}
