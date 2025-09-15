@@ -24,7 +24,7 @@ defmodule Wedid.Diaries.AuthorizationTest do
     test "others can update couples entries" do
       user = generate(user())
       entry = generate(entry(actor: user))
-      partner = Accounts.invite_user!(Faker.Internet.email(), user.couple_id, actor: user)
+      partner = Accounts.invite_user!(Faker.Internet.email(), actor: user)
       assert Diaries.can_update_entry?(partner, entry, %{content: "Great day!"})
     end
   end

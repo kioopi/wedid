@@ -59,7 +59,7 @@ defmodule Wedid.Diaries.DiariesTest do
     test "list_entries with a query" do
       user = generate(user())
       generate(entry(actor: user))
-      partner = Accounts.invite_user!(Faker.Internet.email(), user.couple_id, actor: user)
+      partner = Accounts.invite_user!(Faker.Internet.email(), actor: user)
       generate(entry(actor: partner))
 
       entries =
