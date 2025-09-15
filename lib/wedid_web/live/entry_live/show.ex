@@ -12,15 +12,15 @@ defmodule WedidWeb.EntryLive.Show do
           <.header>
             <div class="flex items-center gap-2">
               <.heroicon name="hero-book-open" class="size-6 text-primary" />
-              <span>Entry Details</span>
+              <span>{gettext("Entry Details")}</span>
             </div>
             <:subtitle>
-              Viewing entry from {Calendar.strftime(@entry.created_at, "%b %d, %Y")}
+              {gettext("Viewing entry from %{date}", date: Calendar.strftime(@entry.created_at, "%b %d, %Y"))}
             </:subtitle>
 
             <:actions>
               <.button navigate={~p"/entries"} class="btn btn-ghost">
-                <.heroicon name="hero-arrow-left" class="size-4 mr-1" /> Back to Entries
+                <.heroicon name="hero-arrow-left" class="size-4 mr-1" /> {gettext("Back to Entries")}
               </.button>
             </:actions>
           </.header>
@@ -29,26 +29,26 @@ defmodule WedidWeb.EntryLive.Show do
             <.journal_entry entry={@entry} />
 
             <div class="card bg-base-100 shadow-md mt-6 p-4">
-              <h3 class="text-sm font-semibold mb-2">Actions</h3>
+              <h3 class="text-sm font-semibold mb-2">{gettext("Actions")}</h3>
               <div class="flex gap-1">
                 <.link navigate={~p"/entries/#{@entry}/edit"} class="btn btn-xs btn-ghost">
-                  <.heroicon name="hero-pencil-square" class="size-4" /> Edit
+                  <.heroicon name="hero-pencil-square" class="size-4" /> {gettext("Edit")}
                 </.link>
                 <.link
                   phx-click={JS.push("delete", value: %{id: @entry.id})}
-                  data-confirm="Are you sure you want to delete this entry?"
+                  data-confirm={gettext("Are you sure you want to delete this entry?")}
                   class="btn btn-xs btn-ghost text-error self-end"
                 >
-                  <.heroicon name="hero-trash" class="size-4" /> Delete
+                  <.heroicon name="hero-trash" class="size-4" /> {gettext("Delete")}
                 </.link>
               </div>
             </div>
 
             <div class="card bg-base-100 shadow-md mt-6 p-4">
-              <h3 class="text-sm font-semibold mb-2">Additional Information</h3>
+              <h3 class="text-sm font-semibold mb-2">{gettext("Additional Information")}</h3>
               <div class="text-xs text-base-content/70">
                 <div class="flex justify-between mb-1">
-                  <span>Entry ID:</span>
+                  <span>{gettext("Entry ID:")}</span>
                   <span class="badge badge-sm badge-neutral">{@entry.id}</span>
                 </div>
               </div>
@@ -80,6 +80,6 @@ defmodule WedidWeb.EntryLive.Show do
      |> assign(:current_user, socket.assigns.current_user)}
   end
 
-  defp page_title(:show), do: "Show Entry"
-  defp page_title(:edit), do: "Edit Entry"
+  defp page_title(:show), do: gettext("Show Entry")
+  defp page_title(:edit), do: gettext("Edit Entry")
 end

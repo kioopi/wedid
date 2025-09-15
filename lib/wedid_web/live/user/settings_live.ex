@@ -6,17 +6,19 @@ defmodule WedidWeb.User.SettingsLive do
   on_mount {WedidWeb.LiveUserAuth, :live_user_required}
 
   @impl true
-  def mount(_params, _session, socket) do
+  def mount(_params, session, socket) do
     current_user = socket.assigns.current_user
+    current_locale = Map.get(session, "locale", "en")
 
     profile_form = Accounts.form_to_update_user_profile(current_user, actor: current_user)
     change_password_form = Accounts.form_to_change_password(current_user, actor: current_user)
 
     {:ok,
      socket
-     |> assign(:page_title, "Settings")
+     |> assign(:page_title, gettext("Settings"))
      |> assign(:profile_form, to_form(profile_form))
-     |> assign(:change_password_form, to_form(change_password_form))}
+     |> assign(:change_password_form, to_form(change_password_form))
+     |> assign(:current_locale, current_locale)}
   end
 
   @impl true
@@ -31,7 +33,7 @@ defmodule WedidWeb.User.SettingsLive do
       {:ok, user} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Profile updated successfully.")
+         |> put_flash(:info, gettext("Profile updated successfully."))
          |> assign(
            :profile_form,
            to_form(Accounts.form_to_update_user_profile(user, actor: user))
@@ -40,7 +42,7 @@ defmodule WedidWeb.User.SettingsLive do
       {:error, form} ->
         {:noreply,
          socket
-         |> put_flash(:error, "Failed to update profile.")
+         |> put_flash(:error, gettext("Failed to update profile."))
          |> assign(:profile_form, form)}
     end
   end
@@ -57,7 +59,7 @@ defmodule WedidWeb.User.SettingsLive do
       {:ok, user} ->
         {:noreply,
          socket
-         |> put_flash(:info, "Password updated successfully.")
+         |> put_flash(:info, gettext("Password updated successfully."))
          |> assign(
            :profile_form,
            to_form(Accounts.form_to_change_password(user, actor: user))
@@ -66,7 +68,7 @@ defmodule WedidWeb.User.SettingsLive do
       {:error, form} ->
         {:noreply,
          socket
-         |> put_flash(:error, "Failed to update profile.")
+         |> put_flash(:error, gettext("Failed to update password."))
          |> assign(:change_password_form, form)}
     end
   end
@@ -79,12 +81,52 @@ defmodule WedidWeb.User.SettingsLive do
       :ok ->
         {:noreply,
          socket
-         |> put_flash(:info, "Password reset link sent to your email.")}
+         |> put_flash(:info, gettext("Password reset link sent to your email."))}
 
       {:error, reason} ->
         {:noreply,
          socket
-         |> put_flash(:error, "Failed to send password reset link: #{reason}")}
+         |> put_flash(
+           :error,
+           gettext("Failed to send password reset link: %{reason}", reason: reason)
+         )}
+    end
+  end
+
+  @impl true
+  def handle_event("change_locale", %{"locale" => locale}, socket) do
+    if WedidWeb.Locale.supported_locale?(locale) do
+      # Set the locale in Gettext for this process (mainly for consistency)
+      Gettext.put_locale(WedidWeb.Gettext, locale)
+
+      # Update the socket state and trigger a page reload
+      # Page reload is necessary because LiveView templates are compiled 
+      # and don't re-evaluate gettext calls when locale changes mid-session
+      {:noreply,
+       socket
+       |> assign(:current_locale, locale)
+       |> assign(:page_title, gettext("Settings"))
+       |> push_event("locale-changed", %{locale: locale, shouldReload: true})}
+    else
+      {:noreply, socket}
+    end
+  end
+
+  @impl true
+  def handle_event("sync_locale", %{"locale" => locale}, socket) do
+    if WedidWeb.Locale.supported_locale?(locale) do
+      # Set the locale in Gettext for this process
+      Gettext.put_locale(WedidWeb.Gettext, locale)
+
+      # This is for silent sync (initial page load) - no reload needed
+      # Just update the socket state, the session will be updated by SetLocale plug
+      {:noreply,
+       socket
+       |> assign(:current_locale, locale)
+       |> assign(:page_title, gettext("Settings"))
+       |> push_event("locale-changed", %{locale: locale, shouldReload: false})}
+    else
+      {:noreply, socket}
     end
   end
 
@@ -112,29 +154,39 @@ defmodule WedidWeb.User.SettingsLive do
     <Layouts.app flash={@flash} current_user={@current_user}>
       <div class="container mx-auto p-6">
         <.header class="mb-8">
-          User Settings
+          {gettext("User Settings")}
         </.header>
 
-        <.card title="Color theme">
-          <p>Select a color theme for the application.</p>
+        <.card title={gettext("Color theme")}>
+          <p>{gettext("Select a color theme for the application.")}</p>
 
           <:actions>
             <.theme_switcher id="theme-switcher" />
           </:actions>
         </.card>
 
-        <.card title="Profile information">
+        <.card title={gettext("Language")}>
+          <p>{gettext("Select your preferred language for the application.")}</p>
+
+          <:actions>
+            <.language_switcher id="language-switcher" current_locale={@current_locale} />
+          </:actions>
+        </.card>
+
+        <.card title={gettext("Profile information")}>
           <.profile_form form={@profile_form} />
         </.card>
 
-        <.card title="Change password">
+        <.card title={gettext("Change password")}>
           <.change_password_form form={@change_password_form} />
         </.card>
 
-        <.card title="Reset password">
+        <.card title={gettext("Reset password")}>
           <p class="mt-1 text-sm text-base-content/70">
-            Use this to set your password after being invited to the application or if you have
-            forgotten your password and signed-in with a magic link.
+            {gettext(
+              "Use this to set your password after being invited to the application or if you have"
+            )}
+            {gettext("forgotten your password and signed-in with a magic link.")}
           </p>
 
           <:actions>
@@ -142,9 +194,9 @@ defmodule WedidWeb.User.SettingsLive do
               type="submit"
               variant="primary"
               phx-click="request_password_reset"
-              phx-disable-with="Requesting..."
+              phx-disable-with={gettext("Requesting...")}
             >
-              Request password reset link
+              {gettext("Request password reset link")}
             </.button>
           </:actions>
         </.card>
@@ -159,7 +211,7 @@ defmodule WedidWeb.User.SettingsLive do
     ~H"""
     <div class="dropdown " title="Change Theme" id={@id} phx-hook="ThemeSwitcher">
       <div tabindex="0" role="button" class="btn btn-primary">
-        Theme
+        {gettext("Theme")}
         <svg
           width="12px"
           height="12px"
@@ -205,6 +257,49 @@ defmodule WedidWeb.User.SettingsLive do
     """
   end
 
+  attr :id, :string, required: true, doc: "the dom id of the language switcher"
+  attr :current_locale, :string, required: true, doc: "the current locale"
+
+  def language_switcher(assigns) do
+    ~H"""
+    <div
+      class="dropdown"
+      title="Change Language"
+      id={@id}
+      phx-hook="LocaleSwitcher"
+      data-current-locale={@current_locale}
+    >
+      <div tabindex="0" role="button" class="btn btn-primary">
+        {WedidWeb.Locale.locale_flag(@current_locale)}
+        {WedidWeb.Locale.locale_name(@current_locale)}
+        <svg
+          width="12px"
+          height="12px"
+          class="h-2 w-2 fill-current opacity-60 inline-block"
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 2048 2048"
+        >
+          <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
+        </svg>
+      </div>
+      <ul tabindex="0" class="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52">
+        <%= for locale <- WedidWeb.Locale.supported_locales() do %>
+          <li>
+            <button
+              type="button"
+              class={"btn btn-sm btn-block btn-ghost justify-start #{if locale.code == @current_locale, do: "btn-active bg-primary", else: ""}"}
+              phx-click="change_locale"
+              phx-value-locale={locale.code}
+            >
+              {locale.flag} {locale.name}
+            </button>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+    """
+  end
+
   attr :title, :string, required: true, doc: "the title of the card"
   slot :inner_block, required: true, doc: "the content to render inside the card"
   slot :actions, required: false, doc: "optional actions to render in the card footer"
@@ -228,7 +323,7 @@ defmodule WedidWeb.User.SettingsLive do
   def profile_form(assigns) do
     ~H"""
     <p class="text-sm text-base-content/70 mb-4">
-      Update your account's profile information.
+      {gettext("Update your account's profile information.")}
     </p>
 
     <.form
@@ -237,14 +332,19 @@ defmodule WedidWeb.User.SettingsLive do
       phx-submit="save_profile"
       class="profile-form space-y-4"
     >
-      <.input field={@form[:name]} type="text" label="Name" placeholder="Your name" />
+      <.input
+        field={@form[:name]}
+        type="text"
+        label={gettext("Name")}
+        placeholder={gettext("Your name")}
+      />
       <p class="mt-1 text-sm text-base-content/70">
-        This is how you will appear to others in the application.
+        {gettext("This is how you will appear to others in the application.")}
       </p>
 
       <div class="flex justify-end">
-        <.button type="submit" variant="primary" phx-disable-with="Saving...">
-          Save Changes
+        <.button type="submit" variant="primary" phx-disable-with={gettext("Saving...")}>
+          {gettext("Save Changes")}
         </.button>
       </div>
     </.form>
@@ -256,18 +356,22 @@ defmodule WedidWeb.User.SettingsLive do
   def change_password_form(assigns) do
     ~H"""
     <p class="text-sm text-base-content/70 mb-4">
-      Change your password
+      {gettext("Change your password")}
     </p>
 
     <.form for={@form} phx-change="validate_password" phx-submit="save_password" class="space-y-4">
-      <.input field={@form[:current_password]} type="password" label="Current password" />
+      <.input field={@form[:current_password]} type="password" label={gettext("Current password")} />
       <hr />
-      <.input field={@form[:password]} type="password" label="New password" />
-      <.input field={@form[:password_confirmation]} type="password" label="New password confirmation" />
+      <.input field={@form[:password]} type="password" label={gettext("New password")} />
+      <.input
+        field={@form[:password_confirmation]}
+        type="password"
+        label={gettext("New password confirmation")}
+      />
 
       <div class="flex justify-end">
-        <.button type="submit" variant="primary" phx-disable-with="Saving...">
-          Change password
+        <.button type="submit" variant="primary" phx-disable-with={gettext("Saving...")}>
+          {gettext("Change password")}
         </.button>
       </div>
     </.form>

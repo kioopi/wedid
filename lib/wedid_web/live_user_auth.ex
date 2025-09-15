@@ -12,10 +12,15 @@ defmodule WedidWeb.LiveUserAuth do
   # To use, place the following at the top of that liveview:
   # on_mount {WedidWeb.LiveUserAuth, :current_user}
   def on_mount(:current_user, _params, session, socket) do
+    # Set locale from session
+    set_locale_from_session(session)
     {:cont, AshAuthentication.Phoenix.LiveSession.assign_new_resources(socket, session)}
   end
 
-  def on_mount(:live_user_optional, _params, _session, socket) do
+  def on_mount(:live_user_optional, _params, session, socket) do
+    # Set locale from session
+    set_locale_from_session(session)
+
     if socket.assigns[:current_user] do
       {:cont, ensure_user_loaded(socket)}
     else
@@ -23,7 +28,10 @@ defmodule WedidWeb.LiveUserAuth do
     end
   end
 
-  def on_mount(:live_user_required, _params, _session, socket) do
+  def on_mount(:live_user_required, _params, session, socket) do
+    # Set locale from session
+    set_locale_from_session(session)
+
     if socket.assigns[:current_user] do
       {:cont, ensure_user_loaded(socket)}
     else
@@ -31,7 +39,10 @@ defmodule WedidWeb.LiveUserAuth do
     end
   end
 
-  def on_mount(:live_no_user, _params, _session, socket) do
+  def on_mount(:live_no_user, _params, session, socket) do
+    # Set locale from session
+    set_locale_from_session(session)
+
     if socket.assigns[:current_user] do
       {:halt, Phoenix.LiveView.redirect(socket, to: ~p"/")}
     else
@@ -44,4 +55,12 @@ defmodule WedidWeb.LiveUserAuth do
   end
 
   defp ensure_user_loaded(socket), do: socket
+
+  defp set_locale_from_session(session) do
+    locale = Map.get(session, "locale", "en")
+
+    if locale in Gettext.known_locales(WedidWeb.Gettext) do
+      Gettext.put_locale(WedidWeb.Gettext, locale)
+    end
+  end
 end
