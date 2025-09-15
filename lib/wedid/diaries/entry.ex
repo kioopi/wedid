@@ -24,8 +24,7 @@ defmodule Wedid.Diaries.Entry do
     otp_app: :wedid,
     domain: Wedid.Diaries,
     data_layer: AshPostgres.DataLayer,
-    authorizers: [Ash.Policy.Authorizer],
-    extensions: [AshAuthentication]
+    authorizers: [Ash.Policy.Authorizer]
 
   require Ash.Query
 
