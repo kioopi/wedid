@@ -30,7 +30,7 @@ defmodule WedidWeb.Couple.CoupleLive do
        |> assign(:tags, current_user.couple.tags)
        |> assign(:form, to_form(form))}
     else
-      {:ok, socket |> put_flash(:error, "You need to be part of a couple") |> redirect(to: "/")}
+      {:ok, socket |> put_flash(:error, gettext("You need to be part of a couple")) |> redirect(to: "/")}
     end
   end
 
@@ -51,12 +51,12 @@ defmodule WedidWeb.Couple.CoupleLive do
          socket
          |> assign(:users, users)
          |> push_event("hideModal", %{id: "invite-modal"})
-         |> put_flash(:info, "Partner invitation sent successfully!")}
+         |> put_flash(:info, gettext("Partner invitation sent successfully!"))}
 
       {:error, form} ->
         {:noreply,
          socket
-         |> put_flash(:error, "Failed to send partner invitation")
+         |> put_flash(:error, gettext("Failed to send partner invitation"))
          |> assign(:form, form)}
     end
   end
@@ -122,22 +122,22 @@ defmodule WedidWeb.Couple.CoupleLive do
     <Layouts.app flash={@flash} current_user={@current_user}>
       <div class="container mx-auto p-6">
         <.header>
-          Your Couple: {@couple.name}
+          {gettext("Your Couple: %{name}", name: @couple.name)}
           <:actions>
             <.button phx-click={show_modal("invite-modal")}>
-              <.heroicon name="hero-user-plus" class="size-4 mr-2" /> Invite Partner
+              <.heroicon name="hero-user-plus" class="size-4 mr-2" /> {gettext("Invite Partner")}
             </.button>
           </:actions>
         </.header>
 
         <div class="card bg-base-100 shadow-xl mb-6">
           <div class="card-body">
-            <h2 class="card-title">Members</h2>
+            <h2 class="card-title">{gettext("Members")}</h2>
             <.table id="users" rows={@users}>
-              <:col :let={user} label="Name">{user.display_name}</:col>
-              <:col :let={user} label="Email">{to_string(user.email)}</:col>
-              <:col :let={user} label="Status">
-                {if user.confirmed_at, do: "Confirmed", else: "Pending"}
+              <:col :let={user} label={gettext("Name")}>{user.display_name}</:col>
+              <:col :let={user} label={gettext("Email")}>{to_string(user.email)}</:col>
+              <:col :let={user} label={gettext("Status")}>
+                {if user.confirmed_at, do: gettext("Confirmed"), else: gettext("Pending")}
               </:col>
             </.table>
           </div>
@@ -145,7 +145,7 @@ defmodule WedidWeb.Couple.CoupleLive do
 
         <div class="card bg-base-100 shadow-xl mb-6">
           <div class="card-body">
-            <h2 class="card-title mb-4">Tag Management</h2>
+            <h2 class="card-title mb-4">{gettext("Tag Management")}</h2>
             <.live_component
               module={WedidWeb.Couple.TagManagementComponent}
               id="tag-management"
@@ -155,22 +155,22 @@ defmodule WedidWeb.Couple.CoupleLive do
           </div>
         </div>
 
-        <.modal id="invite-modal" title="Invite Partner">
+        <.modal id="invite-modal" title={gettext("Invite Partner")}>
           <.form for={@form} phx-submit="invite_partner" phx-change="validate_partner_email">
             <.input
               field={@form[:email]}
               type="email"
-              label="Partner's Email"
-              placeholder="partner@example.com"
+              label={gettext("Partner's Email")}
+              placeholder={gettext("partner@example.com")}
               required
             />
 
             <div class="flex justify-end gap-3 mt-6">
-              <.button type="button" aria-label="Close" phx-click={hide_modal("invite-modal")}>
-                Cancel
+              <.button type="button" aria-label={gettext("Close")} phx-click={hide_modal("invite-modal")}>
+                {gettext("Cancel")}
               </.button>
               <.button type="submit" variant="primary">
-                Send Invitation
+                {gettext("Send Invitation")}
               </.button>
             </div>
           </.form>

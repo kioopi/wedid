@@ -23,5 +23,5 @@ defmodule WedidWeb.Gettext do
   """
   use Gettext.Backend,
     otp_app: :wedid,
-    default_locale: "de"
+    default_locale: "en"
 end

@@ -21,19 +21,19 @@ defmodule WedidWeb.EntryLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     socket
-    |> assign(:page_title, "Edit Entry")
+    |> assign(:page_title, gettext("Edit Entry"))
     |> assign(:entry, Ash.get!(Wedid.Diaries.Entry, id, actor: socket.assigns.current_user))
   end
 
   defp apply_action(socket, :new, _params) do
     socket
-    |> assign(:page_title, "New Entry")
+    |> assign(:page_title, gettext("New Entry"))
     |> assign(:entry, nil)
   end
 
   defp apply_action(socket, :index, _params) do
     socket
-    |> assign(:page_title, "Listing Entries")
+    |> assign(:page_title, gettext("Listing Entries"))
     |> assign(:entry, nil)
   end
 
