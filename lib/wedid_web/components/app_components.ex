@@ -203,7 +203,7 @@ defmodule WedidWeb.AppComponents do
           <button
             type="button"
             class="text-base-content/70 hover:text-base-content"
-            aria-label="Close"
+            aria-label={gettext("Close")}
             phx-click={hide_modal(@id)}
           >
             <Core.heroicon name="hero-x-mark" class="size-5" />
@@ -239,7 +239,7 @@ defmodule WedidWeb.AppComponents do
 
         <div class="divider">
           <div class="badge badge-primary badge-lg gap-2">
-            <.icon name="calendar" class="w-5 h-5" /> Your shared moments
+            <.icon name="calendar" class="w-5 h-5" /> {gettext("Your shared moments")}
           </div>
         </div>
 
@@ -270,9 +270,9 @@ defmodule WedidWeb.AppComponents do
     ~H"""
     <div class="text-center py-12 bg-base-200 rounded-xl">
       <.icon name="edit" class="w-16 h-16 mx-auto text-primary mb-4 opacity-60" />
-      <h3 class="text-2xl font-medium mb-4">No moments recorded yet</h3>
+      <h3 class="text-2xl font-medium mb-4">{gettext("No moments recorded yet")}</h3>
       <p class="mb-6 text-base-content/70 max-w-md mx-auto">
-        This is where you'll see all the special moments you and your partner share. Start your journey of gratitude today!
+        {gettext("This is where you'll see all the special moments you and your partner share. Start your journey of gratitude today!")}
       </p>
       <.add_moment_button />
     </div>
@@ -291,7 +291,7 @@ defmodule WedidWeb.AppComponents do
   def add_moment_button(assigns) do
     ~H"""
     <a href={~p"/entries"} class={@class}>
-      <.icon name="plus" /> See all moments
+      <.icon name="plus" /> {gettext("See all moments")}
     </a>
     """
   end
@@ -311,9 +311,9 @@ defmodule WedidWeb.AppComponents do
           <div class="mask mask-heart mb-8 bg-primary/20 p-8 mx-auto w-32 h-32 flex items-center justify-center">
             <.icon name="users" class="w-16 h-16 text-primary" />
           </div>
-          <h1 class="text-4xl font-bold mb-4">Almost there!</h1>
+          <h1 class="text-4xl font-bold mb-4">{gettext("Almost there!")}</h1>
           <p class="mb-8 text-xl">
-            But your partner hasn't joined yet.
+            {gettext("But your partner hasn't joined yet.")}
           </p>
           <.partner_invite_card />
         </div>
@@ -335,14 +335,14 @@ defmodule WedidWeb.AppComponents do
       <div class="card-body">
         <div class="flex items-center gap-2">
           <.icon name="mail" class="w-6 h-6 text-primary" />
-          <h2 class="card-title">Invite your partner</h2>
+          <h2 class="card-title">{gettext("Invite your partner")}</h2>
         </div>
         <p class="mb-4">
-          Share your journey of gratitude and connection together. Your partner will be able to join with a special invitation link.
+          {gettext("Share your journey of gratitude and connection together. Your partner will be able to join with a special invitation link.")}
         </p>
         <div class="card-actions justify-center">
           <Core.button variant="large" class="btn btn-primary btn-lg gap-2">
-            <.icon name="send" class="w-6 h-6" /> Send invite
+            <.icon name="send" class="w-6 h-6" /> {gettext("Send invite")}
           </Core.button>
         </div>
       </div>
@@ -365,12 +365,12 @@ defmodule WedidWeb.AppComponents do
           <div class="mask mask-heart mb-8 bg-primary/20 p-8 mx-auto w-32 h-32 flex items-center justify-center">
             <.icon name="heart" class="w-16 h-16 text-primary" />
           </div>
-          <h1 class="text-5xl font-bold mb-4">Welcome to WeDid!</h1>
+          <h1 class="text-5xl font-bold mb-4">{gettext("Welcome to WeDid!")}</h1>
           <p class="mb-8 text-xl max-w-md mx-auto">
-            Let's set up your couple profile to start recording beautiful moments together.
+            {gettext("Let's set up your couple profile to start recording beautiful moments together.")}
           </p>
           <button class="btn btn-primary btn-lg gap-2">
-            <.icon name="plus" class="w-6 h-6" /> Create your couple
+            <.icon name="plus" class="w-6 h-6" /> {gettext("Create your couple")}
           </button>
         </div>
       </div>
@@ -402,13 +402,13 @@ defmodule WedidWeb.AppComponents do
             </h1>
           </div>
           <p class="py-3 text-3xl font-light">
-            Celebrate your shared journey—one positive moment at a time.
+            {gettext("Celebrate your shared journey—one positive moment at a time.")}
           </p>
           <div class="py-4 prose prose-lg">
             <p>
-              A success & gratitude diary for two. Every day, both partners can log small or big things that went well: a kind word, a shared laugh, a problem solved, or a moment of connection.
+              {gettext("A success & gratitude diary for two. Every day, both partners can log small or big things that went well: a kind word, a shared laugh, a problem solved, or a moment of connection.")}
             </p>
-            <p>Build resilience together by focusing on what brings you joy.</p>
+            <p>{gettext("Build resilience together by focusing on what brings you joy.")}</p>
           </div>
           <div class="mt-8 flex gap-4">
             <a href="/register" class="btn btn-primary btn-lg gap-2">
@@ -432,36 +432,36 @@ defmodule WedidWeb.AppComponents do
   def features_section(assigns) do
     ~H"""
     <div class="container mx-auto px-4 py-24">
-      <h2 class="text-4xl font-bold text-center mb-4">Why WeDid Works</h2>
+      <h2 class="text-4xl font-bold text-center mb-4">{gettext("Why WeDid Works")}</h2>
       <p class="text-center max-w-xl mx-auto mb-16 text-lg opacity-70">
-        Based on relationship research and designed for couples who want to build a stronger connection
+        {gettext("Based on relationship research and designed for couples who want to build a stronger connection")}
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <.feature_card
-          title="Positive Focus"
+          title={gettext("Positive Focus")}
           color="primary"
           icon="smile"
-          description="Relationships thrive on connection, recognition, and positivity. WeDid helps you capture what matters most in your relationship."
+          description={gettext("Relationships thrive on connection, recognition, and positivity. WeDid helps you capture what matters most in your relationship.")}
         />
 
         <.feature_card
-          title="Shared Memory"
+          title={gettext("Shared Memory")}
           color="secondary"
           icon="book"
-          description="Build a collective journal of what works—a source of strength, joy, and perspective during both good and challenging times."
+          description={gettext("Build a collective journal of what works—a source of strength, joy, and perspective during both good and challenging times.")}
         />
 
         <.feature_card
-          title="Research-Backed"
+          title={gettext("Research-Backed")}
           color="accent"
           icon="shield"
-          description="Inspired by principles from Positive Psychology, Gottman Method, Narrative Therapy, and Emotionally Focused Therapy."
+          description={gettext("Inspired by principles from Positive Psychology, Gottman Method, Narrative Therapy, and Emotionally Focused Therapy.")}
         />
       </div>
 
       <div class="text-center mt-16">
-        <a href="/register" class="btn btn-lg btn-primary">Start Your Journey Together</a>
+        <a href="/register" class="btn btn-lg btn-primary">{gettext("Start Your Journey Together")}</a>
       </div>
     </div>
     """

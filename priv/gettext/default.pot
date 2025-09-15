@@ -94,7 +94,7 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:137
+#: lib/wedid_web/live/couple/couple_live.ex:136
 #: lib/wedid_web/live/user/settings_live.ex:338
 #, elixir-autogen, elixir-format
 msgid "Name"
@@ -250,7 +250,7 @@ msgstr ""
 msgid "Back to Entries"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:170
+#: lib/wedid_web/live/couple/couple_live.ex:169
 #: lib/wedid_web/live/couple/tag_management_component.ex:177
 #: lib/wedid_web/live/couple/tag_management_component.ex:234
 #: lib/wedid_web/live/entry_live/form.ex:60
@@ -258,7 +258,8 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:169
+#: lib/wedid_web/components/app_components.ex:206
+#: lib/wedid_web/live/couple/couple_live.ex:168
 #, elixir-autogen, elixir-format
 msgid "Close"
 msgstr ""
@@ -269,7 +270,7 @@ msgstr ""
 msgid "Color (optional)"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:140
+#: lib/wedid_web/live/couple/couple_live.ex:139
 #, elixir-autogen, elixir-format
 msgid "Confirmed"
 msgstr ""
@@ -318,7 +319,7 @@ msgstr ""
 msgid "Edit Entry"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:138
+#: lib/wedid_web/live/couple/couple_live.ex:137
 #, elixir-autogen, elixir-format
 msgid "Email"
 msgstr ""
@@ -353,7 +354,7 @@ msgstr ""
 msgid "Failed to delete tag."
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:59
+#: lib/wedid_web/live/couple/couple_live.ex:58
 #, elixir-autogen, elixir-format
 msgid "Failed to send partner invitation"
 msgstr ""
@@ -364,8 +365,8 @@ msgstr ""
 msgid "Icon (optional)"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:128
-#: lib/wedid_web/live/couple/couple_live.ex:158
+#: lib/wedid_web/live/couple/couple_live.ex:127
+#: lib/wedid_web/live/couple/couple_live.ex:157
 #, elixir-autogen, elixir-format
 msgid "Invite Partner"
 msgstr ""
@@ -375,7 +376,7 @@ msgstr ""
 msgid "Listing Entries"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:135
+#: lib/wedid_web/live/couple/couple_live.ex:134
 #, elixir-autogen, elixir-format
 msgid "Members"
 msgstr ""
@@ -386,21 +387,22 @@ msgid "New"
 msgstr ""
 
 #: lib/wedid_web/live/entry_live/index.ex:30
+#: lib/wedid_web/live/entry_live/index.html.heex:12
 #, elixir-autogen, elixir-format
 msgid "New Entry"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:54
+#: lib/wedid_web/live/couple/couple_live.ex:53
 #, elixir-autogen, elixir-format
 msgid "Partner invitation sent successfully!"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:163
+#: lib/wedid_web/live/couple/couple_live.ex:162
 #, elixir-autogen, elixir-format
 msgid "Partner's Email"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:140
+#: lib/wedid_web/live/couple/couple_live.ex:139
 #, elixir-autogen, elixir-format
 msgid "Pending"
 msgstr ""
@@ -415,12 +417,13 @@ msgstr ""
 msgid "Select Tag"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:173
+#: lib/wedid_web/live/couple/couple_live.ex:172
 #, elixir-autogen, elixir-format
 msgid "Send Invitation"
 msgstr ""
 
 #: lib/wedid_web/live/entry_live/form.ex:26
+#: lib/wedid_web/live/entry_live/index.html.heex:9
 #, elixir-autogen, elixir-format
 msgid "Share your thoughts and moments with your partner"
 msgstr ""
@@ -430,12 +433,12 @@ msgstr ""
 msgid "Show Entry"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:139
+#: lib/wedid_web/live/couple/couple_live.ex:138
 #, elixir-autogen, elixir-format
 msgid "Status"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:148
+#: lib/wedid_web/live/couple/couple_live.ex:147
 #, elixir-autogen, elixir-format
 msgid "Tag Management"
 msgstr ""
@@ -481,7 +484,7 @@ msgstr ""
 msgid "You need to be part of a couple"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:125
+#: lib/wedid_web/live/couple/couple_live.ex:124
 #, elixir-autogen, elixir-format
 msgid "Your Couple: %{name}"
 msgstr ""
@@ -491,7 +494,7 @@ msgstr ""
 msgid "e.g., Holiday"
 msgstr ""
 
-#: lib/wedid_web/live/couple/couple_live.ex:164
+#: lib/wedid_web/live/couple/couple_live.ex:163
 #, elixir-autogen, elixir-format
 msgid "partner@example.com"
 msgstr ""
@@ -499,4 +502,181 @@ msgstr ""
 #: lib/wedid_web/live/couple/tag_management_component.ex:139
 #, elixir-autogen, elixir-format
 msgid "🏖️"
+msgstr ""
+
+#: lib/wedid_web/controllers/auth_controller.ex:36
+#, elixir-autogen, elixir-format
+msgid "Incorrect email or password"
+msgstr ""
+
+#: lib/wedid_web/controllers/page_html/home.html.heex:13
+#: lib/wedid_web/controllers/page_html/home.html.heex:22
+#: lib/wedid_web/controllers/page_html/home.html.heex:30
+#, elixir-autogen, elixir-format
+msgid "Manage Your Couple"
+msgstr ""
+
+#: lib/wedid_web/controllers/auth_controller.ex:12
+#, elixir-autogen, elixir-format
+msgid "You are now signed in"
+msgstr ""
+
+#: lib/wedid_web/controllers/auth_controller.ex:49
+#, elixir-autogen, elixir-format
+msgid "You are now signed out"
+msgstr ""
+
+#: lib/wedid_web/controllers/auth_controller.ex:33
+#, elixir-autogen, elixir-format
+msgid "You have already signed in another way, but have not confirmed your account. You can confirm your account using the link we sent to you, or by resetting your password."
+msgstr ""
+
+#: lib/wedid_web/controllers/auth_controller.ex:10
+#, elixir-autogen, elixir-format
+msgid "Your email address has now been confirmed"
+msgstr ""
+
+#: lib/wedid_web/controllers/auth_controller.ex:11
+#, elixir-autogen, elixir-format
+msgid "Your password has successfully been reset"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:409
+#, elixir-autogen, elixir-format
+msgid "A success & gratitude diary for two. Every day, both partners can log small or big things that went well: a kind word, a shared laugh, a problem solved, or a moment of connection."
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:314
+#, elixir-autogen, elixir-format
+msgid "Almost there!"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:437
+#, elixir-autogen, elixir-format
+msgid "Based on relationship research and designed for couples who want to build a stronger connection"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:452
+#, elixir-autogen, elixir-format
+msgid "Build a collective journal of what works—a source of strength, joy, and perspective during both good and challenging times."
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:411
+#, elixir-autogen, elixir-format
+msgid "Build resilience together by focusing on what brings you joy."
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:316
+#, elixir-autogen, elixir-format
+msgid "But your partner hasn't joined yet."
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:405
+#, elixir-autogen, elixir-format
+msgid "Celebrate your shared journey—one positive moment at a time."
+msgstr ""
+
+#: lib/wedid_web/live/entry_live/index.html.heex:73
+#, elixir-autogen, elixir-format
+msgid "Create Your First Entry"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:373
+#, elixir-autogen, elixir-format
+msgid "Create your couple"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:459
+#, elixir-autogen, elixir-format
+msgid "Inspired by principles from Positive Psychology, Gottman Method, Narrative Therapy, and Emotionally Focused Therapy."
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:338
+#, elixir-autogen, elixir-format
+msgid "Invite your partner"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:370
+#, elixir-autogen, elixir-format
+msgid "Let's set up your couple profile to start recording beautiful moments together."
+msgstr ""
+
+#: lib/wedid_web/live/entry_live/index.html.heex:68
+#, elixir-autogen, elixir-format
+msgid "No entries yet"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:273
+#, elixir-autogen, elixir-format
+msgid "No moments recorded yet"
+msgstr ""
+
+#: lib/wedid_web/live/entry_live/index.html.heex:7
+#, elixir-autogen, elixir-format
+msgid "Our Journal Entries"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:442
+#, elixir-autogen, elixir-format
+msgid "Positive Focus"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:445
+#, elixir-autogen, elixir-format
+msgid "Relationships thrive on connection, recognition, and positivity. WeDid helps you capture what matters most in your relationship."
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:456
+#, elixir-autogen, elixir-format
+msgid "Research-Backed"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:294
+#, elixir-autogen, elixir-format
+msgid "See all moments"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:345
+#, elixir-autogen, elixir-format
+msgid "Send invite"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:341
+#, elixir-autogen, elixir-format
+msgid "Share your journey of gratitude and connection together. Your partner will be able to join with a special invitation link."
+msgstr ""
+
+#: lib/wedid_web/live/entry_live/index.html.heex:70
+#, elixir-autogen, elixir-format
+msgid "Share your thoughts, experiences, and special moments with your partner by creating your first entry."
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:449
+#, elixir-autogen, elixir-format
+msgid "Shared Memory"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:464
+#, elixir-autogen, elixir-format
+msgid "Start Your Journey Together"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:275
+#, elixir-autogen, elixir-format
+msgid "This is where you'll see all the special moments you and your partner share. Start your journey of gratitude today!"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:368
+#, elixir-autogen, elixir-format
+msgid "Welcome to WeDid!"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:435
+#, elixir-autogen, elixir-format
+msgid "Why WeDid Works"
+msgstr ""
+
+#: lib/wedid_web/components/app_components.ex:242
+#, elixir-autogen, elixir-format
+msgid "Your shared moments"
 msgstr ""

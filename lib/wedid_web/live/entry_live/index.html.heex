@@ -4,12 +4,12 @@
       <.header>
         <div class="flex items-center gap-2">
           <.heroicon name="hero-book-open" class="size-6 text-primary" />
-          <span>Our Journal Entries</span>
+          <span>{gettext("Our Journal Entries")}</span>
         </div>
-        <:subtitle>Share your thoughts and moments with your partner</:subtitle>
+        <:subtitle>{gettext("Share your thoughts and moments with your partner")}</:subtitle>
         <:actions>
           <.button variant="primary" navigate={~p"/entries/new"}>
-            <.heroicon name="hero-plus" class="size-4 mr-1" /> New Entry
+            <.heroicon name="hero-plus" class="size-4 mr-1" /> {gettext("New Entry")}
           </.button>
         </:actions>
       </.header>
@@ -65,12 +65,12 @@
           <div class="flex flex-col items-center justify-center py-10">
             <div class="bg-base-200 p-8 rounded-lg shadow-lg text-center max-w-md">
               <.heroicon name="hero-book-open" class="size-16 mx-auto text-base-content/30" />
-              <h3 class="text-xl font-bold mt-4">No entries yet</h3>
+              <h3 class="text-xl font-bold mt-4">{gettext("No entries yet")}</h3>
               <p class="text-base-content/70 mt-2">
-                Share your thoughts, experiences, and special moments with your partner by creating your first entry.
+                {gettext("Share your thoughts, experiences, and special moments with your partner by creating your first entry.")}
               </p>
               <.button variant="primary" navigate={~p"/entries/new"} class="mt-6">
-                <.heroicon name="hero-plus" class="size-4 mr-1" /> Create Your First Entry
+                <.heroicon name="hero-plus" class="size-4 mr-1" /> {gettext("Create Your First Entry")}
               </.button>
             </div>
           </div>
