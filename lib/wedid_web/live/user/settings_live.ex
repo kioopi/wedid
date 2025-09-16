@@ -169,7 +169,11 @@ defmodule WedidWeb.User.SettingsLive do
           <p>{gettext("Select your preferred language for the application.")}</p>
 
           <:actions>
-            <.language_switcher id="language-switcher" current_locale={@current_locale} />
+            <.language_switcher
+              id="language-switcher"
+              current_locale={@current_locale}
+              change_event="change_locale"
+            />
           </:actions>
         </.card>
 
@@ -252,49 +256,6 @@ defmodule WedidWeb.User.SettingsLive do
         <.theme_button theme="night" label="Night" />
         <.theme_button theme="coffee" label="Coffee" />
         <.theme_button theme="winter" label="Winter" />
-      </ul>
-    </div>
-    """
-  end
-
-  attr :id, :string, required: true, doc: "the dom id of the language switcher"
-  attr :current_locale, :string, required: true, doc: "the current locale"
-
-  def language_switcher(assigns) do
-    ~H"""
-    <div
-      class="dropdown"
-      title="Change Language"
-      id={@id}
-      phx-hook="LocaleSwitcher"
-      data-current-locale={@current_locale}
-    >
-      <div tabindex="0" role="button" class="btn btn-primary">
-        {WedidWeb.Locale.locale_flag(@current_locale)}
-        {WedidWeb.Locale.locale_name(@current_locale)}
-        <svg
-          width="12px"
-          height="12px"
-          class="h-2 w-2 fill-current opacity-60 inline-block"
-          xmlns="http://www.w3.org/2000/svg"
-          viewBox="0 0 2048 2048"
-        >
-          <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
-        </svg>
-      </div>
-      <ul tabindex="0" class="dropdown-content z-[1] p-2 shadow-2xl bg-base-300 rounded-box w-52">
-        <%= for locale <- WedidWeb.Locale.supported_locales() do %>
-          <li>
-            <button
-              type="button"
-              class={"btn btn-sm btn-block btn-ghost justify-start #{if locale.code == @current_locale, do: "btn-active bg-primary", else: ""}"}
-              phx-click="change_locale"
-              phx-value-locale={locale.code}
-            >
-              {locale.flag} {locale.name}
-            </button>
-          </li>
-        <% end %>
       </ul>
     </div>
     """

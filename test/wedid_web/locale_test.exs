@@ -147,7 +147,7 @@ defmodule WedidWeb.LocaleTest do
 
       result =
         view
-        |> element("button[phx-click='change_locale'][phx-value-locale='de']")
+        |> element("a[phx-click='change_locale'][phx-value-locale='de']")
         |> render_click()
 
       # The click should succeed without error
