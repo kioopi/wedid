@@ -30,7 +30,10 @@ defmodule WedidWeb.Couple.CoupleLive do
        |> assign(:tags, current_user.couple.tags)
        |> assign(:form, to_form(form))}
     else
-      {:ok, socket |> put_flash(:error, gettext("You need to be part of a couple")) |> redirect(to: "/")}
+      {:ok,
+       socket
+       |> put_flash(:error, gettext("You need to be part of a couple"))
+       |> redirect(to: "/")}
     end
   end
 
@@ -165,7 +168,11 @@ defmodule WedidWeb.Couple.CoupleLive do
             />
 
             <div class="flex justify-end gap-3 mt-6">
-              <.button type="button" aria-label={gettext("Close")} phx-click={hide_modal("invite-modal")}>
+              <.button
+                type="button"
+                aria-label={gettext("Close")}
+                phx-click={hide_modal("invite-modal")}
+              >
                 {gettext("Cancel")}
               </.button>
               <.button type="submit" variant="primary">

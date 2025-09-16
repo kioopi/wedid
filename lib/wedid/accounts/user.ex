@@ -287,7 +287,7 @@ defmodule Wedid.Accounts.User do
 
       change set_attribute(:couple_id, actor(:couple_id))
 
-      validate present(:couple_id) 
+      validate present(:couple_id)
 
       # TODO move into own file
       change fn changeset, _context ->

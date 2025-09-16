@@ -15,7 +15,9 @@ defmodule WedidWeb.EntryLive.Show do
               <span>{gettext("Entry Details")}</span>
             </div>
             <:subtitle>
-              {gettext("Viewing entry from %{date}", date: Calendar.strftime(@entry.created_at, "%b %d, %Y"))}
+              {gettext("Viewing entry from %{date}",
+                date: Calendar.strftime(@entry.created_at, "%b %d, %Y")
+              )}
             </:subtitle>
 
             <:actions>

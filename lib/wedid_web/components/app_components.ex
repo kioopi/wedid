@@ -272,7 +272,9 @@ defmodule WedidWeb.AppComponents do
       <.icon name="edit" class="w-16 h-16 mx-auto text-primary mb-4 opacity-60" />
       <h3 class="text-2xl font-medium mb-4">{gettext("No moments recorded yet")}</h3>
       <p class="mb-6 text-base-content/70 max-w-md mx-auto">
-        {gettext("This is where you'll see all the special moments you and your partner share. Start your journey of gratitude today!")}
+        {gettext(
+          "This is where you'll see all the special moments you and your partner share. Start your journey of gratitude today!"
+        )}
       </p>
       <.add_moment_button />
     </div>
@@ -338,7 +340,9 @@ defmodule WedidWeb.AppComponents do
           <h2 class="card-title">{gettext("Invite your partner")}</h2>
         </div>
         <p class="mb-4">
-          {gettext("Share your journey of gratitude and connection together. Your partner will be able to join with a special invitation link.")}
+          {gettext(
+            "Share your journey of gratitude and connection together. Your partner will be able to join with a special invitation link."
+          )}
         </p>
         <div class="card-actions justify-center">
           <Core.button variant="large" class="btn btn-primary btn-lg gap-2">
@@ -367,7 +371,9 @@ defmodule WedidWeb.AppComponents do
           </div>
           <h1 class="text-5xl font-bold mb-4">{gettext("Welcome to WeDid!")}</h1>
           <p class="mb-8 text-xl max-w-md mx-auto">
-            {gettext("Let's set up your couple profile to start recording beautiful moments together.")}
+            {gettext(
+              "Let's set up your couple profile to start recording beautiful moments together."
+            )}
           </p>
           <button class="btn btn-primary btn-lg gap-2">
             <.icon name="plus" class="w-6 h-6" /> {gettext("Create your couple")}
@@ -406,7 +412,9 @@ defmodule WedidWeb.AppComponents do
           </p>
           <div class="py-4 prose prose-lg">
             <p>
-              {gettext("A success & gratitude diary for two. Every day, both partners can log small or big things that went well: a kind word, a shared laugh, a problem solved, or a moment of connection.")}
+              {gettext(
+                "A success & gratitude diary for two. Every day, both partners can log small or big things that went well: a kind word, a shared laugh, a problem solved, or a moment of connection."
+              )}
             </p>
             <p>{gettext("Build resilience together by focusing on what brings you joy.")}</p>
           </div>
@@ -434,7 +442,9 @@ defmodule WedidWeb.AppComponents do
     <div class="container mx-auto px-4 py-24">
       <h2 class="text-4xl font-bold text-center mb-4">{gettext("Why WeDid Works")}</h2>
       <p class="text-center max-w-xl mx-auto mb-16 text-lg opacity-70">
-        {gettext("Based on relationship research and designed for couples who want to build a stronger connection")}
+        {gettext(
+          "Based on relationship research and designed for couples who want to build a stronger connection"
+        )}
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
@@ -442,26 +452,40 @@ defmodule WedidWeb.AppComponents do
           title={gettext("Positive Focus")}
           color="primary"
           icon="smile"
-          description={gettext("Relationships thrive on connection, recognition, and positivity. WeDid helps you capture what matters most in your relationship.")}
+          description={
+            gettext(
+              "Relationships thrive on connection, recognition, and positivity. WeDid helps you capture what matters most in your relationship."
+            )
+          }
         />
 
         <.feature_card
           title={gettext("Shared Memory")}
           color="secondary"
           icon="book"
-          description={gettext("Build a collective journal of what works—a source of strength, joy, and perspective during both good and challenging times.")}
+          description={
+            gettext(
+              "Build a collective journal of what works—a source of strength, joy, and perspective during both good and challenging times."
+            )
+          }
         />
 
         <.feature_card
           title={gettext("Research-Backed")}
           color="accent"
           icon="shield"
-          description={gettext("Inspired by principles from Positive Psychology, Gottman Method, Narrative Therapy, and Emotionally Focused Therapy.")}
+          description={
+            gettext(
+              "Inspired by principles from Positive Psychology, Gottman Method, Narrative Therapy, and Emotionally Focused Therapy."
+            )
+          }
         />
       </div>
 
       <div class="text-center mt-16">
-        <a href="/register" class="btn btn-lg btn-primary">{gettext("Start Your Journey Together")}</a>
+        <a href="/register" class="btn btn-lg btn-primary">
+          {gettext("Start Your Journey Together")}
+        </a>
       </div>
     </div>
     """

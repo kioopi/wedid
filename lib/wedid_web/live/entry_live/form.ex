@@ -135,7 +135,10 @@ defmodule WedidWeb.EntryLive.Form do
 
         socket =
           socket
-          |> put_flash(:info, gettext("Entry %{action}d successfully", action: socket.assigns.form.source.type))
+          |> put_flash(
+            :info,
+            gettext("Entry %{action}d successfully", action: socket.assigns.form.source.type)
+          )
           |> push_navigate(to: return_path(socket.assigns.return_to, entry))
 
         {:noreply, socket}

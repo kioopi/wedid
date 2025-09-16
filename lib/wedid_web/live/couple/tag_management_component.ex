@@ -113,7 +113,9 @@ defmodule WedidWeb.Couple.TagManagementComponent do
     <div id={"tag-management-#{@id}"} class="space-y-6">
       <div>
         <p class="text-sm text-base-content/70 mb-4">
-          {gettext("Create and manage tags to organize your journal entries. Use emojis or unicode characters as icons.")}
+          {gettext(
+            "Create and manage tags to organize your journal entries. Use emojis or unicode characters as icons."
+          )}
         </p>
 
         <.form

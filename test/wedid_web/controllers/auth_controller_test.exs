@@ -36,7 +36,7 @@ defmodule WedidWeb.AuthControllerTest do
 
     test "handles sign out when not signed in", %{conn: conn} do
       # Clear session to simulate unauthenticated user
-      conn = 
+      conn =
         conn
         |> Plug.Conn.clear_session()
         |> Phoenix.ConnTest.init_test_session(%{})
@@ -52,10 +52,10 @@ defmodule WedidWeb.AuthControllerTest do
 
     test "preserves return_to session value for redirect", %{conn: conn} do
       return_path = "/some-protected-page"
-      
+
       # Set return_to in session
       conn = Plug.Conn.put_session(conn, :return_to, return_path)
-      
+
       # Sign out
       conn = get(conn, ~p"/sign-out")
 
@@ -66,7 +66,7 @@ defmodule WedidWeb.AuthControllerTest do
     test "does not cause runtime errors (regression test)", %{conn: conn} do
       # This test specifically prevents the AshAuthentication regression
       # where Entry resource incorrectly had AshAuthentication extension
-      
+
       # Verify user is signed in
       assert get_session(conn, :user_token)
       assert conn.assigns[:current_user]

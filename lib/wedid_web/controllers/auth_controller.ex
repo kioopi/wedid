@@ -30,7 +30,9 @@ defmodule WedidWeb.AuthController do
              errors: [%AshAuthentication.Errors.CannotConfirmUnconfirmedUser{}]
            }
          }} ->
-          gettext("You have already signed in another way, but have not confirmed your account. You can confirm your account using the link we sent to you, or by resetting your password.")
+          gettext(
+            "You have already signed in another way, but have not confirmed your account. You can confirm your account using the link we sent to you, or by resetting your password."
+          )
 
         _ ->
           gettext("Incorrect email or password")

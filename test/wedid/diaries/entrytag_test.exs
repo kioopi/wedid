@@ -290,7 +290,7 @@ defmodule Wedid.Diaries.EntryTagTest do
       user = generate(user())
 
       partner = Accounts.invite_user!(Faker.Internet.email(), actor: user)
-      
+
       # Create entry by user, tag by partner
       entry = generate(entry(actor: user))
       tag = generate(tag(actor: partner))

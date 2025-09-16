@@ -67,10 +67,14 @@
               <.heroicon name="hero-book-open" class="size-16 mx-auto text-base-content/30" />
               <h3 class="text-xl font-bold mt-4">{gettext("No entries yet")}</h3>
               <p class="text-base-content/70 mt-2">
-                {gettext("Share your thoughts, experiences, and special moments with your partner by creating your first entry.")}
+                {gettext(
+                  "Share your thoughts, experiences, and special moments with your partner by creating your first entry."
+                )}
               </p>
               <.button variant="primary" navigate={~p"/entries/new"} class="mt-6">
-                <.heroicon name="hero-plus" class="size-4 mr-1" /> {gettext("Create Your First Entry")}
+                <.heroicon name="hero-plus" class="size-4 mr-1" /> {gettext(
+                  "Create Your First Entry"
+                )}
               </.button>
             </div>
           </div>

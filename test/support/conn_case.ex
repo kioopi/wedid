@@ -29,6 +29,13 @@ defmodule WedidWeb.ConnCase do
       import Plug.Conn
       import Phoenix.ConnTest
       import WedidWeb.ConnCase
+
+      alias Wedid.Diaries
+      alias Wedid.Accounts
+      alias Diaries.Entry
+      alias Accounts.{User, Couple}
+      alias Accounts.Generator, as: AccountsGenerator
+      alias Diaries.Generator, as: DiariesGenerator
     end
   end
 
@@ -37,8 +44,13 @@ defmodule WedidWeb.ConnCase do
     {:ok, conn: Phoenix.ConnTest.build_conn()}
   end
 
-  def register_and_log_in_user(%{conn: conn} = context) do
+  def register_and_log_in_user(context) do
     user = Generator.generate(Generator.user())
+
+    log_in_user(context, user)
+  end
+
+  def log_in_user(%{conn: conn} = context, user) do
     strategy = AshAuthentication.Info.strategy!(User, :password)
 
     {:ok, user} =
