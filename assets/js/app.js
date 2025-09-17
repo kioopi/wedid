@@ -22,10 +22,14 @@ import "phoenix_html";
 // Establish Phoenix Socket and LiveView configuration.
 import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
+import {hooks as colocatedHooks} from "phoenix-colocated/wedid"
 import topbar from "../vendor/topbar";
 import Modal from "./modal";
 import ThemeSwitcher, { initTheme } from "./theme_switcher";
 import LocaleSwitcher, { initLocale } from "./locale_switcher";
+
+
+
 
 const csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -33,7 +37,7 @@ const csrfToken = document
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: { _csrf_token: csrfToken },
-  hooks: { Modal, ThemeSwitcher, LocaleSwitcher },
+  hooks: { Modal, ThemeSwitcher, LocaleSwitcher, ...colocatedHooks },
   dom: {
     // enuse that the <dialog> and <details> elements stay open when liveview updates
     onBeforeElUpdated: (fromEl, toEl) => {

@@ -11,7 +11,8 @@ defmodule Wedid.MixProject do
       consolidate_protocols: Mix.env() != :dev,
       aliases: aliases(),
       deps: deps(),
-      listeners: [Phoenix.CodeReloader]
+      listeners: [Phoenix.CodeReloader],
+      compilers: [:phoenix_live_view] ++ Mix.compilers()
     ]
   end
 
@@ -34,6 +35,7 @@ defmodule Wedid.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
+      {:lazy_html, ">= 0.0.0", only: :test},
       {:usage_rules, "~> 0.1", only: [:dev]},
       {:live_debugger, "~> 0.2", only: [:dev]},
       {:faker, "~> 0.18", only: [:test]},
@@ -46,13 +48,13 @@ defmodule Wedid.MixProject do
       {:ash_postgres, "~> 2.0"},
       {:ash, "~> 3.0"},
       {:igniter, "~> 0.5", only: [:dev, :test]},
-      {:phoenix, "~> 1.8.0-rc.3", override: true},
+      {:phoenix, "~> 1.8"},
       {:phoenix_ecto, "~> 4.5"},
       {:ecto_sql, "~> 3.10"},
       {:postgrex, ">= 0.0.0"},
       {:phoenix_html, "~> 4.1"},
       {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_view, "~> 1.0.9"},
+      {:phoenix_live_view, "~> 1.0"},
       {:floki, ">= 0.30.0", only: :test},
       {:phoenix_live_dashboard, "~> 0.8.3"},
       {:esbuild, "~> 0.9", runtime: Mix.env() == :dev},
