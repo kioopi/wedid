@@ -10,8 +10,8 @@ defmodule Wedid.Accounts.User.Senders.SendPasswordResetEmail do
 
   alias Wedid.Mailer
 
-  @impl true
-  def send(user, token, _) do
+  @impl AshAuthentication.Sender
+  def send(user, token, _opts) do
     create_email(user, token)
     |> Mailer.deliver!()
   end

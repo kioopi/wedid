@@ -129,10 +129,7 @@ defmodule WedidWeb.AppComponents do
           <Core.user_menu current_user={@current_user} />
         <% else %>
           <div class="flex items-center gap-2">
-            <.language_switcher
-              id="navbar-language-switcher"
-              current_locale={@current_locale}
-            />
+            <.language_switcher id="navbar-language-switcher" current_locale={@current_locale} />
             <.auth_buttons />
           </div>
         <% end %>
@@ -186,7 +183,10 @@ defmodule WedidWeb.AppComponents do
   """
   attr :id, :string, default: nil, doc: "the DOM id of the language switcher"
   attr :current_locale, :string, default: nil, doc: "the locale currently selected"
-  attr :change_event, :string, default: nil, doc: "optional phx-click event for LiveView integration"
+
+  attr :change_event, :string,
+    default: nil,
+    doc: "optional phx-click event for LiveView integration"
 
   def language_switcher(assigns) do
     assigns = assign_new(assigns, :current_locale, fn -> Locale.current_locale() end)

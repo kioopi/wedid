@@ -321,19 +321,17 @@ defmodule WedidWeb.CoreComponents do
   attr :current_user, :map, required: true, doc: "the current user"
 
   def user_menu(assigns) do
-    assigns =
-      assign(
-        assigns,
-        :gravatar_url,
-        Exgravatar.gravatar_url(to_string(assigns.current_user.email), s: 40, d: "blank")
-      )
-
     ~H"""
     <div class="dropdown dropdown-end">
-      <div tabindex="0" role="button" class="btn btn-ghost btn-circle avatar" title={@current_user.display_name}>
+      <div
+        tabindex="0"
+        role="button"
+        class="btn btn-ghost btn-circle avatar"
+        title={@current_user.display_name}
+      >
         <div class="w-10 h-10 rounded-full overflow-hidden bg-primary text-primary-content flex items-center justify-center">
           <img
-            src={@gravatar_url}
+            src={@current_user.profile_picture}
             alt="Avatar"
             class="w-full h-full object-cover"
             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"

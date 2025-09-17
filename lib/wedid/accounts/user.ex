@@ -6,6 +6,8 @@ defmodule Wedid.Accounts.User do
     authorizers: [Ash.Policy.Authorizer],
     extensions: [AshAuthentication]
 
+  alias Wedid.Accounts.User
+
   authentication do
     add_ons do
       log_out_everywhere do
@@ -19,7 +21,7 @@ defmodule Wedid.Accounts.User do
         require_interaction? true
         confirmed_at_field :confirmed_at
         auto_confirm_actions [:sign_in_with_magic_link, :reset_password_with_token]
-        sender Wedid.Accounts.User.Senders.SendNewUserConfirmationEmail
+        sender User.Senders.SendNewUserConfirmationEmail
       end
     end
 
@@ -36,7 +38,7 @@ defmodule Wedid.Accounts.User do
         identity_field :email
 
         resettable do
-          sender Wedid.Accounts.User.Senders.SendPasswordResetEmail
+          sender User.Senders.SendPasswordResetEmail
           # these configurations will be the default in a future release
           password_reset_action_name :reset_password_with_token
           request_password_reset_action_name :request_password_reset_token
@@ -48,7 +50,7 @@ defmodule Wedid.Accounts.User do
         registration_enabled? false
         require_interaction? true
 
-        sender Wedid.Accounts.User.Senders.SendMagicLinkEmail
+        sender User.Senders.SendMagicLinkEmail
       end
     end
   end
@@ -195,7 +197,7 @@ defmodule Wedid.Accounts.User do
       validate AshAuthentication.Strategy.Password.PasswordConfirmationValidation
 
       # create a couple for the new user
-      change Wedid.Accounts.User.CreateCouple
+      change User.CreateCouple
 
       metadata :token, :string do
         description "A JWT that can be used to authenticate the user."
@@ -374,6 +376,8 @@ defmodule Wedid.Accounts.User do
                   true -> name
                 end
               )
+
+    calculate :profile_picture, :string, {User.ProfilePicture, []}, async?: true
   end
 
   identities do

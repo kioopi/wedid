@@ -1,7 +1,7 @@
 defmodule WedidWeb.LoadUserRelationships do
   import Plug.Conn
 
-  @user_relationships [:display_name, :couple]
+  @user_relationships [:display_name, :couple, :profile_picture]
 
   def init(_opts), do: []
 

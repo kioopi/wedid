@@ -270,4 +270,19 @@ defmodule Wedid.Accounts.UserTest do
       assert user.display_name == "test-user"
     end
   end
+
+  describe "profile picture" do
+    test "display_name uses name when available" do
+      # Create a user with a name
+      user =
+        generate(AccountsGenerator.user(email: "example@example.com"))
+
+      # Load the display_name calculation
+      {:ok, user} = Ash.load(user, [:profile_picture])
+
+      # Verify display_name matches the name
+      assert user.profile_picture ==
+               "https://secure.gravatar.com/avatar/23463b99b62a72f26ed677cc556c44e8?s=40&d=404"
+    end
+  end
 end

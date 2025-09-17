@@ -181,6 +181,18 @@ defmodule WedidWeb.User.SettingsLive do
           <.profile_form form={@profile_form} />
         </.card>
 
+        <.card title={gettext("Profile picture")}>
+          <p class="mt-1 text-sm text-base-content/70">
+           {gettext("Manage your profile picture at Gravatar.com")}
+          </p>
+
+          <:actions>
+            <a href="https://gravatar.com" target="_blank" rel="noopener noreferrer" class="link link-primary">
+              {gettext("Go to Gravatar.com")}
+            </a>
+          </:actions>
+        </.card>
+
         <.card title={gettext("Change password")}>
           <.change_password_form form={@change_password_form} />
         </.card>

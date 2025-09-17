@@ -13,7 +13,7 @@ defmodule WedidWeb.UserMenuIntegrationTest do
       assert has_element?(view, ".btn.btn-ghost.btn-circle.avatar")
 
       # Check gravatar image is present
-      gravatar_url = Exgravatar.gravatar_url(to_string(user.email), s: 40, d: "blank")
+      gravatar_url = Exgravatar.gravatar_url(to_string(user.email), s: 40, d: "404")
       assert has_element?(view, "img[src='#{gravatar_url}']")
 
       # Check fallback text for initial is present (hidden by default)
@@ -82,7 +82,7 @@ defmodule WedidWeb.UserMenuIntegrationTest do
       {:ok, view, _html} = live(conn, ~p"/settings")
 
       # Check that gravatar URL is generated correctly
-      expected_gravatar = Exgravatar.gravatar_url("xaver@example.com", s: 40, d: "blank")
+      expected_gravatar = Exgravatar.gravatar_url("xaver@example.com", s: 40, d: "404")
       assert has_element?(view, "img[src='#{expected_gravatar}']")
     end
   end
@@ -101,4 +101,3 @@ defmodule WedidWeb.UserMenuIntegrationTest do
     end
   end
 end
-
