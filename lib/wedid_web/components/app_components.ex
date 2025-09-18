@@ -87,7 +87,7 @@ defmodule WedidWeb.AppComponents do
     <div class="navbar bg-primary text-primary-content shadow-md">
       <div class="navbar-start">
         <!-- Mobile dropdown -->
-        <div class="dropdown lg:hidden" :if={@current_user}>
+        <div :if={@current_user} class="dropdown lg:hidden">
           <div tabindex="0" role="button" class="btn btn-ghost">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -129,7 +129,10 @@ defmodule WedidWeb.AppComponents do
           <Core.user_menu current_user={@current_user} />
         <% else %>
           <div class="flex items-center gap-2">
-            <WedidWeb.AppComponents.Locale.switcher id="navbar-language-switcher" current_locale={@current_locale} />
+            <WedidWeb.AppComponents.Locale.switcher
+              id="navbar-language-switcher"
+              current_locale={@current_locale}
+            />
             <.auth_buttons />
           </div>
         <% end %>

@@ -94,7 +94,6 @@ defmodule WedidWeb.User.SettingsLive do
     end
   end
 
-
   attr :theme, :string, required: true, doc: "name of the theme"
   attr :label, :string, required: true, doc: "name of the theme"
 
@@ -147,11 +146,16 @@ defmodule WedidWeb.User.SettingsLive do
 
         <.card title={gettext("Profile picture")}>
           <p class="mt-1 text-sm text-base-content/70">
-           {gettext("Manage your profile picture at Gravatar.com")}
+            {gettext("Manage your profile picture at Gravatar.com")}
           </p>
 
           <:actions>
-            <a href="https://gravatar.com" target="_blank" rel="noopener noreferrer" class="link link-primary">
+            <a
+              href="https://gravatar.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="link link-primary"
+            >
               {gettext("Go to Gravatar.com")}
             </a>
           </:actions>
