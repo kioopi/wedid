@@ -87,7 +87,7 @@ defmodule WedidWeb.AppComponents do
     <div class="navbar bg-primary text-primary-content shadow-md">
       <div class="navbar-start">
         <!-- Mobile dropdown -->
-        <div class="dropdown lg:hidden">
+        <div class="dropdown lg:hidden" :if={@current_user}>
           <div tabindex="0" role="button" class="btn btn-ghost">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +112,7 @@ defmodule WedidWeb.AppComponents do
           </ul>
         </div>
         <!-- Brand logo -->
-        <a href="/" class="text-xl font-bold btn btn-ghost normal-case">
+        <a href="/" class="text-xl font-bold normal-case">
           <span class="text-2xl">❤️</span> WeDid
         </a>
       </div>
