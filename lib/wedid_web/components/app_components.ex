@@ -454,11 +454,11 @@ defmodule WedidWeb.AppComponents do
       <h2 class="text-4xl font-bold text-center mb-4">{gettext("Why WeDid Works")}</h2>
       <p class="text-center max-w-xl mx-auto mb-16 text-lg opacity-70">
         {gettext(
-          "Based on relationship research and designed for couples who want to build a stronger connection"
+          "Designed for couples who want to build a stronger connection"
         )}
       </p>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         <.feature_card
           title={gettext("Positive Focus")}
           color="primary"
@@ -472,22 +472,11 @@ defmodule WedidWeb.AppComponents do
 
         <.feature_card
           title={gettext("Shared Memory")}
-          color="secondary"
+          color="primary"
           icon="book"
           description={
             gettext(
               "Build a collective journal of what works—a source of strength, joy, and perspective during both good and challenging times."
-            )
-          }
-        />
-
-        <.feature_card
-          title={gettext("Research-Backed")}
-          color="accent"
-          icon="shield"
-          description={
-            gettext(
-              "Inspired by principles from Positive Psychology, Gottman Method, Narrative Therapy, and Emotionally Focused Therapy."
             )
           }
         />
