@@ -22,14 +22,10 @@ import "phoenix_html";
 // Establish Phoenix Socket and LiveView configuration.
 import { Socket } from "phoenix";
 import { LiveSocket } from "phoenix_live_view";
-import {hooks as colocatedHooks} from "phoenix-colocated/wedid"
+import { hooks as colocatedHooks } from "phoenix-colocated/wedid"
 import topbar from "../vendor/topbar";
 import Modal from "./modal";
 import ThemeSwitcher, { initTheme } from "./theme_switcher";
-import LocaleSwitcher, { initLocale } from "./locale_switcher";
-
-
-
 
 const csrfToken = document
   .querySelector("meta[name='csrf-token']")
@@ -37,7 +33,7 @@ const csrfToken = document
 const liveSocket = new LiveSocket("/live", Socket, {
   longPollFallbackMs: 2500,
   params: { _csrf_token: csrfToken },
-  hooks: { Modal, ThemeSwitcher, LocaleSwitcher, ...colocatedHooks },
+  hooks: { Modal, ThemeSwitcher, ...colocatedHooks },
   dom: {
     // enuse that the <dialog> and <details> elements stay open when liveview updates
     onBeforeElUpdated: (fromEl, toEl) => {
@@ -58,7 +54,7 @@ window.addEventListener("phx:page-loading-stop", (_info) => topbar.hide());
 // connect if there are any LiveViews on the page
 liveSocket.connect();
 initTheme();
-initLocale();
+
 
 // expose liveSocket on window for web console debug logs and latency simulation:
 // >> liveSocket.enableDebug()
@@ -86,7 +82,7 @@ if (process.env.NODE_ENV === "development") {
       //   * click with "d" key pressed to open at function component definition location
       let keyDown;
       window.addEventListener("keydown", (e) => (keyDown = e.key));
-      window.addEventListener("keyup", (e) => (keyDown = null));
+      window.addEventListener("keyup", (_e) => (keyDown = null));
       window.addEventListener(
         "click",
         (e) => {

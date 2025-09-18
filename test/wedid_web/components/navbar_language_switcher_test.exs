@@ -15,16 +15,5 @@ defmodule WedidWeb.NavbarLanguageSwitcherTest do
       assert html =~ "English"
       assert html =~ "Deutsch"
     end
-
-    test "language switcher links point to locale query parameter" do
-      html =
-        render_component(&WedidWeb.AppComponents.navbar/1, %{
-          current_user: nil,
-          current_locale: "en"
-        })
-
-      assert html =~ "href=\"?locale=en\""
-      assert html =~ "href=\"?locale=de\""
-    end
   end
 end

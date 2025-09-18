@@ -2,6 +2,7 @@ defmodule WedidWeb.User.SettingsLive do
   use WedidWeb, :live_view
 
   alias Wedid.Accounts
+  alias WedidWeb.AppComponents.Locale
 
   on_mount {WedidWeb.LiveUserAuth, :live_user_required}
 
@@ -93,42 +94,6 @@ defmodule WedidWeb.User.SettingsLive do
     end
   end
 
-  @impl true
-  def handle_event("change_locale", %{"locale" => locale}, socket) do
-    if WedidWeb.Locale.supported_locale?(locale) do
-      # Set the locale in Gettext for this process (mainly for consistency)
-      Gettext.put_locale(WedidWeb.Gettext, locale)
-
-      # Update the socket state and trigger a page reload
-      # Page reload is necessary because LiveView templates are compiled 
-      # and don't re-evaluate gettext calls when locale changes mid-session
-      {:noreply,
-       socket
-       |> assign(:current_locale, locale)
-       |> assign(:page_title, gettext("Settings"))
-       |> push_event("locale-changed", %{locale: locale, shouldReload: true})}
-    else
-      {:noreply, socket}
-    end
-  end
-
-  @impl true
-  def handle_event("sync_locale", %{"locale" => locale}, socket) do
-    if WedidWeb.Locale.supported_locale?(locale) do
-      # Set the locale in Gettext for this process
-      Gettext.put_locale(WedidWeb.Gettext, locale)
-
-      # This is for silent sync (initial page load) - no reload needed
-      # Just update the socket state, the session will be updated by SetLocale plug
-      {:noreply,
-       socket
-       |> assign(:current_locale, locale)
-       |> assign(:page_title, gettext("Settings"))
-       |> push_event("locale-changed", %{locale: locale, shouldReload: false})}
-    else
-      {:noreply, socket}
-    end
-  end
 
   attr :theme, :string, required: true, doc: "name of the theme"
   attr :label, :string, required: true, doc: "name of the theme"
@@ -169,10 +134,9 @@ defmodule WedidWeb.User.SettingsLive do
           <p>{gettext("Select your preferred language for the application.")}</p>
 
           <:actions>
-            <.language_switcher
+            <Locale.switcher
               id="language-switcher"
               current_locale={@current_locale}
-              change_event="change_locale"
             />
           </:actions>
         </.card>

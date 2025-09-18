@@ -8,7 +8,7 @@ defmodule WedidWeb.Locale do
   """
   def supported_locales do
     [
-      %{code: "en", name: "English", flag: "🇺🇸"},
+      %{code: "en", name: "English", flag: "🇬🇧"},
       %{code: "de", name: "Deutsch", flag: "🇩🇪"}
     ]
   end

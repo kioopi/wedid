@@ -64,16 +64,6 @@ defmodule WedidWeb.LocaleTest do
       assert has_element?(view, "[data-current-locale='de']")
     end
 
-    test "Settings LiveView can change locale via event", %{conn: conn} do
-      {:ok, view, _html} = live(conn, ~p"/settings")
-
-      # Change locale to German
-      view |> element("#language-switcher") |> render_hook("sync_locale", %{"locale" => "de"})
-
-      # Verify the locale change is reflected in the LiveView state
-      assert has_element?(view, "[data-current-locale='de']")
-    end
-
     test "Settings LiveView shows German interface when locale is de", %{conn: conn} do
       # Set German locale in session and apply plug
       conn =
@@ -126,35 +116,6 @@ defmodule WedidWeb.LocaleTest do
       refute html =~ "Sprache"
       refute html =~ "Profilinformationen"
       refute html =~ "Passwort ändern"
-    end
-
-    test "User can change language and LiveView triggers reload", %{conn: conn} do
-      # Start with English - explicitly set the locale to English
-      conn =
-        conn
-        |> init_test_session(%{locale: "en"})
-        |> WedidWeb.Plugs.SetLocale.call([])
-
-      {:ok, view, html} = live(conn, ~p"/settings")
-
-      # Verify we start with English
-      assert html =~ "User Settings"
-      assert html =~ "Language"
-
-      # Change to German via the language switcher
-      # This should trigger a client-side reload, but we can't test that in LiveViewTest
-      # So we just verify the event is handled correctly and the locale-changed event is pushed
-
-      result =
-        view
-        |> element("a[phx-click='change_locale'][phx-value-locale='de']")
-        |> render_click()
-
-      # The click should succeed without error
-      assert result
-
-      # Verify the current locale was updated in the LiveView state
-      assert has_element?(view, "[data-current-locale='de']")
     end
 
     test "Language switching workflow - full cycle", %{conn: conn} do
