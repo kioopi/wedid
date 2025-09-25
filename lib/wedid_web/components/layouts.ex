@@ -35,11 +35,20 @@ defmodule WedidWeb.Layouts do
     ~H"""
     <.navbar current_user={@current_user} />
 
-    <main class="px-4 py-20 sm:px-6 lg:px-8">
+    <main class="px-4 py-4 sm:py-20 sm:px-6 lg:px-8">
       <div class="mx-auto max-w-2xl space-y-4">
         {render_slot(@inner_block)}
       </div>
     </main>
+
+    <div class="fab hidden sm:flex">
+      <.button navigate={~p"/entries/new"} variant="large" class="btn-circle">
+        <.heroicon name="hero-pencil-square" class="size-6" />
+        <span class="dock-label sr-only">{gettext("New Entry")}</span>
+      </.button>
+    </div>
+
+    <.dock current_user={@current_user} />
 
     <.flash_group flash={@flash} />
     """

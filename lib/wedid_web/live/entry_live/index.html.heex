@@ -7,59 +7,12 @@
           <span>{gettext("Our Journal Entries")}</span>
         </div>
         <:subtitle>{gettext("Share your thoughts and moments with your partner")}</:subtitle>
-        <:actions>
-          <.button variant="primary" navigate={~p"/entries/new"}>
-            <.heroicon name="hero-plus" class="size-4 mr-1" /> {gettext("New Entry")}
-          </.button>
-        </:actions>
       </.header>
 
       <div class="mt-8">
-        <ul class="timeline timeline-snap-icon max-md:timeline-compact timeline-vertical">
-          <%= for {id, entry} <- @streams.entries do %>
-            <li id={id} class="group">
-              <hr class="group-first:hidden" />
-              <div class="timeline-middle">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                  class="h-5 w-5 text-primary"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
-                    clip-rule="evenodd"
-                  />
-                </svg>
-              </div>
-              <%= if @current_user && entry.user_id == @current_user.id do %>
-                <div class="timeline-end mb-10 w-full">
-                  <div class="border-l-4 border-primary">
-                    <.link
-                      navigate={~p"/entries/#{entry}"}
-                      class="block hover:bg-base-100 transition-colors duration-200"
-                    >
-                      <.journal_entry entry={entry} id={id} />
-                    </.link>
-                  </div>
-                </div>
-              <% else %>
-                <div class="timeline-start mb-10 md:text-end w-full">
-                  <div class="border-r-4 border-primary">
-                    <.link
-                      navigate={~p"/entries/#{entry}"}
-                      class="block hover:bg-base-100 transition-colors duration-200"
-                    >
-                      <.journal_entry entry={entry} id={id} />
-                    </.link>
-                  </div>
-                </div>
-              <% end %>
-              <hr class="group-last:hidden" />
-            </li>
-          <% end %>
-        </ul>
+        <%= for {id, entry} <- @streams.entries do %>
+          <.journal_entry entry={entry} id={id} />
+        <% end %>
 
         <%= if Enum.empty?(@streams.entries.inserts) do %>
           <div class="flex flex-col items-center justify-center py-10">

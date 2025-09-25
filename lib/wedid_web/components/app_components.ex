@@ -45,26 +45,73 @@ defmodule WedidWeb.AppComponents do
   #
   def journal_entry(assigns) do
     ~H"""
-    <div class="card bg-base-200 shadow-md p-4">
-      <div
-        :if={is_list(@entry.tags) && length(@entry.tags) > 0}
-        class="py-2 text-m bold w-full flex items-center gap-2"
-      >
-        <span :if={hd(@entry.tags).icon} class="text-lg">{hd(@entry.tags).icon}</span>
-        <span>{hd(@entry.tags).name}</span>
-      </div>
-      <div class="py-2 text-lg w-full">
-        {@entry.content}
-      </div>
+    <div class="card bg-base-200 shadow-md p-4 mb-4 last:mb-1">
+      <div class="card-body">
+        <div
+          :if={is_list(@entry.tags) && length(@entry.tags) > 0}
+          class="py-2 text-m bold w-full flex items-center gap-2"
+        >
+          <span :if={hd(@entry.tags).icon} class="text-lg">{hd(@entry.tags).icon}</span>
+          <span>{hd(@entry.tags).name}</span>
+        </div>
 
-      <div class="flex flex-row justify-between items-end mt-2">
-        <div class="mb-1 text-sm text-base-content/70">
-          {Calendar.strftime(@entry.created_at, "%b %d, %Y")}
-        </div>
-        <div class="text-sm font-semibold text-base-content/80">
-          <span class="text-secondary">{@entry.user.display_name}</span>
+        <p class="py-2 text-lg w-full">
+          {@entry.content}
+        </p>
+
+        <div class="flex flex-row justify-between items-end mt-2">
+          <div class="mb-1 text-sm text-base-content/70">
+            {Calendar.strftime(@entry.created_at, "%d.%m.%Y")}
+          </div>
+          <div class="text-sm font-semibold text-base-content/80">
+            <span class="text-secondary">{@entry.user.display_name}</span>
+          </div>
         </div>
       </div>
+    </div>
+    """
+  end
+
+  attr :tags, :list, required: true, doc: "the tags list"
+
+  def tags_list(assigns) do
+    ~H"""
+    <div
+      :if={is_list(@entry.tags) && length(@entry.tags) > 0}
+      class="py-2 text-m bold w-full flex items-center gap-2"
+    >
+      <span :if={hd(@entry.tags).icon} class="text-lg">{hd(@entry.tags).icon}</span>
+      <span>{hd(@entry.tags).name}</span>
+    </div>
+    """
+  end
+
+  @doc """
+  Renders the navigation bar with site branding and user authentication.
+
+  ## Examples
+
+      <.dock current_user={@current_user} />
+  """
+  attr :current_user, :map, default: nil, doc: "the current user if signed in"
+
+  def dock(assigns) do
+    ~H"""
+    <div class="dock sm:hidden">
+      <Core.button navigate={~p"/entries"}>
+        <Core.heroicon name="hero-sparkles" class="size-6" />
+        <span class="dock-label sr-only">{gettext("Entries")}</span>
+      </Core.button>
+
+      <Core.button navigate={~p"/entries/new"}>
+        <Core.heroicon name="hero-pencil-square" class="size-6" />
+        <span class="dock-label sr-only">{gettext("New Entry")}</span>
+      </Core.button>
+
+      <Core.button navigate={~p"/settings"}>
+        <Core.heroicon name="hero-cog-6-tooth" class="size-6" />
+        <span class="dock-label sr-only">{gettext("Settings")}</span>
+      </Core.button>
     </div>
     """
   end
@@ -84,7 +131,7 @@ defmodule WedidWeb.AppComponents do
       assign_new(assigns, :current_locale, fn -> Locale.current_locale() end)
 
     ~H"""
-    <div class="navbar bg-primary text-primary-content shadow-md">
+    <div class="navbar hidden sm:flex bg-primary text-primary-content shadow-md">
       <div class="navbar-start">
         <!-- Mobile dropdown -->
         <div :if={@current_user} class="dropdown lg:hidden">
@@ -453,9 +500,7 @@ defmodule WedidWeb.AppComponents do
     <div class="container mx-auto px-4 py-24">
       <h2 class="text-4xl font-bold text-center mb-4">{gettext("Why WeDid Works")}</h2>
       <p class="text-center max-w-xl mx-auto mb-16 text-lg opacity-70">
-        {gettext(
-          "Designed for couples who want to build a stronger connection"
-        )}
+        {gettext("Designed for couples who want to build a stronger connection")}
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-8">

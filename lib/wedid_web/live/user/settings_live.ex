@@ -117,8 +117,24 @@ defmodule WedidWeb.User.SettingsLive do
     ~H"""
     <Layouts.app flash={@flash} current_user={@current_user}>
       <div class="container mx-auto p-6">
+        <.card title={gettext("Couple Settings")}>
+          <p>{gettext("Manage your couple")}</p>
+
+          <:actions>
+            <.button
+              navigate={~p"/couple"}
+              variant="primary"
+            >
+              {gettext("Couple Settings")}
+            </.button>
+          </:actions>
+        </.card>
+
         <.header class="mb-8">
           {gettext("User Settings")}
+          <:subtitle>
+            {gettext("Configure the app")}
+          </:subtitle>
         </.header>
 
         <.card title={gettext("Color theme")}>
@@ -161,6 +177,13 @@ defmodule WedidWeb.User.SettingsLive do
           </:actions>
         </.card>
 
+        <.header class="mb-8">
+          {gettext("Account Settings")}
+          <:subtitle>
+            {gettext("Your WeDid account")}
+          </:subtitle>
+        </.header>
+
         <.card title={gettext("Change password")}>
           <.change_password_form form={@change_password_form} />
         </.card>
@@ -181,6 +204,21 @@ defmodule WedidWeb.User.SettingsLive do
               phx-disable-with={gettext("Requesting...")}
             >
               {gettext("Request password reset link")}
+            </.button>
+          </:actions>
+        </.card>
+
+        <.card title={gettext("Log Out")}>
+          <p class="mt-1 text-sm text-base-content/70">
+            {gettext("Finish your WeDid session")}
+          </p>
+
+          <:actions>
+            <.button
+              variant="primary"
+              navigate={~p"/sign-out"}
+            >
+              {gettext("Log out")}
             </.button>
           </:actions>
         </.card>
