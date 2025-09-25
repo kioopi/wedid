@@ -45,15 +45,12 @@ defmodule WedidWeb.AppComponents do
   #
   def journal_entry(assigns) do
     ~H"""
-    <div class="card bg-base-200 shadow-md p-4 mb-4 last:mb-1">
+    <.link
+      class="card bg-base-200 shadow-sm p-4 mb-4 last:mb-1 hover:shadow-md hover:-translate-px transition-all duration-200"
+      navigate={~p"/entries/#{@entry}"}
+    >
       <div class="card-body">
-        <div
-          :if={is_list(@entry.tags) && length(@entry.tags) > 0}
-          class="py-2 text-m bold w-full flex items-center gap-2"
-        >
-          <span :if={hd(@entry.tags).icon} class="text-lg">{hd(@entry.tags).icon}</span>
-          <span>{hd(@entry.tags).name}</span>
-        </div>
+        <.tags_list tags={@entry.tags} />
 
         <p class="py-2 text-lg w-full">
           {@entry.content}
@@ -64,11 +61,14 @@ defmodule WedidWeb.AppComponents do
             {Calendar.strftime(@entry.created_at, "%d.%m.%Y")}
           </div>
           <div class="text-sm font-semibold text-base-content/80">
-            <span class="text-secondary">{@entry.user.display_name}</span>
+            <span class="text-secondary">
+              <Core.heroicon name="hero-pencil" class="size-3" />
+              {@entry.user.display_name}
+            </span>
           </div>
         </div>
       </div>
-    </div>
+    </.link>
     """
   end
 
@@ -77,12 +77,33 @@ defmodule WedidWeb.AppComponents do
   def tags_list(assigns) do
     ~H"""
     <div
-      :if={is_list(@entry.tags) && length(@entry.tags) > 0}
+      :if={is_list(@tags) && length(@tags) > 0}
       class="py-2 text-m bold w-full flex items-center gap-2"
     >
-      <span :if={hd(@entry.tags).icon} class="text-lg">{hd(@entry.tags).icon}</span>
-      <span>{hd(@entry.tags).name}</span>
+      <.tag_badge :for={tag <- @tags} tag={tag} />
     </div>
+    """
+  end
+
+  attr :tag, :map, required: true, doc: "a tag struct"
+  attr :active, :boolean, default: false, doc: "whether the tag is active/selected"
+
+  def tag_badge(assigns) do
+    assigns = assign(assigns, :class, ["badge px-2 py-4", assigns.active && "badge-primary"])
+
+    ~H"""
+    <span class={@class}>
+      <.tag_icon tag={@tag} />
+      {@tag.name}
+    </span>
+    """
+  end
+
+  attr :tag, :map, required: true, doc: "a tag struct"
+
+  def tag_icon(assigns) do
+    ~H"""
+    <span :if={String.trim(@tag.icon)} class="text-lg">{@tag.icon}</span>
     """
   end
 
